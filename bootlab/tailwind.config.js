@@ -8,8 +8,15 @@ export default {
         extend: {
             colors: {
                 // Primary Cyber Colors
-                'primary':'#8ef0f4',
-                'cyber-blue': '#00ffff',
+                primary: '#8ef0f4',
+
+
+
+
+
+
+
+                'cyber-blue': '# 00 ffff ',
                 'cyber-teal': '#008080',
                 'cyber-orange': '#ff6600',
                 'cyber-yellow': '#ffcc00',

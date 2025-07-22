@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
+import { useSignupMutation } from '../features/auth/authApi'
 
 export const SignUpPage = () => {
   const navigate = useNavigate()
@@ -14,6 +15,7 @@ export const SignUpPage = () => {
   })
   const [errors, setErrors] = useState<{[key: string]: string}>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [signup, { isLoading, error, isSuccess }] = useSignupMutation()
 
   useEffect(() => {
     setIsLoaded(true)
@@ -72,14 +74,16 @@ export const SignUpPage = () => {
     if (!validateForm()) return
 
     setIsSubmitting(true)
-    
-    // Simulate API call
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      // Handle successful signup
+      await signup({
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        password: formData.password,
+      }).unwrap()
       navigate('/auth/login', { state: { message: 'Account created successfully! Please sign in.' } })
-    } catch (error) {
-      console.error('Signup error:', error)
+    } catch (err) {
+      // error handled below
     } finally {
       setIsSubmitting(false)
     }
@@ -102,42 +106,13 @@ export const SignUpPage = () => {
       
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-10 left-10 sm:top-20 sm:left-20 w-48 h-48 sm:w-72 sm:h-72 bg-primary/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-10 right-10 sm:bottom-20 sm:right-20 w-64 h-64 sm:w-96 sm:h-96 bg-cyber-blue/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
-        <div className="absolute top-1/2 left-1/4 w-32 h-32 bg-neon-cyan/10 rounded-full blur-2xl animate-float"></div>
-        <div className="absolute top-1/3 right-1/3 w-24 h-24 bg-portal-orange/10 rounded-full blur-2xl animate-float" style={{ animationDelay: '1.5s' }}></div>
+        <div className="absolute top-10 left-10 sm:top-20 sm:left-20 w-48 h-48 sm:w-72 sm:h-72 bg-[#8ef0f4]/30 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-10 right-10 sm:bottom-20 sm:right-20 w-64 h-64 sm:w-96 sm:h-96 bg-[#8ef0f4]/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-1/2 left-1/4 w-32 h-32 bg-[#8ef0f4]/20 rounded-full blur-2xl animate-float"></div>
+        <div className="absolute top-1/3 right-1/3 w-24 h-24 bg-[#8ef0f4]/10 rounded-full blur-2xl animate-float" style={{ animationDelay: '1.5s' }}></div>
       </div>
 
-      {/* Navigation */}
-      <nav className="relative z-50 flex justify-between items-center p-6 md:p-8">
-        {/* Logo */}
-        <div className={`transition-all duration-1000 delay-300 ${isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`}>
-          <Link to="/" className="flex items-center space-x-3 group">
-            <div className="w-10 h-10 bg-gradient-to-br from-primary to-cyber-blue rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-              <svg className="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-            </div>
-            <span className="text-xl font-bold text-white font-cyber">BoostLab</span>
-          </Link>
-        </div>
-
-        {/* Back Button */}
-        <div className={`transition-all duration-1000 delay-200 ${isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}>
-          <button
-            onClick={() => navigate('/')}
-            className="px-6 py-3 bg-transparent border border-primary/20 text-primary hover:bg-primary/10 rounded-lg transition-all duration-300 font-cyber tracking-wide"
-          >
-            <div className="flex items-center space-x-2">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-              </svg>
-              <span>Back</span>
-            </div>
-          </button>
-        </div>
-      </nav>
+    
 
       {/* Main Content */}
       <div className="relative z-30 flex flex-col justify-center items-center min-h-screen px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-8 sm:py-12">
@@ -167,7 +142,7 @@ export const SignUpPage = () => {
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleInputChange}
-                    className={`w-full px-4 py-3 bg-ui-dark/50 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-300 ${
+                    className={`w-full px-4 py-3 bg-ui-dark/50 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8ef0f4] focus:border-primary transition-all duration-300 ${
                       errors.firstName ? 'border-red-500' : 'border-primary/20'
                     }`}
                     placeholder="Enter your first name"
@@ -187,7 +162,7 @@ export const SignUpPage = () => {
                     name="lastName"
                     value={formData.lastName}
                     onChange={handleInputChange}
-                    className={`w-full px-4 py-3 bg-ui-dark/50 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-300 ${
+                    className={`w-full px-4 py-3 bg-ui-dark/50 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8ef0f4] focus:border-primary transition-all duration-300 ${
                       errors.lastName ? 'border-red-500' : 'border-primary/20'
                     }`}
                     placeholder="Enter your last name"
@@ -209,7 +184,7 @@ export const SignUpPage = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className={`w-full px-4 py-3 bg-ui-dark/50 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-300 ${
+                  className={`w-full px-4 py-3 bg-ui-dark/50 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8ef0f4] focus:border-primary transition-all duration-300 ${
                     errors.email ? 'border-red-500' : 'border-primary/20'
                   }`}
                   placeholder="Enter your email"
@@ -230,7 +205,7 @@ export const SignUpPage = () => {
                   name="password"
                   value={formData.password}
                   onChange={handleInputChange}
-                  className={`w-full px-4 py-3 bg-ui-dark/50 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-300 ${
+                  className={`w-full px-4 py-3 bg-ui-dark/50 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8ef0f4] focus:border-primary transition-all duration-300 ${
                     errors.password ? 'border-red-500' : 'border-primary/20'
                   }`}
                   placeholder="Create a password"
@@ -250,7 +225,7 @@ export const SignUpPage = () => {
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleInputChange}
-                  className={`w-full px-4 py-3 bg-ui-dark/50 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-300 ${
+                  className={`w-full px-4 py-3 bg-ui-dark/50 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8ef0f4] focus:border-primary transition-all duration-300 ${
                     errors.confirmPassword ? 'border-red-500' : 'border-primary/20'
                   }`}
                   placeholder="Confirm your password"
@@ -288,52 +263,29 @@ export const SignUpPage = () => {
               </div>
 
               {/* Submit Button */}
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full h-16 bg-gradient-to-r from-primary to-cyber-blue text-black font-bold font-cyber tracking-wide rounded-xl hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <div className="flex items-center justify-center space-x-3">
-                  {isSubmitting && (
-                    <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                  )}
-                  {!isSubmitting && (
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                    </svg>
-                  )}
-                  <span>{isSubmitting ? 'Creating Account...' : 'Create Account'}</span>
-                </div>
-              </button>
+              <>
+                {/* Error Message */}
+                {error && (
+                  <div className="mb-4 text-red-400 text-center text-sm">{(error as any)?.data?.message || 'Signup failed. Please try again.'}</div>
+                )}
+                {/* Success Message */}
+                {isSuccess && (
+                  <div className="mb-4 text-green-400 text-center text-sm">Signup successful!</div>
+                )}
+                <button
+                  type="submit"
+                  className={`w-full py-3 px-6 rounded-lg font-semibold text-lg transition-all duration-300 shadow-md focus:outline-none focus:ring-2  text-white hover:bg-[#6edbe0] disabled:opacity-60 disabled:cursor-not-allowed ${isSubmitting ? 'animate-pulse' : ''}`}
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'Signing up...' : 'Sign Up'}
+                </button>
+              </>
             </form>
 
-            {/* Divider */}
-            <div className="relative my-8">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-primary/20"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-ui-medium/50 text-gray-400">Or continue with</span>
-              </div>
-            </div>
+          
 
                         {/* Social Login Buttons */}
-            <div className="space-y-3">
-              <button
-                className="w-full h-12 bg-white text-gray-800 font-bold font-cyber tracking-wide rounded-xl hover:scale-105 transition-all duration-300 flex items-center justify-center space-x-3"
-              >
-                <svg className="w-5 h-5" viewBox="0 0 24 24">
-                  <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                  <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                  <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                  <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                </svg>
-                <span>Continue with Google</span>
-              </button>
-            </div>
+     
 
             {/* Login Link */}
             <div className="text-center mt-8">

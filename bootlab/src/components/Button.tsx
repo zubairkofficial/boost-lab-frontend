@@ -38,7 +38,12 @@ const Button: React.FC<ButtonProps> = ({
   }
 
   const variantClasses = {
-    primary: 'bg-gradient-to-r from-primary via-cyber-blue to-neon-cyan hover:from-primary/90 hover:via-cyber-blue/90 hover:to-neon-cyan/90 text-black font-bold shadow-lg hover:shadow-cyber-lg',
+    primary: `bg-gradient-to-r from-primary via-cyber-blue to-neon-cyan text-black font-bold shadow-lg hover:shadow-cyber-lg
+      backdrop-blur-md bg-opacity-70 border border-primary/30
+      hover:bg-opacity-90 hover:backdrop-blur-xl
+      hover:from-primary/80 hover:via-cyber-blue/80 hover:to-neon-cyan/80
+      hover:border-primary/60
+      transition-all duration-300`,
     secondary: 'bg-ui-dark/50 border border-primary/20 text-white hover:bg-primary/10 hover:border-primary/40',
     outline: 'border border-primary/20 text-primary hover:bg-primary/10 hover:border-primary/40'
   }

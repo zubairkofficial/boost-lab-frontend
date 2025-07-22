@@ -8,7 +8,7 @@ import { ForgotPasswordPage } from './pages/ForgotPassword'
 const App = () => {
   return (
     <Router>
-      <div className="App">
+      <div>
       
         <Routes>
           <Route path="/auth/signup" element={<SignUpPage />} />
