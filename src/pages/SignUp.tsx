@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { useSignupMutation } from '../features/auth/authApi'
+import { useSendRegisterOtpMutation } from '../features/auth/authApi'
+import FuturisticButton from '../components/furastic-button'
+import bg from '../assets/bg_1_1.jpg'
 
 export const SignUpPage = () => {
   const navigate = useNavigate()
   const [isLoaded, setIsLoaded] = useState(false)
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
+    Name: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -15,7 +16,7 @@ export const SignUpPage = () => {
   })
   const [errors, setErrors] = useState<{[key: string]: string}>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [signup, { isLoading, error, isSuccess }] = useSignupMutation()
+  const [sendRegisterOtp, { isLoading, error, isSuccess }] = useSendRegisterOtpMutation()
 
   useEffect(() => {
     setIsLoaded(true)
@@ -36,13 +37,10 @@ export const SignUpPage = () => {
   const validateForm = () => {
     const newErrors: {[key: string]: string} = {}
 
-    if (!formData.firstName.trim()) {
-      newErrors.firstName = 'First name is required'
+    if (!formData.Name.trim()) {
+      newErrors.Name = ' name is required'
     }
 
-    if (!formData.lastName.trim()) {
-      newErrors.lastName = 'Last name is required'
-    }
 
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required'
@@ -75,13 +73,18 @@ export const SignUpPage = () => {
 
     setIsSubmitting(true)
     try {
-      await signup({
-        firstName: formData.firstName,
-        lastName: formData.lastName,
+      await sendRegisterOtp({
+        name: formData.Name,
         email: formData.email,
         password: formData.password,
       }).unwrap()
-      navigate('/auth/login', { state: { message: 'Account created successfully! Please sign in.' } })
+      navigate('/auth/verify-otp', {
+        state: {
+          name: formData.Name,
+          email: formData.email,
+          password: formData.password,
+        }
+      })
     } catch (err) {
       // error handled below
     } finally {
@@ -95,7 +98,7 @@ export const SignUpPage = () => {
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat w-full"
         style={{
-          backgroundImage: 'url(https://static.tildacdn.net/tild6534-6232-4333-a431-313138303165/bg_1_1.jpg)',
+          backgroundImage: `url(${bg})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
@@ -131,47 +134,28 @@ export const SignUpPage = () => {
             {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Name Fields */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="firstName" className="block text-sm font-medium text-gray-200 mb-2">
-                    First Name
+                  <label htmlFor="Name" className="block text-sm font-medium text-gray-200 mb-2">
+                    Name
                   </label>
                   <input
                     type="text"
-                    id="firstName"
-                    name="firstName"
-                    value={formData.firstName}
+                    id="Name"
+                    name="Name"
+                    value={formData.Name}
                     onChange={handleInputChange}
                     className={`w-full px-4 py-3 bg-ui-dark/50 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8ef0f4] focus:border-primary transition-all duration-300 ${
-                      errors.firstName ? 'border-red-500' : 'border-primary/20'
+                      errors.Name ? 'border-red-500' : 'border-primary/20'
                     }`}
-                    placeholder="Enter your first name"
+                    placeholder="Enter your name"
                   />
-                  {errors.firstName && (
-                    <p className="mt-1 text-sm text-red-400">{errors.firstName}</p>
+                  {errors.Name && (
+                    <p className="mt-1 text-sm text-red-400">{errors.Name}</p>
                   )}
                 </div>
 
-                <div>
-                  <label htmlFor="lastName" className="block text-sm font-medium text-gray-200 mb-2">
-                    Last Name
-                  </label>
-                  <input
-                    type="text"
-                    id="lastName"
-                    name="lastName"
-                    value={formData.lastName}
-                    onChange={handleInputChange}
-                    className={`w-full px-4 py-3 bg-ui-dark/50 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8ef0f4] focus:border-primary transition-all duration-300 ${
-                      errors.lastName ? 'border-red-500' : 'border-primary/20'
-                    }`}
-                    placeholder="Enter your last name"
-                  />
-                  {errors.lastName && (
-                    <p className="mt-1 text-sm text-red-400">{errors.lastName}</p>
-                  )}
-                </div>
-              </div>
+                
+              
 
               {/* Email Field */}
               <div>
@@ -272,13 +256,15 @@ export const SignUpPage = () => {
                 {isSuccess && (
                   <div className="mb-4 text-green-400 text-center text-sm">Signup successful!</div>
                 )}
-                <button
+                {/* <button
                   type="submit"
                   className={`w-full py-3 px-6 rounded-lg font-semibold text-lg transition-all duration-300 shadow-md focus:outline-none focus:ring-2  text-white hover:bg-[#6edbe0] disabled:opacity-60 disabled:cursor-not-allowed ${isSubmitting ? 'animate-pulse' : ''}`}
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? 'Signing up...' : 'Sign Up'}
-                </button>
+                </button> */}
+
+                <FuturisticButton type="submit" className='ml-30'>Sign Up</FuturisticButton>
               </>
             </form>
 

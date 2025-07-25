@@ -16,7 +16,7 @@ export default {
 
 
 
-                'cyber-blue': '# 00 ffff ',
+                'cyber-blue': '#00ffff ',
                 'cyber-teal': '#008080',
                 'cyber-orange': '#ff6600',
                 'cyber-yellow': '#ffcc00',

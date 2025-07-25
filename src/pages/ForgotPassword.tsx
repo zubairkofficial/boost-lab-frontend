@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react'
+import { useForgotPasswordMutation } from '../features/auth/authApi'
 import { useNavigate, Link } from 'react-router-dom'
+import FuturisticButton from '../components/furastic-button'
 
 export const ForgotPasswordPage = () => {
+  const [forgotPassword, { isLoading }] = useForgotPasswordMutation()
   const navigate = useNavigate()
   const [isLoaded, setIsLoaded] = useState(false)
   const [email, setEmail] = useState('')
@@ -37,13 +40,13 @@ export const ForgotPasswordPage = () => {
 
     setIsSubmitting(true)
     
-    // Simulate API call
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000))
+      await forgotPassword({ email }).unwrap()
       setIsEmailSent(true)
-    } catch (error) {
-      console.error('Password reset error:', error)
-      setError('Something went wrong. Please try again.')
+      setError('')
+    } catch (err: any) {
+      setError(err?.data?.message || 'Failed to send reset link.')
+      setIsEmailSent(false)
     } finally {
       setIsSubmitting(false)
     }
@@ -72,36 +75,7 @@ export const ForgotPasswordPage = () => {
         <div className="absolute top-1/3 right-1/3 w-24 h-24 bg-[#8ef0f4]/10 rounded-full blur-2xl animate-float" style={{ animationDelay: '1.5s' }}></div>
       </div>
 
-      {/* Navigation */}
-      <nav className="relative z-50 flex justify-between items-center p-6 md:p-8">
-        {/* Logo */}
-        <div className={`transition-all duration-1000 delay-300 ${isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`}>
-          <Link to="/" className="flex items-center space-x-3 group">
-            <div className="w-10 h-10 bg-gradient-to-br from-primary to-cyber-blue rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-              <svg className="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-            </div>
-            <span className="text-xl font-bold text-white font-cyber">BoostLab</span>
-          </Link>
-        </div>
-
-        {/* Back Button */}
-        <div className={`transition-all duration-1000 delay-200 ${isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}>
-          <button
-            onClick={() => navigate('/auth/login')}
-            className="px-6 py-3 bg-transparent border border-primary/20 text-primary hover:bg-primary/10 rounded-lg transition-all duration-300 font-cyber tracking-wide"
-          >
-            <div className="flex items-center space-x-2">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-              </svg>
-              <span>Back</span>
-            </div>
-          </button>
-        </div>
-      </nav>
+    
 
       {/* Main Content */}
       <div className="relative z-30 flex flex-col justify-center items-center min-h-screen px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-8 sm:py-12">
@@ -109,9 +83,9 @@ export const ForgotPasswordPage = () => {
           {/* Form Container */}
           <div className={`bg-ui-medium/50 backdrop-blur-sm border border-primary/20 rounded-2xl p-8 transition-all duration-1000 delay-500 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             {/* Header */}
-            <div className="text-center mb-8">
-              <div className="w-16 h-16 bg-gradient-to-br from-primary to-cyber-blue rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="text-center mb-2">
+              <div className="w-16 h-16 bg-gradient-to-br from-primary to-cyber-blue rounded-full flex items-center justify-center mx-auto mb-2">
+                <svg className="w-8 h-8 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
                 </svg>
               </div>
@@ -124,7 +98,7 @@ export const ForgotPasswordPage = () => {
                   : "Enter your email address and we'll send you a link to reset your password"
                 }
               </p>
-              <div className="w-16 h-1 bg-gradient-to-r from-primary via-cyber-blue to-neon-cyan mx-auto mt-4 rounded-full shadow-cyber"></div>
+              <div className="w-16 h-1 bg-gradient-to-r from-primary via-cyber-blue to-neon-cyan mx-auto mt-2 rounded-full shadow-cyber"></div>
             </div>
 
             {!isEmailSent ? (
@@ -151,13 +125,8 @@ export const ForgotPasswordPage = () => {
                 </div>
 
                 {/* Submit Button */}
-                <button
-                  type="submit"
-                  className={`w-full py-3 px-6 rounded-lg font-semibold text-lg transition-all duration-300 shadow-md focus:outline-none focus:ring-2 focus:ring-[#8ef0f4] focus:ring-offset-2 bg-[#8ef0f4] text-black hover:bg-[#6edbe0] disabled:opacity-60 disabled:cursor-not-allowed ${isSubmitting ? 'animate-pulse' : ''}`}
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? 'Sending...' : 'Send Reset Link'}
-                </button>
+                               <FuturisticButton type='submit' className='ml-30'> {isSubmitting ? 'Sending...' : 'Send Reset Link'}</FuturisticButton>
+
               </form>
             ) : (
               /* Success State */
@@ -212,12 +181,7 @@ export const ForgotPasswordPage = () => {
                   Sign in here
                 </Link>
               </p>
-              <p className="text-gray-300 text-sm">
-                Don't have an account?{' '}
-                <Link to="/auth/signup" className="text-primary hover:text-cyber-blue transition-colors duration-300 font-semibold">
-                  Sign up here
-                </Link>
-              </p>
+
             </div>
           </div>
         </div>
