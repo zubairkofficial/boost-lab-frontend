@@ -59,7 +59,7 @@ export default function ResetPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-dark-blue via-dark-grey to-ui-dark relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-dark-blue via-dark-grey to-ui-dark relative overflow-hidden font">
       
       {/* Background Image */}
       <div 
@@ -82,7 +82,7 @@ export default function ResetPasswordPage() {
 
       {/* Main Content */}
       <div className="relative z-30 flex flex-col justify-center items-center min-h-screen px-4 py-12">
-        <div className={`w-full max-w-lg mx-auto bg-ui-medium/50 backdrop-blur-sm border border-primary/20 rounded-2xl p-8 transition-all duration-1000 delay-500 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <div className={`w-full max-w-lg mx-auto bg-ui-medium/50 backdrop-blur-sm border border-[#8ef0f4] rounded-2xl p-8 transition-all duration-1000 delay-500 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
 
           {/* Header */}
           <div className="text-center mb-6">
@@ -135,9 +135,11 @@ export default function ResetPasswordPage() {
               </div>
 
               {/* Submit Button */}
+              <div className='flex justify-center'>
               <FuturisticButton type="submit">
                 {isSubmitting ? 'Resetting...' : 'Reset Password'}
               </FuturisticButton>
+              </div>
             </form>
           ) : (
             <div className="bg-gray-200/20 border border-gray-200/30 rounded-lg p-6 text-center">

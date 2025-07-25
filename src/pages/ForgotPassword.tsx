@@ -53,7 +53,7 @@ export const ForgotPasswordPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-dark-blue via-dark-grey to-ui-dark relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-dark-blue via-dark-grey to-ui-dark relative overflow-hidden font">
       {/* Background Image */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat w-full"
@@ -81,7 +81,7 @@ export const ForgotPasswordPage = () => {
       <div className="relative z-30 flex flex-col justify-center items-center min-h-screen px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-8 sm:py-12">
         <div className="w-full max-w-lg mx-auto">
           {/* Form Container */}
-          <div className={`bg-ui-medium/50 backdrop-blur-sm border border-primary/20 rounded-2xl p-8 transition-all duration-1000 delay-500 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          <div className={`bg-ui-medium/50 backdrop-blur-sm border border-[#8ef0f4] rounded-2xl p-8 transition-all duration-1000 delay-500 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             {/* Header */}
             <div className="text-center mb-2">
               <div className="w-16 h-16 bg-gradient-to-br from-primary to-cyber-blue rounded-full flex items-center justify-center mx-auto mb-2">
@@ -114,7 +114,7 @@ export const ForgotPasswordPage = () => {
                     id="email"
                     value={email}
                     onChange={handleEmailChange}
-                    className={`w-full px-4 py-3 bg-ui-dark/50 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8ef0f4] focus:border-primary transition-all duration-300 ${
+                    className={`w-full px-4 py-3 bg-ui-dark/50 border border-[#8ef0f4] rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8ef0f4] focus:border-primary transition-all duration-300 ${
                       error ? 'border-red-500' : 'border-primary/20'
                     }`}
                     placeholder="Enter your email"
@@ -149,16 +149,12 @@ export const ForgotPasswordPage = () => {
                   </p>
                 </div>
 
+
+
                 <div className="space-y-3">
-                  <button
-                    onClick={() => setIsEmailSent(false)}
-                    className="w-full h-12 bg-white text-gray-800 font-bold font-cyber tracking-wide rounded-xl hover:scale-105 transition-all duration-300 flex items-center justify-center space-x-3"
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                    </svg>
-                    <span>Resend Email</span>
-                  </button>
+                  <div className='flex justify-center'>
+                  <FuturisticButton onClick={() => setIsEmailSent(false)} type='submit'>{isSubmitting ? 'Resend Email' : 'Resending Email'}</FuturisticButton>
+                  </div>
 
                   <button
                     onClick={() => navigate('/auth/login')}

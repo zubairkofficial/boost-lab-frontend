@@ -15,7 +15,7 @@ export default {
 
 
 
-
+                'sky-blue': '[#8ef0f4]',
                 'cyber-blue': '#00ffff ',
                 'cyber-teal': '#008080',
                 'cyber-orange': '#ff6600',
@@ -44,6 +44,7 @@ export default {
                 'futura': ['Futura', 'Arial', 'sans-serif'],
                 'inter': ['Inter', 'sans-serif'],
                 'roboto': ['Roboto', 'sans-serif'],
+                'font': ['Unbounded','Arial','sans-serif']
             },
             fontSize: {
                 'xs': ['0.75rem', { lineHeight: '1rem' }],

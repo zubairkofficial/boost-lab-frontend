@@ -12,8 +12,8 @@ export default function HomePage() {
     setIsLoaded(true)
     const taken = localStorage.getItem('testTaken')
     setTestTaken(!!taken)
-  }, [])
 
+  }, [])
   return (
     <div className="min-h-screen bg-gradient-to-br from-dark-blue via-dark-grey to-ui-dark relative overflow-hidden">
 
