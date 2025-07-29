@@ -10,15 +10,15 @@ import TakeTestPage from "./pages/TakeTestPage";
 import ResultsPage from "./pages/ResultPage";
 import Dashboard from "./pages/Dashboard";
 import SubscriptionPlans from "./pages/Plans";
-import Success from "./pages/success";
 
 // ✅ Components
 import ProtectedRoute from "./components/ProtectedRoute";
 import LayoutWithSidebar from "./components/LayoutWithSidebar";
-import Cancel from "./pages/cancel";
 import { AuthProvider } from "./contexts/AuthContext";
 import { ToastProvider } from "./contexts/ToastContext";
 import store from "./store";
+import Success from "./pages/Success";
+import Cancel from "./pages/Cancel";
 
 const App = () => {
   return (
