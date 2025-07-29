@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Provider } from 'react-redux';
+import { Provider } from "react-redux";
+import { Toaster } from "react-hot-toast"; // ✅ import toaster
 import { SignInPage } from "./pages/SignIn";
 import { SignUpPage } from "./pages/SignUp";
 import { ForgotPasswordPage } from "./pages/ForgotPassword";
@@ -11,7 +12,6 @@ import ResultsPage from "./pages/ResultPage";
 import Dashboard from "./pages/Dashboard";
 import SubscriptionPlans from "./pages/Plans";
 
-// ✅ Components
 import ProtectedRoute from "./components/ProtectedRoute";
 import LayoutWithSidebar from "./components/LayoutWithSidebar";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -19,6 +19,7 @@ import { ToastProvider } from "./contexts/ToastContext";
 import store from "./store";
 import Success from "./pages/Success";
 import Cancel from "./pages/Cancel";
+import NotFound from "./pages/NotFound";
 
 const App = () => {
   return (
@@ -26,49 +27,25 @@ const App = () => {
       <Router>
         <ToastProvider>
           <AuthProvider>
+            {/* Global Toaster */}
+            <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
             <Routes>
-            {/* ✅ Public Routes */}
-            <Route path="/" element={<HomePage />} />
-            <Route path="/auth/signup" element={<SignUpPage />} />
-            <Route path="/auth/login" element={<SignInPage />} />
-            <Route path="/auth/verify-otp" element={<VerifyOtpPage />} />
-            <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
-            <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
+              {/* Public Routes */}
+              <Route path="/" element={<HomePage />} />
+              <Route path="*" element={<NotFound />} />
+              <Route path="/auth/signup" element={<SignUpPage />} />
+              <Route path="/auth/login" element={<SignInPage />} />
+              <Route path="/auth/verify-otp" element={<VerifyOtpPage />} />
+              <Route
+                path="/auth/forgot-password"
+                element={<ForgotPasswordPage />}
+              />
+              <Route
+                path="/auth/reset-password"
+                element={<ResetPasswordPage />}
+              />
 
-            {/* ✅ Protected Routes with Sidebar */}
-            <Route element={<LayoutWithSidebar />}>
-              <Route
-                path="/auth/dashboard"
-                element={
-                  <ProtectedRoute>
-                    <Dashboard />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/plans"
-                element={
-                  <ProtectedRoute>
-                    <SubscriptionPlans />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/success"
-                element={
-                  <ProtectedRoute>
-                    <Success />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/cancel"
-                element={
-                  <ProtectedRoute>
-                    <Cancel />
-                  </ProtectedRoute>
-                }
-              />
+              {/* Protected Routes without Sidebar */}
               <Route
                 path="/take-test"
                 element={
@@ -77,17 +54,52 @@ const App = () => {
                   </ProtectedRoute>
                 }
               />
-              <Route
-                path="/results"
-                element={
-                  <ProtectedRoute>
-                    <ResultsPage />
-                  </ProtectedRoute>
-                }
-              />
-            </Route>
-          </Routes>
-        </AuthProvider>
+
+              {/* Protected Routes with Sidebar */}
+              <Route element={<LayoutWithSidebar />}>
+                <Route
+                  path="/auth/dashboard"
+                  element={
+                    <ProtectedRoute>
+                      <Dashboard />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/plans"
+                  element={
+                    <ProtectedRoute>
+                      <SubscriptionPlans />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/success"
+                  element={
+                    <ProtectedRoute>
+                      <Success />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/cancel"
+                  element={
+                    <ProtectedRoute>
+                      <Cancel />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/results"
+                  element={
+                    <ProtectedRoute>
+                      <ResultsPage />
+                    </ProtectedRoute>
+                  }
+                />
+              </Route>
+            </Routes>
+          </AuthProvider>
         </ToastProvider>
       </Router>
     </Provider>

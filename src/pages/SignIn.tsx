@@ -1,9 +1,9 @@
-// ✅ Fully updated SignInPage with Supabase login API integration + redirect to /auth/dashboard
 import { useState, useEffect } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
+import toast from "react-hot-toast";
 import FuturisticButton from "../components/furastic-button";
 import { useLoginMutation } from "../features/auth/authApi";
-import { H1, BodyText,  H2 } from "../components/ui/typography";
+import { BodyText, H2 } from "../components/ui/typography";
 
 export const SignInPage = () => {
   const navigate = useNavigate();
@@ -49,10 +49,13 @@ export const SignInPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validateForm()) return;
+    if (!validateForm()) {
+      toast.error("Please fill all required fields correctly.");
+      return;
+    }
 
     setIsSubmitting(true);
-    
+
     try {
       const result = await login({
         email: formData.email,
@@ -62,9 +65,11 @@ export const SignInPage = () => {
       localStorage.setItem("access_token", result.access_token);
       localStorage.setItem("user", JSON.stringify(result.user));
 
+      toast.success("Login successful! Redirecting...");
       navigate("/auth/dashboard", { state: { message: "Login successful!" } });
     } catch (err: any) {
       console.error("Login failed:", err);
+      toast.error(err?.data?.message || "Login failed. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -72,7 +77,8 @@ export const SignInPage = () => {
 
   return (
     <div className="min-h-screen bg-[#293C44] relative overflow-hidden font-font flex items-center justify-center">
-      <div className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20"
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20"
         style={{
           backgroundImage:
             "url(https://static.tildacdn.net/tild6534-6232-4333-a431-313138303165/bg_1_1.jpg)",
@@ -92,84 +98,110 @@ export const SignInPage = () => {
           style={{ animationDelay: "1.5s" }}
         ></div>
       </div>
-      <div className="relative z-30 flex flex-col justify-center items-center min-h-screen px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-8 sm:py-12">
-        <div className="w-full max-w-lg mx-auto">
-          {location.state?.message && (
-            <div
-              className={`mb-6 bg-accent-green/20 border border-accent-green/30 rounded-lg p-4 transition-all duration-1000 delay-300 ${
-                isLoaded ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-8"
-              }`}
-            >
+
+      <div className="relative z-30 flex justify-center items-center min-h-screen px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-8 sm:py-12">
+        <div
+          className={`bg-ui-medium/50 backdrop-blur-sm border border-[#8ef0f4] rounded-2xl p-8 min-h-[600px] min-w-[650px] flex flex-col justify-center transition-all duration-1000 delay-500 ${
+            isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
+          <div className="text-center mb-8">
+            <H2 className="text-white font-font mb-4">Welcome back</H2>
+            <BodyText className="text-gray-300 mb-6 text-base">
+              Sign in to continue your photography
+            </BodyText>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-8">
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-base font-medium text-gray-200 mb-2"
+              >
+                Email Address
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                className={`w-full px-6 py-4 text-base bg-ui-dark/50 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8ef0f4] focus:border-primary transition-all duration-300 ${
+                  errors.email ? "border-red-500" : "border-primary/20"
+                }`}
+                placeholder="Enter your email"
+              />
+              <div className="h-5">
+                {errors.email && (
+                  <p className="mt-1 text-sm text-red-400">{errors.email}</p>
+                )}
+              </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-base font-medium text-gray-200 mb-2"
+              >
+                Password
+              </label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleInputChange}
+                className={`w-full px-6 py-4 text-base bg-ui-dark/50 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8ef0f4] focus:border-primary transition-all duration-300 ${
+                  errors.password ? "border-red-500" : "border-primary/20"
+                }`}
+                placeholder="Enter your password"
+              />
+              <div className="h-5">
+                {errors.password && (
+                  <p className="mt-1 text-sm text-red-400">{errors.password}</p>
+                )}
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <svg
-                  className="w-5 h-5 text-accent-green"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                <p className="text-accent-green font-medium">{location.state.message}</p>
-              </div>
-            </div>
-          )}
-          <div className={`bg-ui-medium/50 backdrop-blur-sm border border-[#8ef0f4] rounded-2xl p-8 transition-all duration-1000 delay-500 ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
-            <div className="text-center mb-8">
-              <H2 className="text-white font-font mb-4">
-                Welcome Back to <span className="text-white animate-glow">BoostLab</span>
-              </H2>
-              <BodyText className="text-gray-300 mb-6 font-font">Sign in to continue your photography journey</BodyText>
-              <div className="w-24 h-2 bg-gradient-to-r from-primary via-cyber-blue to-neon-cyan mx-auto rounded-full shadow-cyber"></div>
-            </div>
-            <form onSubmit={handleSubmit} className="space-y-8">
-              <div>
-                <label htmlFor="email" className="block text-lg font-medium text-gray-200 mb-3">Email Address</label>
                 <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
+                  type="checkbox"
+                  id="rememberMe"
+                  name="rememberMe"
+                  checked={formData.rememberMe}
                   onChange={handleInputChange}
-                  className={`w-full px-6 py-4 text-lg bg-ui-dark/50 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8ef0f4] focus:border-primary transition-all duration-300 ${errors.email ? "border-red-500" : "border-primary/20"}`}
-                  placeholder="Enter your email"
+                  className="w-4 h-4 text-white bg-ui-dark border-primary/20 rounded focus:ring-primary/50 focus:ring-2"
                 />
-                {errors.email && <p className="mt-2 text-sm text-red-400">{errors.email}</p>}
+                <label htmlFor="rememberMe" className="text-sm text-gray-300">
+                  Remember me
+                </label>
               </div>
-              <div>
-                <label htmlFor="password" className="block text-lg font-medium text-gray-200 mb-3">Password</label>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleInputChange}
-                  className={`w-full px-6 py-4 text-lg bg-ui-dark/50 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8ef0f4] focus:border-primary transition-all duration-300 ${errors.password ? "border-red-500" : "border-primary/20"}`}
-                  placeholder="Enter your password"
-                />
-                {errors.password && <p className="mt-2 text-sm text-red-400">{errors.password}</p>}
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <input
-                    type="checkbox"
-                    id="rememberMe"
-                    name="rememberMe"
-                    checked={formData.rememberMe}
-                    onChange={handleInputChange}
-                    className="w-4 h-4 text-white bg-ui-dark border-primary/20 rounded focus:ring-primary/50 focus:ring-2"
-                  />
-                  <label htmlFor="rememberMe" className="text-sm text-gray-300">Remember me</label>
-                </div>
-                <Link to="/auth/forgot-password" className="text-sm text-gray-200 hover:text-cyber-blue transition-colors duration-300">Forgot password?</Link>
-              </div>
-              {error && <div className="mb-4 text-red-400 text-center text-sm">{(error as any)?.data?.message || "Login failed. Please try again."}</div>}
-              <FuturisticButton type="submit" className="ml-30">
+              <Link
+                to="/auth/forgot-password"
+                className="text-sm text-gray-200 hover:text-cyber-blue transition-colors duration-300"
+              >
+                Forgot password?
+              </Link>
+            </div>
+
+            <div className="flex justify-center">
+              <FuturisticButton type="submit">
                 {isSubmitting || isLoading ? "Signing in..." : "Sign In"}
               </FuturisticButton>
-            </form>
-            <div className="text-center mt-8">
-              <p className="text-gray-300">Don't have an account?{' '}<Link to="/auth/signup" className="text-white hover:text-cyber-blue transition-colors duration-300 font-semibold">Sign up here</Link></p>
             </div>
+          </form>
+
+          <div className="text-center mt-8">
+            <p className="text-gray-300">
+              Don't have an account?{" "}
+              <Link
+                to="/auth/signup"
+                className="text-white hover:text-cyber-blue transition-colors duration-300 font-semibold"
+              >
+                Sign up here
+              </Link>
+            </p>
           </div>
         </div>
       </div>
