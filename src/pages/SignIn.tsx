@@ -3,10 +3,12 @@ import { useState, useEffect } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import FuturisticButton from "../components/furastic-button";
 import { useLoginMutation } from "../features/auth/authApi";
+import { H1, BodyText,  H2 } from "../components/ui/typography";
 
 export const SignInPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [login, { isLoading, error }] = useLoginMutation();
   const [isLoaded, setIsLoaded] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -15,7 +17,6 @@ export const SignInPage = () => {
   });
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [login, { isLoading, error, isSuccess }] = useLoginMutation();
 
   useEffect(() => {
     setIsLoaded(true);
@@ -51,6 +52,7 @@ export const SignInPage = () => {
     if (!validateForm()) return;
 
     setIsSubmitting(true);
+    
     try {
       const result = await login({
         email: formData.email,
@@ -61,7 +63,7 @@ export const SignInPage = () => {
       localStorage.setItem("user", JSON.stringify(result.user));
 
       navigate("/auth/dashboard", { state: { message: "Login successful!" } });
-    } catch (err) {
+    } catch (err: any) {
       console.error("Login failed:", err);
     } finally {
       setIsSubmitting(false);
@@ -69,9 +71,8 @@ export const SignInPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-dark-blue via-dark-grey to-ui-dark relative overflow-hidden font">
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat w-full"
+    <div className="min-h-screen bg-[#293C44] relative overflow-hidden font-font flex items-center justify-center">
+      <div className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20"
         style={{
           backgroundImage:
             "url(https://static.tildacdn.net/tild6534-6232-4333-a431-313138303165/bg_1_1.jpg)",
@@ -79,7 +80,6 @@ export const SignInPage = () => {
           backgroundPosition: "center",
         }}
       />
-      <div className="absolute inset-0 bg-gradient-to-br from-dark-blue/80 via-dark-grey/70 to-ui-dark/90"></div>
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-10 left-10 sm:top-20 sm:left-20 w-48 h-48 sm:w-72 sm:h-72 bg-[#8ef0f4]/30 rounded-full blur-3xl animate-pulse"></div>
         <div
@@ -115,10 +115,10 @@ export const SignInPage = () => {
           )}
           <div className={`bg-ui-medium/50 backdrop-blur-sm border border-[#8ef0f4] rounded-2xl p-8 transition-all duration-1000 delay-500 ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
             <div className="text-center mb-8">
-              <h1 className="text-4xl font-bold text-white font-cyber mb-4">
+              <H2 className="text-white font-font mb-4">
                 Welcome Back to <span className="text-white animate-glow">BoostLab</span>
-              </h1>
-              <p className="text-xl text-gray-300 mb-6">Sign in to continue your photography journey</p>
+              </H2>
+              <BodyText className="text-gray-300 mb-6 font-font">Sign in to continue your photography journey</BodyText>
               <div className="w-24 h-2 bg-gradient-to-r from-primary via-cyber-blue to-neon-cyan mx-auto rounded-full shadow-cyber"></div>
             </div>
             <form onSubmit={handleSubmit} className="space-y-8">
@@ -163,8 +163,7 @@ export const SignInPage = () => {
                 <Link to="/auth/forgot-password" className="text-sm text-gray-200 hover:text-cyber-blue transition-colors duration-300">Forgot password?</Link>
               </div>
               {error && <div className="mb-4 text-red-400 text-center text-sm">{(error as any)?.data?.message || "Login failed. Please try again."}</div>}
-              {isSuccess && <div className="mb-4 text-green-400 text-center text-sm">Login successful!</div>}
-              <FuturisticButton type="submit" className="ml-30" disabled={isSubmitting || isLoading}>
+              <FuturisticButton type="submit" className="ml-30">
                 {isSubmitting || isLoading ? "Signing in..." : "Sign In"}
               </FuturisticButton>
             </form>

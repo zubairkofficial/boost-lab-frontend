@@ -7,8 +7,10 @@ export default {
     theme: {
         extend: {
             colors: {
-                // Primary Cyber Colors
+                // Primary Colors
                 primary: '#ffffff',
+                'boostlab-bg': '#293C44',
+                'boostlab-text': '#ffffff',
 
 
 
@@ -42,7 +44,7 @@ export default {
                 'futura': ['Futura', 'Arial', 'sans-serif'],
                 'inter': ['Inter', 'sans-serif'],
                 'roboto': ['Roboto', 'sans-serif'],
-                'font': ['Unbounded','Arial','sans-serif']
+                'font': ['Unbounded', 'Arial', 'sans-serif']
             },
             fontSize: {
                 'xs': ['0.75rem', { lineHeight: '1rem' }],

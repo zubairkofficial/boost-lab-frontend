@@ -3,10 +3,12 @@ import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useSignupMutation } from '../features/auth/authApi';
 import FuturisticButton from '../components/furastic-button';
+import { useToast } from '../contexts/ToastContext';
 import bg from '../assets/bg_1_1.jpg';
 
 export const SignUpPage = () => {
   const navigate = useNavigate();
+  const { showSuccess, showError } = useToast();
   const [isLoaded, setIsLoaded] = useState(false);
   const [formData, setFormData] = useState({
     Name: '',
@@ -26,7 +28,8 @@ export const SignUpPage = () => {
   }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type } = e.target;
+    const checked = (e.target as HTMLInputElement).checked;
     setFormData(prev => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : value
@@ -70,11 +73,12 @@ export const SignUpPage = () => {
         name: formData.Name,
         email: formData.email,
         password: formData.password,
-        planId: formData.planId ? parseInt(formData.planId) : undefined
       }).unwrap();
+      showSuccess("Account Created!", "Please sign in with your new account");
       navigate('/auth/login', { replace: true });
-    } catch (err) {
+    } catch (err: any) {
       console.error('Signup failed:', err);
+      showError("Signup Failed", (err as any)?.data?.message || "Please try again with different credentials");
     } finally {
       setIsSubmitting(false);
     }

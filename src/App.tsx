@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Provider } from 'react-redux';
 import { SignInPage } from "./pages/SignIn";
 import { SignUpPage } from "./pages/SignUp";
 import { ForgotPasswordPage } from "./pages/ForgotPassword";
@@ -12,63 +13,84 @@ import SubscriptionPlans from "./pages/Plans";
 import Success from "./pages/success";
 
 // ✅ Components
-// import ProtectedRoute from "./components/ProtectedRoute";
-import LayoutWithSidebar from "./components/LayoutWithSidebar"; // ✅ Import layout
+import ProtectedRoute from "./components/ProtectedRoute";
+import LayoutWithSidebar from "./components/LayoutWithSidebar";
 import Cancel from "./pages/cancel";
+import { AuthProvider } from "./contexts/AuthContext";
+import { ToastProvider } from "./contexts/ToastContext";
+import store from "./store";
 
 const App = () => {
   return (
-    <Router>
-      <Routes>
-        {/* ✅ Public Routes */}
-        <Route path="/" element={<HomePage />} />
-        <Route path="/auth/signup" element={<SignUpPage />} />
-        <Route path="/auth/login" element={<SignInPage />} />
-        <Route path="/auth/verify-otp" element={<VerifyOtpPage />} />
-        <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
-        <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
+    <Provider store={store}>
+      <Router>
+        <ToastProvider>
+          <AuthProvider>
+            <Routes>
+            {/* ✅ Public Routes */}
+            <Route path="/" element={<HomePage />} />
+            <Route path="/auth/signup" element={<SignUpPage />} />
+            <Route path="/auth/login" element={<SignInPage />} />
+            <Route path="/auth/verify-otp" element={<VerifyOtpPage />} />
+            <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
+            <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
 
-        {/* ✅ Protected Routes with Sidebar */}
-        <Route element={<LayoutWithSidebar />}>
-          <Route
-            path="/auth/dashboard"
-            element={
-                <Dashboard />
-            }
-          />
-          <Route
-            path="/plans"
-            element={
-                <SubscriptionPlans />
-            }
-          />
-            <Route
-            path="/success"
-            element={
-                <Success />
-            }
-          />
-            <Route
-            path="/cancel"
-            element={
-                <Cancel />
-            }
-          />
-          <Route
-            path="/take-test"
-            element={
-                <TakeTestPage />
-            }
-          />
-          <Route
-            path="/results"
-            element={
-                <ResultsPage />
-            }
-          />
-        </Route>
-      </Routes>
-    </Router>
+            {/* ✅ Protected Routes with Sidebar */}
+            <Route element={<LayoutWithSidebar />}>
+              <Route
+                path="/auth/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/plans"
+                element={
+                  <ProtectedRoute>
+                    <SubscriptionPlans />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/success"
+                element={
+                  <ProtectedRoute>
+                    <Success />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/cancel"
+                element={
+                  <ProtectedRoute>
+                    <Cancel />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/take-test"
+                element={
+                  <ProtectedRoute>
+                    <TakeTestPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/results"
+                element={
+                  <ProtectedRoute>
+                    <ResultsPage />
+                  </ProtectedRoute>
+                }
+              />
+            </Route>
+          </Routes>
+        </AuthProvider>
+        </ToastProvider>
+      </Router>
+    </Provider>
   );
 };
 

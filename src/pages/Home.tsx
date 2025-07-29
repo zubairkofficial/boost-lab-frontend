@@ -43,13 +43,13 @@ export default function HomePage() {
           
           {/* Header */}
           <div className="text-center mb-6">
-            <h1 className="text-3xl md:text-4xl font-bold text-white font-cyber mb-2">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white font-font mb-2 animate-fade-in">
               AI Personality Test
             </h1>
-            <p className="text-gray-300 text-sm">
+            <p className="text-gray-300 text-body font-font">
               Discover your AI-generated personality type and see what it says about you!
             </p>
-            <div className="w-16 h-1 bg-gradient-to-r from-primary via-cyber-blue to-neon-cyan mx-auto mt-2 rounded-full shadow-cyber"></div>
+            <div className="w-16 h-1 bg-gradient-to-r from-primary via-cyber-blue to-neon-cyan mx-auto mt-2 rounded-full shadow-cyber animate-glow"></div>
           </div>
 
           {/* Conditional: test block */}
@@ -58,7 +58,7 @@ export default function HomePage() {
               <FuturisticButton onClick={() => navigate('/take-test')}>
                 Take the Test
               </FuturisticButton>
-              <p className="text-xs text-gray-400">One-time test. Discover your AI type now!</p>
+              <p className="text-caption text-gray-400 font-font">One-time test. Discover your AI type now!</p>
             </div>
           ) : (
             <div className="bg-ui-dark/40 border border-primary/20 rounded-xl p-4 text-center">
@@ -80,9 +80,9 @@ export default function HomePage() {
 
           {/* Back to login */}
           <div className="text-center mt-6">
-            <p className="text-gray-300 text-xs">
+            <p className="text-gray-300 text-caption font-font">
               Already have an account?{' '}
-              <Link to="/auth/login" className="text-white hover:text-cyber-blue font-semibold transition-colors">
+              <Link to="/auth/login" className="text-white hover:text-cyber-blue font-semibold transition-colors font-font">
                 Sign In
               </Link>
             </p>
