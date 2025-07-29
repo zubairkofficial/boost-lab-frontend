@@ -9,15 +9,18 @@ import TakeTestPage from "./pages/TakeTestPage";
 import ResultsPage from "./pages/ResultPage";
 import Dashboard from "./pages/Dashboard";
 import SubscriptionPlans from "./pages/Plans";
+import Success from "./pages/success";
 
-// ✅ Protected Route Wrapper
-import ProtectedRoute from "./components/ProtectedRoute";
+// ✅ Components
+// import ProtectedRoute from "./components/ProtectedRoute";
+import LayoutWithSidebar from "./components/LayoutWithSidebar"; // ✅ Import layout
+import Cancel from "./pages/cancel";
 
 const App = () => {
   return (
     <Router>
       <Routes>
-        {/* Public Routes */}
+        {/* ✅ Public Routes */}
         <Route path="/" element={<HomePage />} />
         <Route path="/auth/signup" element={<SignUpPage />} />
         <Route path="/auth/login" element={<SignInPage />} />
@@ -25,36 +28,45 @@ const App = () => {
         <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
 
-        {/* ✅ Protected Routes */}
-        <Route path="/plans" element={
-          <ProtectedRoute>
-            <SubscriptionPlans />
-          </ProtectedRoute>
-          } />
-        <Route
-          path="/auth/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/take-test"
-          element={
-            <ProtectedRoute>
-              <TakeTestPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/results"
-          element={
-            <ProtectedRoute>
-              <ResultsPage />
-            </ProtectedRoute>
-          }
-        />
+        {/* ✅ Protected Routes with Sidebar */}
+        <Route element={<LayoutWithSidebar />}>
+          <Route
+            path="/auth/dashboard"
+            element={
+                <Dashboard />
+            }
+          />
+          <Route
+            path="/plans"
+            element={
+                <SubscriptionPlans />
+            }
+          />
+            <Route
+            path="/success"
+            element={
+                <Success />
+            }
+          />
+            <Route
+            path="/cancel"
+            element={
+                <Cancel />
+            }
+          />
+          <Route
+            path="/take-test"
+            element={
+                <TakeTestPage />
+            }
+          />
+          <Route
+            path="/results"
+            element={
+                <ResultsPage />
+            }
+          />
+        </Route>
       </Routes>
     </Router>
   );

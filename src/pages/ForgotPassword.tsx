@@ -125,8 +125,7 @@ export const ForgotPasswordPage = () => {
                 </div>
 
                 {/* Submit Button */}
-                               <FuturisticButton type='submit' className='ml-30'> {isSubmitting ? 'Sending...' : 'Send Reset Link'}</FuturisticButton>
-
+                <FuturisticButton type='submit' className='ml-30'> {isSubmitting ? 'Sending...' : 'Send Reset Link'}</FuturisticButton>
               </form>
             ) : (
               /* Success State */
@@ -139,12 +138,12 @@ export const ForgotPasswordPage = () => {
                       </svg>
                     </div>
                     <div>
-                      <h3 className="text-lg font-semibold text-accent-green">Email Sent!</h3>
+                      <h3 className="text-lg font-semibold text-white">Email Sent!</h3>
                       <p className="text-sm text-gray-300">Check your inbox for reset instructions</p>
                     </div>
                   </div>
                   <p className="text-sm text-gray-300">
-                    We've sent a password reset link to <span className="text-primary font-medium">{email}</span>. 
+                    We've sent a password reset link to <span className="text-white font-medium">{email}</span>. 
                     Click the link in the email to reset your password.
                   </p>
                 </div>
@@ -158,11 +157,8 @@ export const ForgotPasswordPage = () => {
 
                   <button
                     onClick={() => navigate('/auth/login')}
-                    className="w-full h-12 bg-gradient-to-r from-primary to-cyber-blue text-black font-bold font-cyber tracking-wide rounded-xl hover:scale-105 transition-all duration-300 flex items-center justify-center space-x-3"
+                    className="w-full h-12 text-white font-bold font-cyber tracking-wide rounded-xl hover:scale-105 transition-all duration-300 flex items-center justify-center space-x-3"
                   >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                    </svg>
                     <span>Back to Sign In</span>
                   </button>
                 </div>
@@ -173,7 +169,7 @@ export const ForgotPasswordPage = () => {
             <div className="text-center mt-8 space-y-2">
               <p className="text-gray-300 text-sm">
                 Remember your password?{' '}
-                <Link to="/auth/login" className="text-primary hover:text-cyber-blue transition-colors duration-300 font-semibold">
+                <Link to="/auth/login" className="text-white hover:text-cyber-blue transition-colors duration-300 font-semibold">
                   Sign in here
                 </Link>
               </p>

@@ -1,5 +1,5 @@
-import { Sidebar } from "./../components/sidebar";
-import { ProfileContent } from "./../components/profile";
+import { } from 'react';
+import ProfileContent from "./../components/profile";
 
 const Dashboard = () => {
   const backgroundImageUrl =
@@ -16,10 +16,6 @@ const Dashboard = () => {
         />
         <div className="absolute inset-0 bg-gradient-to-br from-dark-blue/80 via-dark-grey/70 to-ui-dark/90" />
       </div>
-
-      {/* Sidebar */}
-      <Sidebar />
-
       {/* Main Content */}
       <main className="flex-1 relative z-10 overflow-y-auto">
         <ProfileContent />

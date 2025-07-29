@@ -1,138 +1,95 @@
-"use client"
+import { useEffect } from 'react';
+import { loadStripe } from '@stripe/stripe-js';
+import PlansFuturisticButton from "@/components/plans-furastic-button";
+import bg from "../assets/bg_tariffs.jpg";
+import {
+  useGetAllPlansQuery,
+  useCreateCheckoutSessionMutation,
+} from "../features/auth/plansApi";
 
-import PlansFuturisticButton from "@/components/plans-furastic-button"
-import bg from "../assets/bg_tariffs.jpg"
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY!);
 
-interface Plan {
-  name: string
-  price: string
-  period: string
-  features: string[]
-  buttonText: string
-  popular: boolean
-}
+export default function SubscriptionPlans() {
+  const { data: plans = [], isLoading, isError } = useGetAllPlansQuery();
+  const [createCheckoutSession] = useCreateCheckoutSessionMutation();
 
-interface SubscriptionPlansProps {
-  plans?: Plan[]
-  title?: string
-  subtitle?: string
-}
-
-const defaultPlans: Plan[] = [
-  {
-    name: "BASIC",
-    price: "$9",
-    period: "/month",
-    features: ["5 Projects", "10GB Storage", "Basic Support", "Standard Analytics", "Mobile App Access"],
-    buttonText: "START BASIC",
-    popular: false,
-  },
-  {
-    name: "PRO",
-    price: "$29",
-    period: "/month",
-    features: [
-      "Unlimited Projects",
-      "100GB Storage",
-      "Priority Support",
-      "Advanced Analytics",
-      "Mobile App Access",
-      "API Access",
-      "Custom Integrations",
-    ],
-    buttonText: "GO PRO",
-    popular: true,
-  },
-  {
-    name: "ENTERPRISE",
-    price: "$99",
-    period: "/month",
-    features: [
-      "Unlimited Everything",
-      "1TB Storage",
-      "24/7 Dedicated Support",
-      "Enterprise Analytics",
-      "White Label Solution",
-      "Custom Development",
-      "SLA Guarantee",
-    ],
-    buttonText: "GET ENTERPRISE",
-    popular: false,
-  },
-]
-
-export default function SubscriptionPlans({
-  plans = defaultPlans,
-  title = "Choose Your Plan",
-  subtitle = "Select the perfect subscription plan for your needs. Upgrade or downgrade at any time.",
-}: SubscriptionPlansProps) {
-  const handlePlanSelect = (planName: string) => {
-    alert(`Selected ${planName} plan!`)
-    // Add your plan selection logic here
-  }
+  const handlePlanSelect = async (plan: any) => {
+    try {
+      const { url } = await createCheckoutSession({
+        stripePriceId: plan.stripePriceId,
+      }).unwrap();
+  
+      const stripe = await stripePromise;
+      if (!stripe) throw new Error("Stripe failed to initialize");
+  
+      window.location.href = url;
+    } catch (error) {
+      console.error("Checkout error:", error);
+      alert("Something went wrong while redirecting to Stripe");
+    }
+  };
+  
 
   return (
-    <div className="min-h-screen p-8 bg-fixed bg-cover bg-no-repeat" style={{ backgroundImage: `url(${bg})` }}>
+    <div
+      className="min-h-screen p-8 bg-fixed bg-cover bg-no-repeat"
+      style={{ backgroundImage: `url(${bg})` }}
+    >
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
         <div className="text-center mb-16">
-          <h1 className="text-5xl font-bold text-white mb-4">{title}</h1>
-          <p className="text-xl text-cyan-300 max-w-2xl mx-auto">{subtitle}</p>
+          <h1 className="text-5xl font-bold text-white mb-4">Choose Your Plan</h1>
+          <p className="text-xl text-cyan-300 max-w-2xl mx-auto">
+            Select the perfect subscription plan for your needs. Upgrade or downgrade at any time.
+          </p>
         </div>
 
-        {/* Pricing Cards */}
-        <div className="flex flex-wrap justify-center gap-8 max-w-6xl mx-auto">
-          {plans.map((plan, index) => (
-            <div
-              key={plan.name}
-              className="relative bg-[#123c4b] backdrop-blur-sm border rounded-2xl
-                         border-slate-700 w-full max-w-sm min-w-[300px]
-                         hover:border-cyan-400/50 transition-all duration-300
-                         flex flex-col h-auto min-h-[500px]"
-            >
-             
+        {isLoading && <p className="text-center text-white">Loading plans...</p>}
+        {isError && <p className="text-center text-red-500">Failed to load plans. Please try again later.</p>}
 
-              {/* Plan Header */}
-              <div className="text-center p-8 pb-4">
-                <h3 className="text-2xl font-bold text-white mb-2">{plan.name}</h3>
-                <div className="flex items-baseline justify-center mb-4">
-                  <span className="text-5xl font-bold text-cyan-400">{plan.price}</span>
-                  <span className="text-xl text-slate-400 ml-2">{plan.period}</span>
+        {!isLoading && !isError && (
+          <div className="flex flex-wrap justify-center gap-10">
+            {plans.map((plan: any) => (
+              <div
+                key={plan.id}
+                className="bg-[#154E62] border border-cyan-500/30 shadow-xl text-white h-[28rem] w-full max-w-sm min-w-[370px] flex flex-col justify-between"
+              >
+                <div className="p-6 flex flex-col flex-grow">
+                  <h3 className="text-3xl font-bold text-cyan-300 mb-4">{plan.name} Plan</h3>
+                  <div className="text-sm text-cyan-200 font-semibold mb-2">
+                    — {plan.validTill} Access —
+                  </div>
+                  <p className="text-sm text-slate-300 mb-4">
+                    {plan.description || "Best for long-term growth and value."}
+                  </p>
+                  <ul className="text-sm text-slate-200 mb-6 space-y-2">
+                    {plan.features?.map((feature: string, i: number) => (
+                      <li key={i} className="flex items-start">
+                        <span className="text-cyan-400 mr-2">✓</span>
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="text-lg text-white mb-6">
+                    {plan.originalPrice && (
+                      <span className="line-through text-slate-400 mr-2">€{plan.originalPrice}</span>
+                    )}
+                    <span className="text-2xl font-bold text-cyan-400">€{plan.price}</span>
+                  </div>
+
+                  <PlansFuturisticButton
+                    onClick={() => handlePlanSelect(plan)}
+                    className="w-full right-7 top-5"
+                  >
+                    JOIN NOW
+                  </PlansFuturisticButton>
                 </div>
               </div>
+            ))}
+          </div>
+        )}
 
-              {/* Features List - This will grow to fill available space */}
-              <div className="flex-1 px-8">
-                <ul className="space-y-4">
-                  {plan.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-center text-slate-300">
-                      <svg
-                        className="w-5 h-5 text-cyan-400 mr-3 flex-shrink-0"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Button at bottom - Fixed position */}
-              <div className="px-8">
-                <PlansFuturisticButton onClick={() => handlePlanSelect(plan.name)} className="right-8 top-6 w-full">
-                  {plan.buttonText}
-                </PlansFuturisticButton>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Bottom CTA */}
-        <div className="text-center mt-16">
-          <p className="text-slate-400 mb-6">All plans include a 30-day money-back guarantee</p>
+        <div className="text-center mt-29">
+          <p className="text-cyan-300 mb-6">All plans include a 30-day money-back guarantee</p>
           <div className="flex flex-wrap justify-center gap-4 text-sm text-cyan-300">
             <span>✓ No setup fees</span>
             <span>✓ Cancel anytime</span>
@@ -142,5 +99,5 @@ export default function SubscriptionPlans({
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -38,9 +38,9 @@ const CyberButton: React.FC<CyberButtonProps> = ({
   }
 
   const variantClasses = {
-    primary: 'text-black font-cyber tracking-wide',
+    primary: 'text-white font-cyber tracking-wide',
     secondary: 'text-white font-cyber tracking-wide',
-    outline: 'text-primary border border-primary/20 hover:bg-primary/10 font-cyber tracking-wide'
+    outline: 'text-white border border-primary/20 hover:bg-primary/10 font-cyber tracking-wide'
   }
 
   const buttonContent = (

@@ -30,7 +30,7 @@ export default function PlansFuturisticButton({
      {/* Glow effect */}
       <div
         className={`absolute inset-0 rounded-full blur-[60px] transition-opacity duration-100 ${
-         isHovered ? "opacity-100 shadow-[0_0_150px_15px_rgba(142,240,244,0.9)]" : "opacity-0"
+         isHovered ? "opacity-50 shadow-[0_0_150px_15px_rgba(142,240,244,0.9)]" : "opacity-0"
         }`}
       ></div>
 

@@ -150,7 +150,7 @@ export const VerifyOtpPage = () => {
             <div className="text-center mt-8 space-y-2">
               <p className="text-gray-300 text-sm">
                 Entered wrong email?{' '}
-                <Link to="/auth/signup" className="text-primary hover:text-cyber-blue transition-colors duration-300 font-semibold">
+                <Link to="/auth/signup" className="text-white hover:text-cyber-blue transition-colors duration-300 font-semibold">
                   Try again
                 </Link>
               </p>

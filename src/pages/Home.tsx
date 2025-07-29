@@ -62,11 +62,11 @@ export default function HomePage() {
             </div>
           ) : (
             <div className="bg-ui-dark/40 border border-primary/20 rounded-xl p-4 text-center">
-              <h2 className="text-xl font-semibold mb-2">You’ve already taken the test 🎉</h2>
-              <p className="text-gray-400 mb-3 text-sm">Retaking is currently unavailable.</p>
+              <h2 className="text-xl font-semibold mb-2 text-white">You’ve already taken the test 🎉</h2>
+              <p className="text-white mb-3 text-sm">Retaking is currently unavailable.</p>
               <Link 
                 to="/results"
-                className="text-primary hover:text-cyber-blue font-semibold transition-colors"
+                className="text-white hover:text-cyber-blue font-semibold transition-colors"
               >
                 View Your Test Results
               </Link>
@@ -82,7 +82,7 @@ export default function HomePage() {
           <div className="text-center mt-6">
             <p className="text-gray-300 text-xs">
               Already have an account?{' '}
-              <Link to="/auth/login" className="text-primary hover:text-cyber-blue font-semibold transition-colors">
+              <Link to="/auth/login" className="text-white hover:text-cyber-blue font-semibold transition-colors">
                 Sign In
               </Link>
             </p>

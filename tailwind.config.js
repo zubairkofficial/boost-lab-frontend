@@ -8,9 +8,7 @@ export default {
         extend: {
             colors: {
                 // Primary Cyber Colors
-                primary: '#8ef0f4',
-
-
+                primary: '#ffffff',
 
 
 
