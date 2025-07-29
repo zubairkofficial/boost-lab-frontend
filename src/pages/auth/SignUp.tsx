@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useSignupMutation } from "../features/auth/authApi";
-import FuturisticButton from "../components/furastic-button";
-import { useToast } from "../contexts/ToastContext";
-import bg from "../assets/bg_1_1.jpg";
+import { useSignupMutation } from "../../features/auth/authApi";
+import FuturisticButton from "../../components/furastic-button";
+import { useToast } from "../../contexts/ToastContext";
+import bg from "../../assets/bg_1_1.jpg";
 
 export const SignUpPage = () => {
   const navigate = useNavigate();
@@ -77,8 +77,8 @@ export const SignUpPage = () => {
         email: formData.email,
         password: formData.password,
       }).unwrap();
-      showSuccess("Account Created!", "Please sign in with your new account");
-      navigate("/auth/login", { replace: true });
+      showSuccess("Account Created!", "Please check your email to confirm your account");
+      navigate(`/auth/confirm-email?email=${encodeURIComponent(formData.email)}`, { replace: true });
     } catch (err: any) {
       console.error("Signup failed:", err);
       const backendMessage =

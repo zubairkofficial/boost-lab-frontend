@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
-import { useForgotPasswordMutation } from '../features/auth/authApi'
+import { useForgotPasswordMutation } from '../../features/auth/authApi'
 import { useNavigate, Link } from 'react-router-dom'
-import FuturisticButton from '../components/furastic-button'
-import { H1, BodyText, Caption, H2 } from '../components/ui/typography'
-import { useToast } from '../contexts/ToastContext'
+import FuturisticButton from '../../components/furastic-button'
+import { H1, BodyText, Caption, H2 } from '../../components/ui/typography'
+import { useToast } from '../../contexts/ToastContext'
 
 export const ForgotPasswordPage = () => {
   const [forgotPassword, { isLoading }] = useForgotPasswordMutation()

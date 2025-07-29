@@ -56,7 +56,14 @@ export const authApi = createApi({
         body,
       }),
     }),
+    resendConfirmationEmail: builder.mutation<any, { email: string }>({
+      query: (body) => ({
+        url: '/resend-confirmation',
+        method: 'POST',
+        body,
+      }),
+    }),
   }),
 })
 
-export const { useSignupMutation, useLoginMutation, useForgotPasswordMutation, useSendRegisterOtpMutation, useVerifyRegisterOtpMutation, useResetPasswordMutation } = authApi 
+export const { useSignupMutation, useLoginMutation, useForgotPasswordMutation, useSendRegisterOtpMutation, useVerifyRegisterOtpMutation, useResetPasswordMutation, useResendConfirmationEmailMutation } = authApi 

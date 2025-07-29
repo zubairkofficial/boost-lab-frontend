@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { H1, BodyText } from './ui/typography';
+import { selectUser, selectIsAuthenticated, selectIsLoading } from '../store/userSlice';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -13,27 +15,10 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   requiredRole = 'user',
   fallbackPath = '/auth/login'
 }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
-  const [user, setUser] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const user = useSelector(selectUser);
+  const isLoading = useSelector(selectIsLoading);
   const location = useLocation();
-
-  useEffect(() => {
-    const checkAuth = () => {
-      const token = localStorage.getItem('access_token');
-      const userData = localStorage.getItem('user');
-      
-      if (token && userData) {
-        setUser(JSON.parse(userData));
-        setIsAuthenticated(true);
-      } else {
-        setIsAuthenticated(false);
-      }
-      setIsLoading(false);
-    };
-
-    checkAuth();
-  }, []);
 
   // Show loading spinner while checking authentication
   if (isLoading) {

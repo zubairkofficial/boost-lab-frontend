@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import toast from "react-hot-toast";
-import FuturisticButton from "../components/furastic-button";
-import { useLoginMutation } from "../features/auth/authApi";
-import { BodyText, H2 } from "../components/ui/typography";
+import FuturisticButton from "../../components/furastic-button";
+import { useLoginMutation } from "../../features/auth/authApi";
+import { BodyText, H2 } from "../../components/ui/typography";
+import { setUser } from "../../store/userSlice";
 
 export const SignInPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
   const [login, { isLoading, error }] = useLoginMutation();
   const [isLoaded, setIsLoaded] = useState(false);
   const [formData, setFormData] = useState({
@@ -62,8 +65,12 @@ export const SignInPage = () => {
         password: formData.password,
       }).unwrap();
 
+      // Store in localStorage
       localStorage.setItem("access_token", result.access_token);
       localStorage.setItem("user", JSON.stringify(result.user));
+
+      // Dispatch user data to Redux store
+      dispatch(setUser(result.user));
 
       toast.success("Login successful! Redirecting...");
       navigate("/auth/dashboard", { state: { message: "Login successful!" } });
