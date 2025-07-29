@@ -44,7 +44,7 @@ const userSlice = createSlice({
   reducers: {
     setUser: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
-      state.isAuthenticated = true;
+      state.isAuthenticated = false;
       state.isLoading = false;
     },
     setUserFromStorage: (state, action: PayloadAction<User | null>) => {

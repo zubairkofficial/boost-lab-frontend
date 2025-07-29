@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Provider } from "react-redux";
+import { Provider, useSelector } from "react-redux";
 import { Toaster } from "react-hot-toast";
 import { ToastProvider } from './contexts/ToastContext';
 import { AuthProvider } from './contexts/AuthContext';
@@ -7,7 +7,7 @@ import { SignInPage } from "./pages/auth/SignIn";
 import { SignUpPage } from "./pages/auth/SignUp";
 import { ForgotPasswordPage } from "./pages/auth/ForgotPassword";
 import ConfirmEmailPage from "./pages/auth/ConfirmEmail";
-import HomePage from "./pages/Home";
+
 import ResetPasswordPage from "./pages/auth/ResetPassword";
 import TakeTestPage from "./pages/TakeTestPage";
 import ResultsPage from "./pages/ResultPage";
@@ -16,13 +16,18 @@ import SubscriptionPlans from "./pages/Plans";
 import ProtectedRoute from "./components/ProtectedRoute";
 import LayoutWithSidebar from "./components/LayoutWithSidebar";
 import AppInitializer from "./components/AppInitializer";
-import store from "./store";
+
 import Success from "./pages/Success";
 import Cancel from "./pages/Cancel";
 import NotFound from "./pages/NotFound";
+
 const App = () => {
+  const accessToken = localStorage.getItem("access_token");
+  console.log("accessToken",accessToken)
+
+
   return (
-    <Provider store={store}>
+    // <Provider store={store}>
       <AppInitializer>
         <Router>
           <ToastProvider>
@@ -65,7 +70,7 @@ const App = () => {
                     } />
 
                     <Route
-                      path="/auth/dashboard"
+                      path="/dashboard"
                       element={
                         <ProtectedRoute>
                           <Dashboard />
@@ -111,7 +116,7 @@ const App = () => {
           </ToastProvider>
         </Router>
       </AppInitializer>
-    </Provider>
+    // </Provider>
   );
 };
 

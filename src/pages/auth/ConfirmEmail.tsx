@@ -130,7 +130,7 @@ const ConfirmEmail = () => {
             <div className="flex justify-center">
               <FuturisticButton
                 onClick={handleResendEmail}
-                disabled={isResending || !email.trim()}
+                // disabled={isResending || !email.trim()}
                 className="w-full"
               >
                 {isResending ? "Sending..." : "Resend Confirmation Email"}

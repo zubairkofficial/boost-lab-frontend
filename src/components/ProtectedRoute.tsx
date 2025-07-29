@@ -16,6 +16,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   fallbackPath = '/auth/login'
 }) => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
+  console.log("isAuthenticated",isAuthenticated)
   const user = useSelector(selectUser);
   const isLoading = useSelector(selectIsLoading);
   const location = useLocation();
@@ -48,7 +49,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   if (user && requiredRole === 'admin' && user.role !== 'admin') {
     return (
       <Navigate 
-        to="/auth/dashboard" 
+        to="/dashboard" 
         state={{ message: 'Access denied. Admin privileges required.' }} 
         replace 
       />
