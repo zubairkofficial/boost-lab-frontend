@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import PlansFuturisticButton from "@/components/plans-furastic-button";
 import bg from "../assets/bg_tariffs.jpg";
@@ -18,7 +18,7 @@ export default function SubscriptionPlans() {
       const { url } = await createCheckoutSession({
         stripePriceId: plan.stripePriceId,
       }).unwrap();
-  
+
       const stripe = await stripePromise;
       if (!stripe) throw new Error("Stripe failed to initialize");
   

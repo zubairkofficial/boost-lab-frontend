@@ -1,3 +1,5 @@
+// components/Sidebar.tsx
+
 import { Home, Settings, LogOut, FileQuestion } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Link, useNavigate, useLocation } from "react-router-dom";
@@ -23,20 +25,21 @@ export const Sidebar = () => {
 
   return (
     <aside
-      className="h-screen w-64 text-white flex flex-col"
+      className="w-64 h-screen text-white flex-shrink-0"
       style={{
         backgroundImage: `url(${backgroundImageUrl})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
       }}
     >
-      {/* Overlay for readability */}
-      <div className="flex-1 bg-black/70 backdrop-blur-sm flex flex-col">
+      <div className="h-full backdrop-blur-sm flex flex-col overflow-hidden">
         {/* Logo/Header */}
         <div className="h-16 flex items-center justify-center border-b border-[#8ef0f4]/30 text-xl font-bold tracking-wider">
           🚀 BoostLab
         </div>
 
         {/* Menu */}
-        <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+        <nav className="flex-1 px-4 py-6 space-y-2">
           {menuItems.map((item, idx) => {
             const isActive = location.pathname === item.link;
             return (
