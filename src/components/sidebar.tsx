@@ -47,7 +47,7 @@ export const Sidebar = () => {
     { 
       label: "Dashboard", 
       icon: <Home className="w-5 h-5" />, 
-      link: "/auth/dashboard",
+      link: "/dashboard",
       description: "Overview and analytics"
     },
     { 

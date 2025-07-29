@@ -89,7 +89,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       localStorage.setItem('user', JSON.stringify(result.user));
       setUser(result.user);
       
-      navigate('/auth/dashboard');
+      navigate('/dashboard');
     } catch (error) {
       console.error('Login error:', error);
       throw error;

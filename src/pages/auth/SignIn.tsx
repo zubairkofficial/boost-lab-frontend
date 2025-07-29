@@ -73,7 +73,7 @@ export const SignInPage = () => {
       dispatch(setUser(result.user));
 
       toast.success("Login successful! Redirecting...");
-      navigate("/auth/dashboard", { state: { message: "Login successful!" } });
+      navigate("/dashboard", { state: { message: "Login successful!" } });
     } catch (err: any) {
       console.error("Login failed:", err);
       toast.error(err?.data?.message || "Login failed. Please try again.");
