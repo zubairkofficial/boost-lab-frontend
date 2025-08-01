@@ -12,21 +12,16 @@ import { BeforeSubscriptionStages } from "@/common/constant";
 
 const Dashboard: React.FC = () => {
   const user = useSelector(selectUser);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [showResult, setShowResult] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isResultOpen, setIsResultOpen] = useState(false);
 
   const { data: testResult, isLoading } = useGetTestResultByEmailQuery(
     user?.email ?? "",
-    { skip: !showResult }
+    { skip: !isResultOpen }
   );
 
   const backgroundImage =
     "https://static.tildacdn.net/tild6534-6232-4333-a431-313138303165/bg_1_1.jpg";
-
-  const handleSeeResult = () => {
-    setIsModalOpen(true);
-    setShowResult(true);
-  };
 
   return (
     <div
@@ -40,30 +35,30 @@ const Dashboard: React.FC = () => {
         fontFamily: `'Unbounded', Arial, sans-serif`,
       }}
     >
+      {/* Navbar */}
       <div className="container mx-auto fixed top-0 z-50 p-3 px-10 backdrop-blur-md rounded-b-xl shadow-md border-b border-white/10">
         <img src={navbar1} alt="Navbar" className="w-full" />
       </div>
+
+      {/* MENU Button */}
       <div
         className="z-[60] fixed top-8 right-0 sm:right-10"
-       onClick={() => setIsModalOpen(true)}
-
+        onClick={() => setIsMenuOpen(true)}
       >
         <div className="relative w-[114px] h-[35px] sm:w-[140px] sm:h-[45px] cursor-pointer">
           <img src={menu} alt="Menu" className="w-full h-full" />
-          <div className="absolute inset-0 flex items-center justify-center" >
-            <span className="text-white text-xs sm:text-sm font-semibold">
-              MENU
-            </span>
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span className="text-white text-xs sm:text-sm font-semibold">MENU</span>
           </div>
         </div>
       </div>
 
+      {/* Welcome Text */}
       <div className="absolute top-14 pt-10 left-6 z-60 ml-10">
-        <p className="text-lg font-light tracking-wide font-ptSans">
-          WELCOME TO YOUR BOOSTLAB
-        </p>
+        <p className="text-lg font-light tracking-wide font-ptSans">WELCOME TO YOUR BOOSTLAB</p>
       </div>
 
+      {/* Video Section */}
       <div className="relative z-10 flex flex-col items-center text-center px-4 py-20">
         <h1 className="text-[2.5rem] sm:text-[4rem] md:text-[6rem] lg:text-[7rem] mb-10 leading-none tracking-tight font-normal pt-14">
           PERSONAL ACCOUNT
@@ -98,7 +93,7 @@ const Dashboard: React.FC = () => {
           </div>
           <div
             className="flex items-center mt-6 md:mt-0 text-[#d2d2d2] text-sm cursor-pointer"
-            onClick={handleSeeResult}
+            onClick={() => setIsResultOpen(true)}
           >
             <img
               src="https://static.tildacdn.net/tild6231-3763-4066-a262-313738353561/result_icon.svg"
@@ -110,76 +105,59 @@ const Dashboard: React.FC = () => {
             </span>
           </div>
         </div>
-        {isModalOpen && <MenuCard onClose={() => setIsModalOpen(false)} />}
-
-        {showResult && (
+        {isMenuOpen && <MenuCard onClose={() => setIsMenuOpen(false)} />}
+        {isResultOpen && (
           <MenuModal
-            isModalOpen={isModalOpen}
-            setIsModalOpen={setIsModalOpen}
+            isModalOpen={isResultOpen}
+            setIsModalOpen={setIsResultOpen}
             testResult={testResult}
             isLoading={isLoading}
           />
         )}
-        {BeforeSubscriptionStages.map(
-          ({ stage, title, description, button }) => (
-            <div
-              key={stage}
-              className="flex justify-between items-center w-full max-w-[91rem] px-4 sm:px-10 md:px-20 py-10 bg-gradient-to-r from-[#1f3b47] to-[#193540]/60 backdrop-blur-md rounded-md mb-6 text-white"
-            >
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between w-full gap-4">
-                <div className="w-[82%] md:w-auto">
-                  <h2
-                    className={`text-xl md:text-4xl text-[#87F1FF] uppercase tracking-wide font-normal ${
-                      stage === "LET BOOSTI BUILD YOUR PERSONALIZED STRATEGY"
-                        ? "py-5"
-                        : ""
-                    }`}
-                  >
-                    {stage}
-                    {title ? `: ${title}` : ""}
-                  </h2>
-                  <p className="mt-2 text-white text-sm md:text-base font-normal">
-                    {description}
-                  </p>
-                  {button && (
-                    <div className="block lg:hidden mt-4 w-[50px]">
-                      {button}
-                    </div>
-                  )}
-                </div>
-                {button ? (
-                  <div className="hidden lg:flex items-center mt-4 md:mt-0 justify-end w-full md:w-auto">
-                    {button}
-                  </div>
-                ) : (
-                  <div className="flex items-center justify-end w-full md:w-auto">
-                    <img
-                      src="https://static.tildacdn.net/tild6466-3537-4561-a136-313962393561/lock_icon.svg"
-                      alt="Lock Icon"
-                      className="w-18 h-18 mr-4"
-                    />
-                    <span className="underline underline-offset-[4px] text-xl font-light px-2">
-                      Not Available
-                    </span>
-                  </div>
-                )}
+        {BeforeSubscriptionStages.map(({ stage, title, description, button }) => (
+          <div
+            key={stage}
+            className="flex justify-between items-center w-full max-w-[91rem] px-4 sm:px-10 md:px-20 py-10 bg-gradient-to-r from-[#1f3b47] to-[#193540]/60 backdrop-blur-md rounded-md mb-6 text-white"
+          >
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between w-full gap-4">
+              <div className="w-[82%] md:w-auto">
+                <h2
+                  className={`text-xl md:text-4xl text-[#87F1FF] uppercase tracking-wide font-normal ${
+                    stage === "LET BOOSTI BUILD YOUR PERSONALIZED STRATEGY" ? "py-5" : ""
+                  }`}
+                >
+                  {stage}
+                  {title ? `: ${title}` : ""}
+                </h2>
+                <p className="mt-2 text-white text-sm md:text-base font-normal">{description}</p>
+                {button && <div className="block lg:hidden mt-4 w-[50px]">{button}</div>}
               </div>
+              {button ? (
+                <div className="hidden lg:flex items-center mt-4 md:mt-0 justify-end w-full md:w-auto">
+                  {button}
+                </div>
+              ) : (
+                <div className="flex items-center justify-end w-full md:w-auto">
+                  <img
+                    src="https://static.tildacdn.net/tild6466-3537-4561-a136-313962393561/lock_icon.svg"
+                    alt="Lock Icon"
+                    className="w-18 h-18 mr-4"
+                  />
+                  <span className="underline underline-offset-[4px] text-xl font-light px-2">
+                    Not Available
+                  </span>
+                </div>
+              )}
             </div>
-          )
-        )}
+          </div>
+        ))}
       </div>
+
       <div className="w-[70%] px-6 py-10 max-w-screen-xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
         {["SERVICES", "LIBRARY"].map((text, i) => (
-          <div
-            key={i}
-            className="w-full flex justify-center md:justify-between"
-          >
+          <div key={i} className="w-full flex justify-center md:justify-between">
             <div className="relative w-full transition-all duration-300 rounded-xl group">
-              <img
-                src={vector2}
-                alt={text}
-                className="w-full h-auto rounded-xl"
-              />
+              <img src={vector2} alt={text} className="w-full h-auto rounded-xl" />
               <div className="absolute inset-0 flex items-center justify-center">
                 <span className="text-white text-base md:text-lg font-semibold transition-all duration-500 ease-out group-hover:shadow-[0_0_2500px_100px_#8EF0F4]">
                   {text}
@@ -189,16 +167,14 @@ const Dashboard: React.FC = () => {
           </div>
         ))}
       </div>
-
       <div className="text-center">
         <h1 className="text-[2rem] lg:text-[5rem] mb-5 font-normal">Pricing</h1>
         <div className="flex justify-center">
           <p className="max-w-4xl text-base sm:text-lg leading-relaxed">
-            Buy Now, pay with a 42% discount, register, and get ready to turn
-            your passion for photography into a career with BOOSTLAB. Join us
-            and be part of the photography revolution! 🔓 First month/year
-            access only. No auto-renewal. On September 1st, you’ll receive an
-            invitation to activate your subscription and continue your access to
+            Buy Now, pay with a 42% discount, register, and get ready to turn your passion for
+            photography into a career with BOOSTLAB. Join us and be part of the photography
+            revolution! 🔓 First month/year access only. No auto-renewal. On September 1st, you’ll
+            receive an invitation to activate your subscription and continue your access to
             BOOSTLAB.
           </p>
         </div>
