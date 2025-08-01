@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { useResendConfirmationEmailMutation } from '../../features/auth/authApi';
-import FuturisticButton from '../../components/furastic-button';
+import FuturisticButton from '../../components/FurasticButton';
 import { useToast } from '../../contexts/ToastContext';
 import bg from '../../assets/bg_1_1.jpg';
 

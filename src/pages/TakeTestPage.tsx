@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import FuturisticButton from '../components/furastic-button'
+import FuturisticButton from '../components/FurasticButton'
 
 interface Question {
   id: number

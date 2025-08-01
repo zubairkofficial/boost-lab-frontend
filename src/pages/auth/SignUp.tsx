@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useSignupMutation } from "../../features/auth/authApi";
-import FuturisticButton from "../../components/furastic-button";
+import FuturisticButton from "../../components/FurasticButton";
 import { useToast } from "../../contexts/ToastContext";
 import bg from "../../assets/bg_1_1.jpg";
 

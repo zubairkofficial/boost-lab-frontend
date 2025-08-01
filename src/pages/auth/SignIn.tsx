@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import toast from "react-hot-toast";
-import FuturisticButton from "../../components/furastic-button";
+import frame from "../../assets/vector2.png";
 import { useLoginMutation } from "../../features/auth/authApi";
 import { BodyText, H2 } from "../../components/ui/typography";
 import { setUser } from "../../store/userSlice";
@@ -73,7 +73,7 @@ export const SignInPage = () => {
       dispatch(setUser(result.user));
 
       toast.success("Login successful! Redirecting...");
-      navigate("/dashboard", { state: { message: "Login successful!" } });
+      navigate("/");
     } catch (err: any) {
       console.error("Login failed:", err);
       toast.error(err?.data?.message || "Login failed. Please try again.");
@@ -192,10 +192,31 @@ export const SignInPage = () => {
               </Link>
             </div>
 
-            <div className="flex justify-center">
-              <FuturisticButton type="submit">
-                {isSubmitting || isLoading ? "Signing in..." : "Sign In"}
-              </FuturisticButton>
+            <div className="w-full mt-6 cursor-pointer group flex justify-center">
+              <div
+                className="w-full max-w-xs h-[100px] bg-no-repeat bg-center bg-contain flex items-center justify-center"
+                style={{
+                  backgroundImage: `url(${frame})`,
+                  backgroundSize: "100% 100%",
+                }}
+              >
+                <button
+  type="submit"
+  disabled={isSubmitting || isLoading}
+  className="text-white text-sm sm:text-base font-semibold px-4 py-2 
+    transition-all duration-500 ease-out
+    group-hover:shadow-[0_0_2500px_100px_#8EF0F4] 
+    rounded-md 
+    !bg-transparent 
+    !hover:bg-transparent 
+    !focus:bg-transparent 
+    !active:bg-transparent 
+    border-none outline-none"
+>
+  {isSubmitting || isLoading ? "Signing in..." : "Sign In"}
+</button>
+
+              </div>
             </div>
           </form>
 

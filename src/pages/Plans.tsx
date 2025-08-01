@@ -1,11 +1,11 @@
 import { } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
-import PlansFuturisticButton from "@/components/plans-furastic-button";
+import PlansFuturisticButton from "@/components/PlanFuresticButton";
 import bg from "../assets/bg_tariffs.jpg";
 import {
   useGetAllPlansQuery,
   useCreateCheckoutSessionMutation,
-} from "../features/auth/plansApi";
+} from "../features/plansApi";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY!);
 

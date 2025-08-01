@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import FuturisticButton from '../../components/furastic-button'
+import FuturisticButton from '../../components/FurasticButton'
 import { useResetPasswordMutation } from '../../features/auth/authApi'
 
 export default function ResetPasswordPage() {

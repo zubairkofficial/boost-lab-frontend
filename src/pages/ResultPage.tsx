@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import FuturisticButton from '../components/furastic-button'
+import FuturisticButton from '../components/FurasticButton'
 
 export default function ResultsPage() {
   const navigate = useNavigate()

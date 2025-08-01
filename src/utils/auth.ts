@@ -1,4 +1,4 @@
-import { store } from '../store';
+import store from '@/store/store';
 import { clearUser } from '../store/userSlice';
 
 export const logout = () => {

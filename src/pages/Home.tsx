@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import FuturisticButton from "../components/furastic-button";
+import FuturisticButton from "../components/FurasticButton";
 import bg from "../assets/bg_program_2.jpg";
 
 export default function HomePage() {

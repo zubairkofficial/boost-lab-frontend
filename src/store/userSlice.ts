@@ -27,7 +27,7 @@ interface User {
 }
 
 interface UserState {
-  user: User | null;
+  user: User ;
   isAuthenticated: boolean;
   isLoading: boolean;
 }
@@ -44,7 +44,7 @@ const userSlice = createSlice({
   reducers: {
     setUser: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
-      state.isAuthenticated = false;
+      state.isAuthenticated = true;
       state.isLoading = false;
     },
     setUserFromStorage: (state, action: PayloadAction<User | null>) => {

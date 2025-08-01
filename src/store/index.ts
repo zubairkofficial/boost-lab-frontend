@@ -1,2 +1,1 @@
-export { store, type RootState, type AppDispatch } from '../store';
 export { selectUser, selectIsAuthenticated, selectIsLoading, setUser, setUserFromStorage, clearUser, setLoading, updateUser } from './userSlice'; 
