@@ -4,7 +4,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const plansApi = createApi({
   reducerPath: "plansApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${import.meta.env.BASE_URL}/plans`,
+    baseUrl: `${import.meta.env.VITE_BASE_URL}/plans`,
   }),
   tagTypes: ["Plan"],
   endpoints: (builder) => ({

@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const testApi = createApi({
   reducerPath: 'testApi',
-  baseQuery: fetchBaseQuery({ baseUrl: `${import.meta.env.BASE_URL}/test-result/` }),
+  baseQuery: fetchBaseQuery({ baseUrl: `${import.meta.env.VITE_BASE_URL}/test-result/` }),
   tagTypes: ['Test'],
   endpoints: (builder) => ({
     getTestResultByEmail: builder.query<any, string>({
