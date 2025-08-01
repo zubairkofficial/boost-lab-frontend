@@ -35,12 +35,9 @@ const Dashboard: React.FC = () => {
         fontFamily: `'Unbounded', Arial, sans-serif`,
       }}
     >
-      {/* Navbar */}
       <div className="container mx-auto fixed top-0 z-50 p-3 px-10 backdrop-blur-md rounded-b-xl shadow-md border-b border-white/10">
         <img src={navbar1} alt="Navbar" className="w-full" />
       </div>
-
-      {/* MENU Button */}
       <div
         className="z-[60] fixed top-8 right-0 sm:right-10"
         onClick={() => setIsMenuOpen(true)}
@@ -53,12 +50,10 @@ const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Welcome Text */}
       <div className="absolute top-14 pt-10 left-6 z-60 ml-10">
         <p className="text-lg font-light tracking-wide font-ptSans">WELCOME TO YOUR BOOSTLAB</p>
       </div>
 
-      {/* Video Section */}
       <div className="relative z-10 flex flex-col items-center text-center px-4 py-20">
         <h1 className="text-[2.5rem] sm:text-[4rem] md:text-[6rem] lg:text-[7rem] mb-10 leading-none tracking-tight font-normal pt-14">
           PERSONAL ACCOUNT

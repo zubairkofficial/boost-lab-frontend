@@ -47,12 +47,9 @@ const Dashboard: React.FC = () => {
         fontFamily: `'Unbounded', Arial, sans-serif`,
       }}
     >
-      {/* Navbar */}
       <div className="fixed top-0 w-full z-50 px-4 sm:px-10 py-3 backdrop-blur-md shadow-md border-b border-white/10">
         <img src={navbar1} alt="Navbar" className="w-full" />
       </div>
-
-      {/* Menu Button */}
       <div
         className="z-[60] fixed top-8 right-0 sm:right-10"
         onClick={() => setIsMenuOpen(true)}
@@ -60,19 +57,17 @@ const Dashboard: React.FC = () => {
         <div className="relative w-[114px] h-[35px] sm:w-[140px] sm:h-[45px] cursor-pointer">
           <img src={menu} alt="Menu" className="w-full h-full" />
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-white text-xs sm:text-sm font-semibold">MENU</span>
+            <span className="text-white text-xs sm:text-sm font-semibold">
+              MENU
+            </span>
           </div>
         </div>
       </div>
-
-      {/* Welcome */}
       <div className="absolute top-14 left-14 z-10 py-8">
         <p className="text-lg font-light tracking-wide font-['PT Sans',Arial,sans-serif]">
           WELCOME TO YOUR BOOSTLAB
         </p>
       </div>
-
-      {/* Hero Section */}
       <div className="relative z-10 flex flex-col items-center text-center px-4 py-30">
         <h1 className="text-[2.5rem] sm:text-[4rem] md:text-[6rem] lg:text-[7rem] leading-none tracking-tight font-normal mb-10">
           PERSONAL ACCOUNT
@@ -107,7 +102,9 @@ const Dashboard: React.FC = () => {
                   <h2 className="text-xl md:text-4xl text-[#87F1FF] uppercase tracking-wide font-normal">
                     {stage} {title ? `: ${title}` : ""}
                   </h2>
-                  <p className="mt-2 text-sm md:text-base font-normal">{description}</p>
+                  <p className="mt-2 text-sm md:text-base font-normal">
+                    {description}
+                  </p>
                 </div>
                 <div className="flex items-center gap-4 w-full md:w-auto md:justify-end">
                   {isResultStage ? (
@@ -167,28 +164,29 @@ const Dashboard: React.FC = () => {
         )}
       </div>
 
-      {/* Services & Library */}
       <div className="w-[65%] px-6 py-10 max-w-screen-xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
         {["SERVICES", "LIBRARY"].map((label) => (
-          <div key={label} className="w-full flex justify-center md:justify-between">
+          <div
+            key={label}
+            className="w-full flex justify-center md:justify-between"
+          >
             <div className="relative w-full">
               <img src={vector2} alt={label} className="w-full h-auto" />
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-white text-base md:text-lg font-semibold">{label}</span>
+                <span className="text-white text-base md:text-lg font-semibold">
+                  {label}
+                </span>
               </div>
             </div>
           </div>
         ))}
       </div>
-
-      {/* Boostie Character */}
       <img
         src="https://optim.tildacdn.net/tild6636-3666-4264-b566-653863396561/-/resize/140x/-/format/webp/boostie.png.webp"
         alt="Boostie"
         className="fixed bottom-0 right-4 w-20 z-50 pointer-events-none"
       />
 
-      {/* Footer */}
       <footer className="w-full py-10 bg-[#063241] sticky bottom-0 container mx-auto px-5">
         <div className="flex justify-center md:flex-row sm:flex-row flex-col gap-10 text-sm font-semibold text-cyan-300">
           <Link to="/terms">Terms of Service</Link>
