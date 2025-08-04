@@ -1,7 +1,8 @@
 import React from "react";
 import { X } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import line from "../assets/line_tablet.svg";
+import toast from "react-hot-toast";
 
 interface MenuCardProps {
   onClose: () => void;
@@ -16,7 +17,6 @@ const menuLinks = [
   { label: "STAGE 5: AD Launch and Monetization", path: "/stage-5" },
   { label: "LIBRARY", path: "/library" },
   { label: "SERVICES", path: "/services" },
-  { label: "LOGOUT", path: "/auth/logout" },
 ];
 
 const lockedLabels = [
@@ -28,6 +28,16 @@ const lockedLabels = [
 ];
 
 const MenuCard: React.FC<MenuCardProps> = ({ onClose }) => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("user");
+    toast.success("Signed out successfully");
+    onClose();
+    navigate("/auth/login");
+  };
+
   return (
     <div
       className="fixed inset-0 bg-[#49909A]/5 backdrop-blur-md z-[100] flex items-center justify-center text-2xl"
@@ -44,7 +54,6 @@ const MenuCard: React.FC<MenuCardProps> = ({ onClose }) => {
         <ul className="space-y-4 text-base flex flex-col mx-5">
           {menuLinks.map(({ label, path }, index) => {
             const isLocked = lockedLabels.includes(label);
-
             return (
               <div key={index}>
                 {isLocked ? (
@@ -73,6 +82,16 @@ const MenuCard: React.FC<MenuCardProps> = ({ onClose }) => {
               </div>
             );
           })}
+          <div>
+            <button
+              onClick={handleLogout}
+              className="w-full mb-3 flex items-center text-left gap-2 text-white hover:text-[#f87171]"
+            >
+              <span className="flex-1">LOGOUT</span>
+           
+            </button>
+            <img src={line} className="mb-2" alt="line-logout" />
+          </div>
         </ul>
       </div>
     </div>

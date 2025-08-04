@@ -1,11 +1,8 @@
 import { Link } from "react-router-dom";
 import line from "../assets/tariff_line.svg";
 import frame from "../assets/vector2.png";
-import { useCreateCheckoutSessionMutation } from "@/features/plansApi";
 
 export default function PersonalInfo() {
-  const [createCheckoutSession] = useCreateCheckoutSessionMutation();
-
   const features = [
     {
       title: "Starter Plan",
@@ -39,33 +36,10 @@ export default function PersonalInfo() {
     },
   ];
 
-  // ✅ Match plan title to backend Stripe Price ID
-  const priceIdMap: Record<string, string> = {
-    "Starter Plan": "price_1RsM7QC6cGHMgKhAJhIOUwPm",
-    "Growth Plan": "price_1RsMABC6cGHMgKhAJExample01",
-    "Annual Plan": "price_1RsMBBC6cGHMgKhAJExample02",
-  };
-
-  const handleJoinNow = async (planTitle: string) => {
-    const stripePriceId = priceIdMap[planTitle];
-    if (!stripePriceId) {
-      alert("Invalid plan selected");
-      return;
-    }
-
-    try {
-      const { url } = await createCheckoutSession({ stripePriceId }).unwrap();
-      window.location.href = url;
-    } catch (err) {
-      console.error("Checkout error:", err);
-      alert("Something went wrong while redirecting to Stripe");
-    }
-  };
-
   return (
     <>
       <div className="min-h-screen bg-fixed bg-cover bg-no-repeat">
-        <div className="max-w-7xl mx-auto py-20">
+        <div className="max-w-8xl mx-auto py-20 px-14">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-center">
             {features.map((item, index) => (
               <div
@@ -90,14 +64,14 @@ export default function PersonalInfo() {
                     ))}
                   </ul>
 
-                  <div className="text-lg text-white">
-                    <span className="text-3xl line-through text-slate-400 mr-2">
+                  <div className="flex flex-wrap gap-x-2 items-center text-white text-base sm:text-lg">
+                    <span className="line-through text-slate-400 text-sm sm:text-xl">
                       €{item.oldPrice}
                     </span>
-                    <span className="text-3xl font-bold text-cyan-400">
+                    <span className="font-bold text-cyan-400 text-lg sm:text-2xl">
                       €{item.price}
                     </span>
-                    <span className="text-2xl mx-2 text-cyan-400 font-semibold">
+                    <span className="text-cyan-400 text-sm sm:text-lg font-medium break-words">
                       {item.billingCycle}
                     </span>
                   </div>
@@ -112,9 +86,8 @@ export default function PersonalInfo() {
                     }}
                   >
                     <button
-                      onClick={() => handleJoinNow(item.title)}
                       className="text-white text-sm sm:text-base font-semibold px-4 py-2 transition-all duration-500 ease-out
-                        group-hover:shadow-[0_0_2500px_100px_#8EF0F4] rounded-md bg-transparent"
+                        rounded-md bg-transparent"
                     >
                       JOIN NOW
                     </button>

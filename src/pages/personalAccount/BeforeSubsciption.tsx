@@ -74,7 +74,7 @@ const Dashboard: React.FC = () => {
         <h1 className="text-[2.5rem] sm:text-[4rem] md:text-[6rem] lg:text-[7rem] mb-10 leading-none tracking-tight font-normal pt-14">
           PERSONAL ACCOUNT
         </h1>
-        <div className="w-[320px] sm:w-[400px] h-[400px] rounded-md shadow-xl overflow-hidden">
+        <div className="w-[400px] sm:w-[400px] h-[460px] rounded-md shadow-xl overflow-hidden">
           <video
             playsInline
             controls
@@ -82,12 +82,9 @@ const Dashboard: React.FC = () => {
             preload="metadata"
             crossOrigin="anonymous"
             className="w-full h-full object-cover"
-            poster="blob:https://kinescope.io/f9590827-ea52-461c-b4d5-1453cf65875b"
+            muted
           >
-            <source
-              src="blob:https://kinescope.io/f31c1f52-641d-4f08-91c5-a3f9a91f6481"
-              type="video/mp4"
-            />
+            <source src={''} type="video/mp4"/>
             Your browser does not support the video tag.
           </video>
         </div>
