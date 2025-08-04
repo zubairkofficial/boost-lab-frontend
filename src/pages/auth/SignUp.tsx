@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useSignupMutation } from "../../features/auth/authApi";
-import FuturisticButton from "../../components/FurasticButton";
+import frame from "../../assets/vector2.png";
+import { IoMdCheckboxOutline, IoMdSquareOutline } from "react-icons/io";
 import { useToast } from "../../contexts/ToastContext";
 import bg from "../../assets/bg_1_1.jpg";
 
@@ -77,15 +78,18 @@ export const SignUpPage = () => {
         email: formData.email,
         password: formData.password,
       }).unwrap();
-      showSuccess("Account Created!", "Please check your email to confirm your account");
-      navigate(`/auth/confirm-email?email=${encodeURIComponent(formData.email)}`, { replace: true });
+      showSuccess(
+        "Account Created!",
+        "Please check your email to confirm your account"
+      );
+      navigate(
+        `/auth/confirm-email?email=${encodeURIComponent(formData.email)}`,
+        { replace: true }
+      );
     } catch (err: any) {
       console.error("Signup failed:", err);
       const backendMessage =
-        (err as any)?.data?.message ||
-        "Signup failed. Please try again.";
-
-      // If it's an email conflict, show toaster + field error
+        (err as any)?.data?.message || "Signup failed. Please try again.";
       if (backendMessage.toLowerCase().includes("email")) {
         showError("Signup Failed", backendMessage);
         setErrors((prev) => ({ ...prev, email: backendMessage }));
@@ -122,11 +126,14 @@ export const SignUpPage = () => {
       </div>
 
       <div className="relative z-30 flex justify-center items-center min-h-screen px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-8 sm:py-12">
-        <div
-          className={`bg-ui-medium/50 backdrop-blur-sm border border-[#8ef0f4] rounded-2xl p-8 min-h-[600px] min-w-[650px] flex flex-col justify-center transition-all duration-1000 delay-500 ${
-            isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
+       <div
+  className={`bg-ui-medium/50 backdrop-blur-sm border border-[#8ef0f4] rounded-2xl 
+    p-6 sm:p-16 w-full max-w-md sm:max-w-lg lg:max-w-xl xl:max-w-2xl
+    2xl:max-w-3xl flex flex-col justify-center transition-all duration-1000 delay-500 ${
+      isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+    }`}
+>
+
           <div>
             <div className="text-center mb-6">
               <h1 className="text-3xl md:text-4xl font-bold text-white font-cyber mb-2">
@@ -138,7 +145,6 @@ export const SignUpPage = () => {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
-              {/* Name */}
               <div>
                 <label
                   htmlFor="Name"
@@ -163,12 +169,10 @@ export const SignUpPage = () => {
                   )}
                 </div>
               </div>
-
-              {/* Email */}
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium text-gray-200 mb-2"
+                  className="w-full block text-sm font-medium text-gray-200 mb-2"
                 >
                   Email Address
                 </label>
@@ -189,8 +193,6 @@ export const SignUpPage = () => {
                   )}
                 </div>
               </div>
-
-              {/* Password */}
               <div>
                 <label
                   htmlFor="password"
@@ -215,8 +217,6 @@ export const SignUpPage = () => {
                   )}
                 </div>
               </div>
-
-              {/* Confirm Password */}
               <div>
                 <label
                   htmlFor="confirmPassword"
@@ -245,22 +245,25 @@ export const SignUpPage = () => {
                   )}
                 </div>
               </div>
+              <div
+                className="flex items-start space-x-3 cursor-pointer select-none"
+                onClick={() =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    agreeToTerms: !prev.agreeToTerms,
+                  }))
+                }
+              >
+                <div className="mt-1 text-white text-xl">
+                  {formData.agreeToTerms ? (
+                    <IoMdCheckboxOutline className="w-5 h-5" />
+                  ) : (
+                    <IoMdSquareOutline className="w-5 h-5" />
+                  )}
+                </div>
 
-              {/* Terms */}
-              <div className="flex items-start space-x-3">
-                <input
-                  type="checkbox"
-                  id="agreeToTerms"
-                  name="agreeToTerms"
-                  checked={formData.agreeToTerms}
-                  onChange={handleInputChange}
-                  className="mt-1 w-4 h-4 text-white bg-ui-dark border-primary/20 rounded focus:ring-primary/50 focus:ring-2"
-                />
                 <div className="flex-1">
-                  <label
-                    htmlFor="agreeToTerms"
-                    className="text-sm text-gray-300"
-                  >
+                  <label className="text-sm text-gray-300">
                     I agree to the{" "}
                     <a
                       href="#"
@@ -276,6 +279,7 @@ export const SignUpPage = () => {
                       Privacy Policy
                     </a>
                   </label>
+
                   <div className="min-h-[20px]">
                     {errors.agreeToTerms && (
                       <p className="text-sm text-red-400">
@@ -286,10 +290,27 @@ export const SignUpPage = () => {
                 </div>
               </div>
 
-              <div className="flex justify-center">
-                <FuturisticButton type="submit" className="w-full">
-                  {isSubmitting || isLoading ? "Signing up..." : "Sign Up"}
-                </FuturisticButton>
+              <div className="w-full mt-6 cursor-pointer group flex justify-center">
+                <button
+                  type="submit"
+                  disabled={isSubmitting || isLoading}
+                  className="w-full max-w-xs h-[100px] bg-no-repeat bg-center bg-contain flex items-center justify-center group
+      transition-all duration-500 ease-out
+      rounded-md 
+      !bg-transparent 
+      !hover:bg-transparent 
+      !focus:bg-transparent 
+      !active:bg-transparent 
+      border-none outline-none"
+                  style={{
+                    backgroundImage: `url(${frame})`,
+                    backgroundSize: "100% 100%",
+                  }}
+                >
+                  <span className="text-white text-sm sm:text-base font-semibold px-4 py-2 pointer-events-none">
+                    {isSubmitting || isLoading ? "Signing up..." : "Sign Up"}
+                  </span>
+                </button>
               </div>
             </form>
           </div>

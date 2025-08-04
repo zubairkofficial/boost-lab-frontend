@@ -6,6 +6,7 @@ import frame from "../../assets/vector2.png";
 import { useLoginMutation } from "../../features/auth/authApi";
 import { BodyText, H2 } from "../../components/ui/typography";
 import { setUser } from "../../store/userSlice";
+import { IoMdCheckboxOutline, IoMdSquareOutline } from "react-icons/io";
 
 export const SignInPage = () => {
   const navigate = useNavigate();
@@ -24,7 +25,6 @@ export const SignInPage = () => {
   useEffect(() => {
     setIsLoaded(true);
   }, []);
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
@@ -83,7 +83,7 @@ export const SignInPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#293C44] relative overflow-hidden font-font flex items-center justify-center">
+    <div className="min-h-screen bg-[#293C44] relative overflow-hidden font-font flex items-center justify-center w-full">
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20"
         style={{
@@ -108,9 +108,11 @@ export const SignInPage = () => {
 
       <div className="relative z-30 flex justify-center items-center min-h-screen px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-8 sm:py-12">
         <div
-          className={`bg-ui-medium/50 backdrop-blur-sm border border-[#8ef0f4] rounded-2xl p-8 min-h-[600px] min-w-[650px] flex flex-col justify-center transition-all duration-1000 delay-500 ${
-            isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
+          className={`bg-ui-medium/50 backdrop-blur-sm border border-[#8ef0f4] rounded-2xl 
+            p-6 sm:p-16 w-full max-w-md sm:max-w-lg lg:max-w-xl xl:max-w-2xl
+            2xl:max-w-3xl flex flex-col justify-center transition-all duration-1000 delay-500 ${
+              isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+            }`}
         >
           <div className="text-center mb-8">
             <H2 className="text-white font-font mb-4">Welcome back</H2>
@@ -171,19 +173,30 @@ export const SignInPage = () => {
             </div>
 
             <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <input
-                  type="checkbox"
-                  id="rememberMe"
-                  name="rememberMe"
-                  checked={formData.rememberMe}
-                  onChange={handleInputChange}
-                  className="w-4 h-4 text-white bg-ui-dark border-primary/20 rounded focus:ring-primary/50 focus:ring-2"
-                />
-                <label htmlFor="rememberMe" className="text-sm text-gray-300">
+              <div
+                className="flex items-center space-x-3 cursor-pointer select-none"
+                onClick={() =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    rememberMe: !prev.rememberMe,
+                  }))
+                }
+              >
+                <div className="mt-1 text-white text-xl">
+                  {formData.rememberMe ? (
+                    <IoMdCheckboxOutline className="w-5 h-5" />
+                  ) : (
+                    <IoMdSquareOutline className="w-5 h-5" />
+                  )}
+                </div>
+                <label
+                  htmlFor="rememberMe"
+                  className="text-sm text-gray-300 cursor-pointer"
+                >
                   Remember me
                 </label>
               </div>
+
               <Link
                 to="/auth/forgot-password"
                 className="text-sm text-gray-200 hover:text-cyber-blue transition-colors duration-300"
@@ -192,30 +205,29 @@ export const SignInPage = () => {
               </Link>
             </div>
 
-            <div className="w-full mt-6 cursor-pointer group flex justify-center">
+            <div className="w-full mt-6 flex justify-center group cursor-pointer">
               <div
-                className="w-full max-w-xs h-[100px] bg-no-repeat bg-center bg-contain flex items-center justify-center"
+                className="w-full max-w-xs h-[100px] bg-no-repeat bg-center bg-contain relative transition-all duration-500"
                 style={{
                   backgroundImage: `url(${frame})`,
                   backgroundSize: "100% 100%",
                 }}
               >
                 <button
-  type="submit"
-  disabled={isSubmitting || isLoading}
-  className="text-white text-sm sm:text-base font-semibold px-4 py-2 
-    transition-all duration-500 ease-out
-    group-hover:shadow-[0_0_2500px_100px_#8EF0F4] 
-    rounded-md 
-    !bg-transparent 
-    !hover:bg-transparent 
-    !focus:bg-transparent 
-    !active:bg-transparent 
-    border-none outline-none"
->
-  {isSubmitting || isLoading ? "Signing in..." : "Sign In"}
-</button>
-
+                  type="submit"
+                  disabled={isSubmitting || isLoading}
+                  className="absolute inset-0 w-full h-full text-white text-sm sm:text-base font-semibold
+        transition-all duration-500 ease-out
+        rounded-md 
+        !bg-transparent 
+        !hover:bg-transparent 
+        !focus:bg-transparent 
+        !active:bg-transparent 
+        border-none outline-none
+        flex items-center justify-center"
+                >
+                  {isSubmitting || isLoading ? "Signing in..." : "Sign In"}
+                </button>
               </div>
             </div>
           </form>
