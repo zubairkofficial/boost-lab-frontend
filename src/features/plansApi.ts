@@ -1,4 +1,3 @@
-// src/features/auth/plansApi.ts
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const plansApi = createApi({
@@ -63,10 +62,9 @@ export const plansApi = createApi({
       invalidatesTags: (_result, _error, id) => [{ type: "Plan", id }],
     }),
 
-    // ✅ Stripe Checkout Session Endpoint
     createCheckoutSession: builder.mutation<
       { url: string },
-      { priceId: string }
+      { stripePriceId: string } 
     >({
       query: (body) => ({
         url: "/checkout-session",
@@ -83,5 +81,5 @@ export const {
   useGetPlanByIdQuery,
   useUpdatePlanMutation,
   useDeletePlanMutation,
-  useCreateCheckoutSessionMutation, // ✅ export this
+  useCreateCheckoutSessionMutation, 
 } = plansApi;

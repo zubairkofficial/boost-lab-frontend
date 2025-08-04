@@ -1,11 +1,13 @@
 import { Link } from "react-router-dom";
 import line from "../assets/tariff_line.svg";
 import frame from "../assets/vector2.png";
+import { useCreateCheckoutSessionMutation } from "@/features/plansApi";
 
 export default function PersonalInfo() {
+  const [createCheckoutSession] = useCreateCheckoutSessionMutation();
+
   const features = [
     {
-      img: "https://cdn-icons-png.flaticon.com/512/1828/1828817.png",
       title: "Starter Plan",
       price: 69,
       oldPrice: 119,
@@ -16,7 +18,6 @@ export default function PersonalInfo() {
       ],
     },
     {
-      img: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
       title: "Growth Plan",
       price: 129,
       oldPrice: 199,
@@ -27,7 +28,6 @@ export default function PersonalInfo() {
       ],
     },
     {
-      img: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
       title: "Annual Plan",
       price: 199,
       oldPrice: 299,
@@ -39,12 +39,32 @@ export default function PersonalInfo() {
     },
   ];
 
+  // ✅ Match plan title to backend Stripe Price ID
+  const priceIdMap: Record<string, string> = {
+    "Starter Plan": "price_1RsM7QC6cGHMgKhAJhIOUwPm",
+    "Growth Plan": "price_1RsMABC6cGHMgKhAJExample01",
+    "Annual Plan": "price_1RsMBBC6cGHMgKhAJExample02",
+  };
+
+  const handleJoinNow = async (planTitle: string) => {
+    const stripePriceId = priceIdMap[planTitle];
+    if (!stripePriceId) {
+      alert("Invalid plan selected");
+      return;
+    }
+
+    try {
+      const { url } = await createCheckoutSession({ stripePriceId }).unwrap();
+      window.location.href = url;
+    } catch (err) {
+      console.error("Checkout error:", err);
+      alert("Something went wrong while redirecting to Stripe");
+    }
+  };
+
   return (
     <>
-      <div
-        className="min-h-screen bg-fixed bg-cover bg-no-repeat"
-        style={{ fontFamily: "'PT Sans', Arial, sans-serif" }}
-      >
+      <div className="min-h-screen bg-fixed bg-cover bg-no-repeat">
         <div className="max-w-7xl mx-auto py-20">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-center">
             {features.map((item, index) => (
@@ -92,8 +112,9 @@ export default function PersonalInfo() {
                     }}
                   >
                     <button
+                      onClick={() => handleJoinNow(item.title)}
                       className="text-white text-sm sm:text-base font-semibold px-4 py-2 transition-all duration-500 ease-out
-      group-hover:shadow-[0_0_2500px_100px_#8EF0F4] rounded-md bg-transparent"
+                        group-hover:shadow-[0_0_2500px_100px_#8EF0F4] rounded-md bg-transparent"
                     >
                       JOIN NOW
                     </button>
@@ -107,7 +128,7 @@ export default function PersonalInfo() {
 
       <div className="bg-[#063241]">
         <footer className="w-full p-10 bg-[#063241] sticky bottom-0">
-          <div className="flex justify-center gap-10 text-sm font-semibold text-cyan-300 bg-[#063241]">
+          <div className="flex justify-center gap-10 text-sm font-semibold text-cyan-300">
             <Link to="/terms" className="hover:underline">
               Terms of Service
             </Link>
