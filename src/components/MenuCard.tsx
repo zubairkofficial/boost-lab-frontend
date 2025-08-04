@@ -24,15 +24,16 @@ const MenuCard: React.FC<MenuCardProps> = ({ onClose }) => {
       className="fixed inset-0 bg-[#49909A]/5 backdrop-blur-md z-[100] flex items-center justify-center text-2xl"
       style={{ fontFamily: "'Unbounded', Arial, sans-serif" }}
     >
-      <div className="bg-[#2A515D]/90 w-[80%] max-w-md p-6 rounded-lg relative shadow-2xl text-white">
+      <div className="bg-[#2A515D]/90 w-[90%] max-w-md p-6 rounded-lg relative shadow-2xl text-white max-h-[90vh] overflow-y-auto">
+        {/* Close button always inside the card */}
         <button
-          className="absolute top-4 right-4 text-[#6dafb8]"
+          className="sticky top-0 right-0 ml-auto text-[#6dafb8] bg-[#2A515D]/90 z-10 p-1"
           onClick={onClose}
         >
-          <X className="w-10 h-10" />
+          <X className="w-8 h-8 sm:w-10 sm:h-10" />
         </button>
 
-        <ul className="space-y-4 text-base flex justify-center flex-col mx-5">
+        <ul className="space-y-4 text-base flex flex-col mx-5">
           {menuLinks.map(({ label, path }, index) => {
             const isLocked =
               label === "LIBRARY" ||
@@ -56,7 +57,7 @@ const MenuCard: React.FC<MenuCardProps> = ({ onClose }) => {
                     <img
                       src="https://static.tildacdn.net/tild3638-3166-4030-a231-356366383030/lock.svg"
                       alt="Lock Icon"
-                      className="w-6 h-6 opacity-50"
+                      className="w-5 h-5 opacity-50"
                     />
                   )}
                 </Link>
