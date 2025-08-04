@@ -88,7 +88,7 @@ const Dashboard: React.FC = () => {
             Your browser does not support the video tag.
           </video>
         </div>
-      </div>
+      </div>e
 
       <div className="w-full flex flex-col items-center py-10 px-4 z-10">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center w-full max-w-[91rem] px-6 md:px-20 py-10 bg-gradient-to-r from-[#1f3b47]/10 to-[#193540]/60 backdrop-blur-md rounded-md mb-6 text-white">

@@ -9,8 +9,8 @@ interface MenuCardProps {
 }
 
 const menuLinks = [
-  { label: "Before Subscription", path: "/" },
-  { label: "After Subscription", path: "/after-subscription" },
+  { label: "Free", path: "/" },
+  { label: "Paid", path: "/after-subscription" },
   { label: "STAGE 2: STRATEGY", path: "/stage-2" },
   { label: "STAGE 3: CONTENT", path: "/stage-3" },
   { label: "STAGE 4: AUTOMATION", path: "/stage-4" },
