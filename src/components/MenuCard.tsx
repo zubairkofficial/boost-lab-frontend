@@ -16,6 +16,15 @@ const menuLinks = [
   { label: "STAGE 5: AD Launch and Monetization", path: "/stage-5" },
   { label: "LIBRARY", path: "/library" },
   { label: "SERVICES", path: "/services" },
+  { label: "LOGOUT", path: "/auth/logout" },
+];
+
+const lockedLabels = [
+  "LIBRARY",
+  "STAGE 2: STRATEGY",
+  "STAGE 3: CONTENT",
+  "STAGE 4: AUTOMATION",
+  "STAGE 5: AD Launch and Monetization",
 ];
 
 const MenuCard: React.FC<MenuCardProps> = ({ onClose }) => {
@@ -32,34 +41,34 @@ const MenuCard: React.FC<MenuCardProps> = ({ onClose }) => {
           <X className="w-10 h-10" />
         </button>
 
-        <ul className="space-y-4 text-base flex justify-center flex-col mx-5">
+        <ul className="space-y-4 text-base flex flex-col mx-5">
           {menuLinks.map(({ label, path }, index) => {
-            const isLocked =
-              label === "LIBRARY" ||
-              label === "STAGE 2: STRATEGY" ||
-              label === "STAGE 3: CONTENT" ||
-              label === "STAGE 4: AUTOMATION" ||
-              label === "STAGE 5: AD Launch and Monetization";
+            const isLocked = lockedLabels.includes(label);
 
             return (
               <div key={index}>
-                <Link
-                  to={path}
-                  className={`cursor-pointer mb-3 flex items-center gap-2 ${
-                    isLocked
-                      ? "text-white/50"
-                      : "text-white hover:text-[#6dafb8]"
-                  }`}
-                >
-                  {label}
-                  {isLocked && (
+                {isLocked ? (
+                  <button
+                    disabled
+                    aria-disabled="true"
+                    className="cursor-not-allowed mb-3 flex items-center text-left gap-2 text-white/50 w-full"
+                  >
+                    <span className="flex-1">{label}</span>
                     <img
                       src="https://static.tildacdn.net/tild3638-3166-4030-a231-356366383030/lock.svg"
                       alt="Lock Icon"
-                      className="w-6 h-6 opacity-50"
+                      className="w-6 h-6 opacity-50 shrink-0"
                     />
-                  )}
-                </Link>
+                  </button>
+                ) : (
+                  <Link
+                    to={path}
+                    onClick={onClose}
+                    className="cursor-pointer mb-3 flex items-center text-left gap-2 text-white hover:text-[#6dafb8] w-full"
+                  >
+                    <span className="flex-1">{label}</span>
+                  </Link>
+                )}
                 <img src={line} className="mb-2" alt={`line-${index}`} />
               </div>
             );

@@ -18,6 +18,7 @@ import AppInitializer from "./components/AppInitializer";
 import Success from "./pages/Success";
 import Cancel from "./pages/Cancel";
 import NotFound from "./pages/NotFound";
+import LogoutPage from "./pages/auth/LogoutPage";
 
 const App = () => {
   const accessToken = localStorage.getItem("access_token");
@@ -35,6 +36,7 @@ const App = () => {
 
                 <Route path="/auth/signup" element={<SignUpPage />} />
                 <Route path="/auth/login" element={<SignInPage />} />
+                <Route path="/auth/logout" element={<LogoutPage />} />
                 <Route
                   path="/auth/confirm-email"
                   element={<ConfirmEmailPage />}
