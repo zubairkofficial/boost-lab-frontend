@@ -1,7 +1,6 @@
 import frame from "../assets/vector2.png";
 import line from "../assets/tariff_line.svg";
 import bg from "../assets/bg_tariffs.jpg";
-import Free from "../components/Free";
 import {
   useGetAllPlansQuery,
   useCreateCheckoutSessionMutation,
@@ -155,7 +154,6 @@ console.log("user",userInfo)
           </div>
         )} */}
       </div>
-      <Free />
     </div>
   );
 }
