@@ -3,8 +3,8 @@ import { useSelector } from "react-redux";
 import { useGetTestResultByEmailQuery } from "@/features/testResultApi";
 import { selectUser } from "@/store/userSlice";
 import MenuModal from "@/components/MenuModal";
-import MenuCard from "@/components/MenuCard";
-import { AfterSubscriptionStages } from "@/generic-components/constant";
+import MenuCard from "@/components/NavbarMenu";
+import { AfterSubscriptionStages } from "@/generic-components/subscriptionStages";
 import boosties from "../../assets/boostrGirl.png";
 import vector2 from "../../assets/vector2.png";
 import { Link } from "react-router-dom";
@@ -115,7 +115,7 @@ const Dashboard: React.FC = () => {
                       />
                       <Link
                         to="https://boostlab.ph/test"
-                        target="_blank"
+                      
                         className="text-xl md:text-2xl font-medium text-[#98EBA5]"
                       >
                         START THE TEST

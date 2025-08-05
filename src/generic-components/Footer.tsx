@@ -4,14 +4,14 @@ function Footer() {
     <div>
          <div className="bg-[#063241]">
         <footer className="w-full p-10 bg-[#063241] sticky bottom-0">
-          <div className="flex justify-center gap-10 text-sm font-semibold text-cyan-300">
-            <Link to="/terms" className="hover:underline">
+          <div className="flex justify-center gap-10 text-sm font-normal text-white cursor-pointer">
+            <Link to="/terms">
               Terms of Service
             </Link>
-            <Link to="/privacy" className="hover:underline">
+            <Link to="/privacy">
               Privacy Policy
             </Link>
-            <Link to="/contact" className="hover:underline">
+            <Link to="/contact">
               Contact Us
             </Link>
           </div>

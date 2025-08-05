@@ -21,7 +21,6 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   const isLoading = useSelector(selectIsLoading);
   const location = useLocation();
 
-  // Show loading spinner while checking authentication
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-primary flex items-center justify-center">
@@ -34,7 +33,6 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     );
   }
 
-  // Redirect to login if not authenticated
   if (!isAuthenticated) {
     return (
       <Navigate 
@@ -44,8 +42,6 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
       />
     );
   }
-
-  // Check role-based access
   if (user && requiredRole === 'admin' && user.role !== 'admin') {
     return (
       <Navigate 

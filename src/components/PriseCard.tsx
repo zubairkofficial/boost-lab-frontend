@@ -36,7 +36,7 @@ export default function PersonalInfo() {
   ];
 
   return (
-    <div className="min-h-screen bg-fixed bg-cover bg-no-repeat">
+    <div className="min-h-screen bg-fixed bg-cover bg-no-repeat container mx-auto">
       <div className="max-w-8xl mx-auto py-20 px-6 sm:px-14">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 gap-y-10 justify-center">
           {features.map((item, index) => (

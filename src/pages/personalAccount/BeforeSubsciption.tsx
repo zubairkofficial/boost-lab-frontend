@@ -7,9 +7,9 @@ import { selectUser } from "@/store/userSlice";
 import vector2 from "../../assets/vector2.png";
 import PriseCard from "@/components/PriseCard";
 import MenuModal from "@/components/MenuModal";
-import MenuCard from "@/components/MenuCard";
+import MenuCard from "@/components/NavbarMenu";
 import Header from "../../generic-components/Header";
-import { BeforeSubscriptionStages } from "@/generic-components/constant";
+import { BeforeSubscriptionStages } from "@/generic-components/subscriptionStages";
 import Footer from "@/generic-components/Footer";
 
 const Dashboard: React.FC = () => {

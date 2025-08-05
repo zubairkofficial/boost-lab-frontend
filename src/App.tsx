@@ -16,7 +16,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import AppInitializer from "./components/AppInitializer";
 import Success from "./pages/Success";
 import Cancel from "./pages/Cancel";
-import NotFound from "./pages/NotFound";
+import NotFound from "./generic-components/PageNotFound";
 
 const App = () => {
   const accessToken = localStorage.getItem("access_token");

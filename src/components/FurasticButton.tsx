@@ -90,7 +90,6 @@ export default function FuturisticButton({
           />
         </svg>
 
-        {/* Chevron pattern */}
         <div className="absolute bottom-16 right-1 transition-all duration-300">
           <div className={`transition-all duration-300 ${isHovered ? "opacity-80" : "opacity-60"}`}>
             <svg width="80" height="6" viewBox="0 0 131 10" fill="none">
@@ -104,8 +103,6 @@ export default function FuturisticButton({
             </svg>
           </div>
         </div>
-
-        {/* Button text */}
         <div className="absolute inset-0 flex items-center justify-center">
           <span className="text-white font-bold text-base tracking-wider transition-all duration-300">
             {children}
@@ -127,7 +124,7 @@ export default function FuturisticButton({
     <button
       type={type}
       onClick={onClick}
-      className="bg-transparent border-none p-0 m-0 cursor-pointer" // remove default button styles
+      className="bg-transparent border-none p-0 m-0 cursor-pointer"
     >
       {buttonContent}
     </button>
