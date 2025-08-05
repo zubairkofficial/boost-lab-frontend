@@ -1,35 +1,65 @@
-import {} from "react";
-import PlansFuturisticButton from "@/components/PlanFuresticButton";
+import frame from "../assets/vector2.png";
+import line from "../assets/tariff_line.svg";
 import bg from "../assets/bg_tariffs.jpg";
+import Free from "../components/Free";
 import {
   useGetAllPlansQuery,
   useCreateCheckoutSessionMutation,
 } from "../features/plansApi";
+import { useSelector } from "react-redux";
+import { selectUser } from "../store/userSlice";
 
 export default function SubscriptionPlans() {
   const { data: plans = [], isLoading, isError } = useGetAllPlansQuery();
   const [createCheckoutSession] = useCreateCheckoutSessionMutation();
+  const user = useSelector(selectUser); 
+
   const handlePlanSelect = async (plan: any) => {
     try {
+      if (!user?.id) throw new Error("User ID not found. Please log in.");
+      if (!plan.stripePriceId) throw new Error("Missing Stripe Price ID");
+
       const { url } = await createCheckoutSession({
         stripePriceId: plan.stripePriceId,
+        id: Number(user.id),
       }).unwrap();
 
       if (!url) throw new Error("Stripe URL is missing");
-
-      window.location.href = url;
     } catch (error) {
       console.error("Checkout error:", error);
-      alert("Something went wrong while redirecting to Stripe");
+      alert(error);
     }
   };
 
+  // const handleCancelSubscription = async () => {
+  //   try {
+  //     const response = await fetch(
+  //       "http://localhost:3000/api/v1/plans/cancel-subscription",
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({ userId: user?.id }),
+  //       }
+  //     );
+
+  //     if (!response.ok) throw new Error("Failed to cancel subscription");
+
+  //     alert("Subscription canceled successfully");
+  //     // You may want to reload or update Redux state here
+  //   } catch (err) {
+  //     console.error("Cancel error:", err);
+  //     alert("Something went wrong while canceling your subscription");
+  //   }
+  // };
+
   return (
     <div
-      className="min-h-screen p-8 bg-fixed bg-cover bg-no-repeat"
+      className="min-h-screen bg-fixed bg-cover bg-no-repeat container mx-auto"
       style={{ backgroundImage: `url(${bg})` }}
     >
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-8xl mx-auto py-20 px-6 sm:px-14">
         <div className="text-center mb-16">
           <h1 className="text-5xl font-bold text-white mb-4">
             Choose Your Plan
@@ -50,65 +80,80 @@ export default function SubscriptionPlans() {
         )}
 
         {!isLoading && !isError && (
-          <div className="flex flex-wrap justify-center gap-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 gap-y-10 justify-center">
             {plans.map((plan: any) => (
               <div
                 key={plan.id}
-                className="bg-[#154E62] border border-cyan-500/30 shadow-xl text-white h-[28rem] w-full max-w-sm min-w-[370px] flex flex-col justify-between"
+                className="bg-[#154E62]/60 backdrop-blur-md border border-cyan-500/30 shadow-2xl text-white min-h-[35rem] flex flex-col justify-between rounded-2xl relative mb-6"
               >
-                <div className="p-6 flex flex-col flex-grow">
-                  <h3 className="text-3xl font-bold text-cyan-300 mb-4">
-                    {plan.name} Plan
+                <div className="p-8 flex flex-col flex-grow gap-3">
+                  <h3 className="text-4xl font-semibold text-cyan-300 pt-2">
+                    {plan.name}
                   </h3>
-                  <div className="text-sm text-cyan-200 font-semibold mb-2">
-                    — {plan.validTill} Access —
+                  <div className="flex flex-col gap-4 flex-grow">
+                    {Array.isArray(plan.description)
+                      ? plan.description.map((desc: string, i: number) => (
+                          <div key={i} className="flex flex-col gap-1">
+                            <p className="text-sm text-slate-200">{desc}</p>
+                            <img
+                              src={line}
+                              alt="divider"
+                              className="h-10 w-full mt-0"
+                            />
+                          </div>
+                        ))
+                      : plan.description && (
+                          <p className="text-sm text-slate-200">
+                            {plan.description}
+                          </p>
+                        )}
                   </div>
-                  <p className="text-sm text-slate-300 mb-4">
-                    {plan.description || "Best for long-term growth and value."}
-                  </p>
-                  <ul className="text-sm text-slate-200 mb-6 space-y-2">
-                    {plan.features?.map((feature: string, i: number) => (
-                      <li key={i} className="flex items-start">
-                        <span className="text-cyan-400 mr-2">✓</span>
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="text-lg text-white mb-6">
-                    {plan.originalPrice && (
-                      <span className="line-through text-slate-400 mr-2">
-                        €{plan.originalPrice}
+                  <div className="flex flex-wrap gap-x-2 items-center text-white text-base sm:text-lg mt-4">
+                    {plan.oldPrice && (
+                      <span className="line-through text-slate-400 text-sm sm:text-xl">
+                        €{plan.oldPrice}
                       </span>
                     )}
-                    <span className="text-2xl font-bold text-cyan-400">
+                    <span className="font-bold text-cyan-400 text-lg sm:text-2xl">
                       €{plan.price}
                     </span>
+                    <span className="text-cyan-400 text-sm sm:text-lg font-medium break-words">
+                      /month
+                    </span>
                   </div>
-
-                  <PlansFuturisticButton
-                    onClick={() => handlePlanSelect(plan)}
-                    className="w-full right-7 top-5"
+                </div>
+                <div
+                  className="w-full mt-6 cursor-pointer group"
+                  onClick={() => handlePlanSelect(plan)}
+                >
+                  <div
+                    className="w-full h-[130px] bg-no-repeat bg-center bg-contain flex items-center justify-center"
+                    style={{
+                      backgroundImage: `url(${frame})`,
+                      backgroundSize: "100% 100%",
+                    }}
                   >
-                    JOIN NOW
-                  </PlansFuturisticButton>
+                    <span className="text-white text-sm sm:text-base font-semibold px-4 py-2 transition-all duration-500 ease-out rounded-md bg-transparent">
+                      JOIN NOW
+                    </span>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
         )}
-
-        <div className="text-center mt-29">
-          <p className="text-cyan-300 mb-6">
-            All plans include a 30-day money-back guarantee
-          </p>
-          <div className="flex flex-wrap justify-center gap-4 text-sm text-cyan-300">
-            <span>✓ No setup fees</span>
-            <span>✓ Cancel anytime</span>
-            <span>✓ 24/7 support</span>
-            <span>✓ Secure payments</span>
+        {user?.subscriptionStatus === "active" && (
+          <div className="text-center mt-12">
+            <button
+              // onClick={handleCancelSubscription}
+              className="bg-red-600 hover:bg-red-700 text-white font-semibold px-6 py-3 rounded-md transition"
+            >
+              Cancel Subscription
+            </button>
           </div>
-        </div>
+        )}
       </div>
+      <Free />
     </div>
   );
 }

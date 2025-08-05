@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import line from "../assets/tariff_line.svg";
 import frame from "../assets/vector2.png";
 
@@ -83,12 +84,13 @@ export default function PersonalInfo() {
                     backgroundSize: "100% 100%",
                   }}
                 >
-                  <button
+                  <Link
+                    to={"/plans"}
                     className="text-white text-sm sm:text-base font-semibold px-4 py-2 transition-all duration-500 ease-out
                     rounded-md bg-transparent"
                   >
                     JOIN NOW
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>

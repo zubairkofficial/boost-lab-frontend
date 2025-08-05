@@ -1,9 +1,10 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 interface User {
   id: string;
   email: string;
   role: string;
+  subscriptionStatus: "active" | "canceled" | "none";
   user_metadata: {
     name: string;
     email: string;
@@ -27,7 +28,7 @@ interface User {
 }
 
 interface UserState {
-  user: User ;
+  user: User|null;
   isAuthenticated: boolean;
   isLoading: boolean;
 }
@@ -39,7 +40,7 @@ const initialState: UserState = {
 };
 
 const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState,
   reducers: {
     setUser: (state, action: PayloadAction<User>) => {
@@ -68,10 +69,18 @@ const userSlice = createSlice({
   },
 });
 
-export const { setUser, setUserFromStorage, clearUser, setLoading, updateUser } = userSlice.actions;
+export const {
+  setUser,
+  setUserFromStorage,
+  clearUser,
+  setLoading,
+  updateUser,
+} = userSlice.actions;
 export default userSlice.reducer;
 
 // Selectors
 export const selectUser = (state: { user: UserState }) => state.user.user;
-export const selectIsAuthenticated = (state: { user: UserState }) => state.user.isAuthenticated;
-export const selectIsLoading = (state: { user: UserState }) => state.user.isLoading; 
+export const selectIsAuthenticated = (state: { user: UserState }) =>
+  state.user.isAuthenticated;
+export const selectIsLoading = (state: { user: UserState }) =>
+  state.user.isLoading;

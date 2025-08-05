@@ -11,9 +11,9 @@ export const plansApi = createApi({
       any,
       {
         name: string;
+        oldPrice: number;
         price: number;
         description?: string;
-        features?: string[];
       }
     >({
       query: (body) => ({
@@ -40,9 +40,9 @@ export const plansApi = createApi({
         id: string;
         data: Partial<{
           name: string;
+          oldPrice: number;
           price: number;
           description?: string;
-          features?: string[];
         }>;
       }
     >({
@@ -64,7 +64,7 @@ export const plansApi = createApi({
 
     createCheckoutSession: builder.mutation<
       { url: string },
-      { stripePriceId: string } 
+      { stripePriceId: string; id: number }
     >({
       query: (body) => ({
         url: "/checkout-session",
@@ -81,5 +81,5 @@ export const {
   useGetPlanByIdQuery,
   useUpdatePlanMutation,
   useDeletePlanMutation,
-  useCreateCheckoutSessionMutation, 
+  useCreateCheckoutSessionMutation,
 } = plansApi;
