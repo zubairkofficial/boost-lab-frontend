@@ -58,20 +58,17 @@ const Dashboard: React.FC = () => {
         <h1 className="text-[2.5rem] sm:text-[4rem] md:text-[6rem] lg:text-[7rem] mb-10 leading-none tracking-tight font-normal pt-14">
           PERSONAL ACCOUNT
         </h1>
-        <div className="w-[400px] sm:w-[400px] h-[460px] rounded-md shadow-xl overflow-hidden">
-          <video
-            playsInline
-            controls
-            controlsList="nodownload"
-            preload="metadata"
-            crossOrigin="anonymous"
-            className="w-full h-full object-cover"
-            muted
-          >
-            <source src={""} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        </div>
+    <div className="w-[400px] sm:w-[400px] h-[460px] rounded-md shadow-xl overflow-hidden">
+  <iframe
+    src="https://kinescope.io/embed/3kNR85cmGAPZe13Py7UgF8"
+    className="w-full h-full border-none"
+    allow="autoplay; fullscreen"
+    allowFullScreen
+    title="Kinescope Video"
+  ></iframe>
+</div>
+
+
       </div>
 
       <div className="w-full flex flex-col items-center py-10 px-4 z-10">

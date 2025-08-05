@@ -29,6 +29,7 @@ interface User {
 
 interface UserState {
   user: User|null;
+  userInfo:{id:number}|null,
   isAuthenticated: boolean;
   isLoading: boolean;
 }
@@ -37,19 +38,26 @@ const initialState: UserState = {
   user: null,
   isAuthenticated: false,
   isLoading: true, // Start with loading true for initialization
+userInfo:null
 };
 
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<User>) => {
-      state.user = action.payload;
+    setUser: (state, action: PayloadAction<any>) => {
+      state.user = action.payload.user;
+      state.userInfo = action.payload.userInfo;
       state.isAuthenticated = true;
       state.isLoading = false;
     },
     setUserFromStorage: (state, action: PayloadAction<User | null>) => {
       state.user = action.payload;
+      state.isAuthenticated = !!action.payload;
+      state.isLoading = false;
+    },
+    setUserInfoFromStorage: (state, action: PayloadAction<any | null>) => {
+      state.userInfo = action.payload;
       state.isAuthenticated = !!action.payload;
       state.isLoading = false;
     },
@@ -72,6 +80,7 @@ const userSlice = createSlice({
 export const {
   setUser,
   setUserFromStorage,
+  setUserInfoFromStorage,
   clearUser,
   setLoading,
   updateUser,
@@ -79,7 +88,8 @@ export const {
 export default userSlice.reducer;
 
 // Selectors
-export const selectUser = (state: { user: UserState }) => state.user.user;
+export const selectUser = (state: { user: UserState }) => {state.user.user};
+export const selectUserInfo = (state: { user: UserState }) => state.user.userInfo;
 export const selectIsAuthenticated = (state: { user: UserState }) =>
   state.user.isAuthenticated;
 export const selectIsLoading = (state: { user: UserState }) =>

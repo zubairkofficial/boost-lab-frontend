@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { setUserFromStorage } from '../store/userSlice';
+import { setUserFromStorage, setUserInfoFromStorage } from '../store/userSlice';
 
 interface AppInitializerProps {
   children: React.ReactNode;
@@ -12,10 +12,13 @@ const AppInitializer = ({ children }: AppInitializerProps) => {
   useEffect(() => {
     // Initialize user from localStorage on app start
     const storedUser = localStorage.getItem('user');
-    if (storedUser) {
+    const storedUserInfo = localStorage.getItem('userInfo');
+    if (storedUser && storedUserInfo) {
       try {
         const userData = JSON.parse(storedUser);
+        const userInfoData = JSON.parse(storedUserInfo);
         dispatch(setUserFromStorage(userData));
+        dispatch(setUserInfoFromStorage(userInfoData));
       } catch (error) {
         console.error('Error parsing stored user data:', error);
         localStorage.removeItem('user');

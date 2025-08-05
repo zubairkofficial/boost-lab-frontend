@@ -68,9 +68,10 @@ export const SignInPage = () => {
       // Store in localStorage
       localStorage.setItem("access_token", result.access_token);
       localStorage.setItem("user", JSON.stringify(result.user));
+      localStorage.setItem("userInfo", JSON.stringify(result.userInfo));
 
       // Dispatch user data to Redux store
-      dispatch(setUser(result.user));
+      dispatch(setUser({user:result.user,userInfo:result.userInfo}));
 
       toast.success("Login successful! Redirecting...");
       navigate("/");

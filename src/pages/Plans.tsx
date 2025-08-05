@@ -7,24 +7,26 @@ import {
   useCreateCheckoutSessionMutation,
 } from "../features/plansApi";
 import { useSelector } from "react-redux";
-import { selectUser } from "../store/userSlice";
+import { selectUser, selectUserInfo } from "../store/userSlice";
 
 export default function SubscriptionPlans() {
+ 
   const { data: plans = [], isLoading, isError } = useGetAllPlansQuery();
   const [createCheckoutSession] = useCreateCheckoutSessionMutation();
-  const user = useSelector(selectUser); 
-
+  const userInfo = useSelector(selectUserInfo); 
+console.log("user",userInfo)
   const handlePlanSelect = async (plan: any) => {
     try {
-      if (!user?.id) throw new Error("User ID not found. Please log in.");
+      if (!userInfo?.id) throw new Error("User ID not found. Please log in.");
       if (!plan.stripePriceId) throw new Error("Missing Stripe Price ID");
 
       const { url } = await createCheckoutSession({
         stripePriceId: plan.stripePriceId,
-        id: Number(user.id),
+        id: userInfo.id,
       }).unwrap();
 
       if (!url) throw new Error("Stripe URL is missing");
+   window.open(url, "_blank", "noopener,noreferrer");
     } catch (error) {
       console.error("Checkout error:", error);
       alert(error);
@@ -142,7 +144,7 @@ export default function SubscriptionPlans() {
             ))}
           </div>
         )}
-        {user?.subscriptionStatus === "active" && (
+        {/* {user?.subscriptionStatus === "active" && (
           <div className="text-center mt-12">
             <button
               // onClick={handleCancelSubscription}
@@ -151,7 +153,7 @@ export default function SubscriptionPlans() {
               Cancel Subscription
             </button>
           </div>
-        )}
+        )} */}
       </div>
       <Free />
     </div>
