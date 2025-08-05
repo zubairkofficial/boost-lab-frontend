@@ -11,7 +11,7 @@ import TakeTestPage from "./pages/TakeTestPage";
 import ResultsPage from "./pages/ResultPage";
 import BeforeSubsciption from "./pages/personalAccount/BeforeSubsciption";
 import AfterSubsciption from "./pages/personalAccount/AfterSubsciption";
-import SubscriptionPlans from "./pages/Plans2";
+import SubscriptionPlans from "./pages/Plans";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AppInitializer from "./components/AppInitializer";
 import Success from "./pages/Success";
