@@ -5,12 +5,12 @@ import { toast } from "react-hot-toast";
 import { useGetTestResultByEmailQuery } from "@/features/testResultApi";
 import { selectUser } from "@/store/userSlice";
 import vector2 from "../../assets/vector2.png";
-import menu from "../../assets/menu.png";
-import navbar1 from "../../assets/navbar.svg";
 import PriseCard from "@/components/PriseCard";
 import MenuModal from "@/components/MenuModal";
 import MenuCard from "@/components/MenuCard";
-import { BeforeSubscriptionStages } from "@/common/constant";
+import Header from "../../generic-components/Header";
+import { BeforeSubscriptionStages } from "@/generic-components/constant";
+import Footer from "@/generic-components/Footer";
 
 const Dashboard: React.FC = () => {
   const user = useSelector(selectUser);
@@ -46,31 +46,15 @@ const Dashboard: React.FC = () => {
         fontFamily: `'Unbounded', Arial, sans-serif`,
       }}
     >
-      <div className="container mx-auto fixed top-0 z-50 p-3 px-10 backdrop-blur-md rounded-b-xl shadow-md border-b border-white/10">
-        <img src={navbar1} alt="Navbar" className="w-full" />
-      </div>
+      <Header onMenuClick={() => setIsMenuOpen(true)} />
 
-      <div
-        className="z-[60] fixed top-8 right-0 sm:right-10"
-        onClick={() => setIsMenuOpen(true)}
-      >
-        <div className="relative w-[114px] h-[35px] sm:w-[140px] sm:h-[45px] cursor-pointer">
-          <img src={menu} alt="Menu" className="w-full h-full" />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-white text-xs sm:text-sm font-semibold">
-              MENU
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <div className="absolute top-14 pt-10 left-6 z-60 ml-10">
+      <div className="absolute top-14 pt-8 sm:pt-14 left-6 z-60 ml-10">
         <p className="text-lg font-light tracking-wide font-ptSans">
           WELCOME TO YOUR BOOSTLAB
         </p>
       </div>
 
-      <div className="relative z-10 flex flex-col items-center text-center px-4 py-20">
+      <div className="relative z-10 flex flex-col items-center text-center px-4 py-24">
         <h1 className="text-[2.5rem] sm:text-[4rem] md:text-[6rem] lg:text-[7rem] mb-10 leading-none tracking-tight font-normal pt-14">
           PERSONAL ACCOUNT
         </h1>
@@ -84,11 +68,11 @@ const Dashboard: React.FC = () => {
             className="w-full h-full object-cover"
             muted
           >
-            <source src={''} type="video/mp4"/>
+            <source src={""} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         </div>
-      </div>e
+      </div>
 
       <div className="w-full flex flex-col items-center py-10 px-4 z-10">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center w-full max-w-[91rem] px-6 md:px-20 py-10 bg-gradient-to-r from-[#1f3b47]/10 to-[#193540]/60 backdrop-blur-md rounded-md mb-6 text-white">
@@ -114,6 +98,7 @@ const Dashboard: React.FC = () => {
             </span>
           </div>
         </div>
+
         {isMenuOpen && <MenuCard onClose={() => setIsMenuOpen(false)} />}
         {isResultOpen && (
           <MenuModal
@@ -123,13 +108,14 @@ const Dashboard: React.FC = () => {
             isLoading={isLoading}
           />
         )}
+
         {BeforeSubscriptionStages.map(
           ({ stage, title, description, button }) => (
             <div
               key={stage}
               className="flex justify-between items-center w-full max-w-[91rem] px-4 sm:px-10 md:px-20 py-10 bg-gradient-to-r from-[#1f3b47] to-[#193540]/60 backdrop-blur-md rounded-md mb-6 text-white"
             >
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between w-full gap-4">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between justify-start w-full gap-4">
                 <div className="w-[82%] md:w-auto">
                   <h2
                     className={`text-xl md:text-4xl text-[#87F1FF] uppercase tracking-wide font-normal ${
@@ -155,7 +141,7 @@ const Dashboard: React.FC = () => {
                     {button}
                   </div>
                 ) : (
-                  <div className="flex items-center justify-end w-full md:w-auto">
+                  <div className="flex items-center justify-start w-full md:w-auto">
                     <img
                       src="https://static.tildacdn.net/tild6466-3537-4561-a136-313962393561/lock_icon.svg"
                       alt="Lock Icon"
@@ -212,6 +198,7 @@ const Dashboard: React.FC = () => {
         />
       </div>
       <PriseCard />
+      <Footer />
     </div>
   );
 };

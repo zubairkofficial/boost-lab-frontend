@@ -57,7 +57,7 @@ function DialogContent({
 }) {
   const [loading, setLoading] = React.useState(true);
   React.useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 300); 
+    const timer = setTimeout(() => setLoading(false), 300);
     return () => clearTimeout(timer);
   }, []);
 
@@ -87,7 +87,7 @@ function DialogContent({
         {showCloseButton && !loading && (
           <DialogPrimitive.Close
             data-slot="dialog-close"
-            className="absolute top-6 right-6 w-12 h-12 flex items-center justify-center rounded-full transition-colors z-50 border-none"
+            className="fixed top-6 right-6 w-12 h-12 flex items-center justify-center rounded-full transition-colors z-50 border-none"
             onClick={() => {
               if (setIsModalOpen && typeof isModelOpen === "boolean") {
                 setIsModalOpen(!isModelOpen);
