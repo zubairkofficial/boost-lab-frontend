@@ -7,6 +7,7 @@ import {
 } from "../features/plansApi";
 import { useSelector } from "react-redux";
 import { selectUser, selectUserInfo } from "../store/userSlice";
+import LaunchCountdown from "./Plans2";
 
 export default function SubscriptionPlans() {
  
@@ -60,6 +61,7 @@ console.log("user",userInfo)
       className="min-h-screen bg-fixed bg-cover bg-no-repeat container mx-auto"
       style={{ backgroundImage: `url(${bg})` }}
     >
+      {/* <LaunchCountdown/> */}
       <div className="max-w-8xl mx-auto py-20 px-6 sm:px-14">
         <div className="text-center mb-16">
           <h1 className="text-5xl font-bold text-white mb-4">
