@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useGetTestResultByEmailQuery } from "@/features/testResultApi";
-import { selectUser } from "@/store/userSlice";
 import MenuModal from "@/components/MenuModal";
 import MenuCard from "@/components/NavbarMenu";
 import { AfterSubscriptionStages } from "@/generic-components/subscriptionStages";
@@ -10,9 +9,11 @@ import vector2 from "../../assets/vector2.png";
 import { Link } from "react-router-dom";
 import Header from "@/generic-components/Header";
 import Footer from "@/generic-components/Footer";
+import type { RootState } from "@/store/store";
 
 const Dashboard: React.FC = () => {
-  const user = useSelector(selectUser);
+  const user = useSelector((state: RootState) => state.user.user);
+
   const [isClient, setIsClient] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isResultOpen, setIsResultOpen] = useState(false);
@@ -36,8 +37,8 @@ const Dashboard: React.FC = () => {
 
   return (
     <div
-      className="min-h-screen w-full text-white relative overflow-auto"
-      style={{
+  className="min-h-screen w-full text-white relative overflow-auto before:absolute before:inset-0 before:bg-[#2A4C57]/40 before:z-0"
+  style={{
         backgroundImage:
           "url(https://static.tildacdn.net/tild6534-6232-4333-a431-313138303165/bg_1_1.jpg)",
         backgroundSize: "cover",
@@ -55,23 +56,22 @@ const Dashboard: React.FC = () => {
       </div>
 
       <div className="relative z-10 flex flex-col items-center text-center px-4 py-30">
-      <h1 className="text-[2.5rem] sm:text-[4rem] md:text-[6rem] lg:text-[7rem] mb-10 leading-none tracking-tight font-normal pt-10">
+        <h1 className="text-[2.5rem] sm:text-[4rem] md:text-[6rem] lg:text-[7rem] mb-10 leading-none tracking-tight font-normal pt-10">
           PERSONAL ACCOUNT
         </h1>
         <div className="relative rounded-xl overflow-hidden w-[90%] max-w-[450px] h-full">
-  <img
-    src={boosties}
-    alt="BOOSTIE"
-    className="w-full object-cover rounded-t-xl"
-  />
-  <div className="absolute bottom-2 left-0 w-full px-4 py-4 text-start rounded-b-xl">
-    <p className="text-xs sm:text-sm md:text-base leading-snug">
-      Hello, I'm BOOSTIE! I'm here to help you transition from hobby to
-      profession in just 3 months at our lab. Let's go!
-    </p>
-  </div>
-</div>
-
+          <img
+            src={boosties}
+            alt="BOOSTIE"
+            className="w-full object-cover rounded-t-xl"
+          />
+          <div className="absolute bottom-2 left-0 w-full px-4 py-4 text-start rounded-b-xl">
+            <p className="text-xs sm:text-sm md:text-base leading-snug">
+              Hello, I'm BOOSTIE! I'm here to help you transition from hobby to
+              profession in just 3 months at our lab. Let's go!
+            </p>
+          </div>
+        </div>
       </div>
       <div className="flex flex-col items-center px-4 py-10">
         {isMenuOpen && <MenuCard onClose={() => setIsMenuOpen(false)} />}
@@ -80,7 +80,7 @@ const Dashboard: React.FC = () => {
           ({ stage, title, description, isResultStage }, index) => (
             <div
               key={stage + index}
-              className="w-full max-w-[91rem] bg-gradient-to-r from-[#1f3b47]/30 to-[#193540]/60 backdrop-blur-md rounded-md mb-6 text-white px-4 sm:px-10 md:px-20 py-10"
+              className="w-full max-w-[91rem] bg-[#537F89]/30 backdrop-blur-md rounded-md mb-6 text-white px-4 sm:px-10 md:px-20 py-10"
             >
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                 <div className="w-full">
@@ -115,7 +115,7 @@ const Dashboard: React.FC = () => {
                       />
                       <Link
                         to="https://boostlab.ph/test"
-                      
+                        target="_blank"
                         className="text-xl md:text-2xl font-medium text-[#98EBA5]"
                       >
                         START THE TEST

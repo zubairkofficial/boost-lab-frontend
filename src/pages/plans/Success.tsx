@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import bg from "../assets/bg_tariffs.jpg";
+import bg from "../../assets/bg_tariffs.jpg";
 
 export default function Success() {
   return (

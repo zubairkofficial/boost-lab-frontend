@@ -11,12 +11,13 @@ import TakeTestPage from "./pages/TakeTestPage";
 import ResultsPage from "./pages/ResultPage";
 import BeforeSubsciption from "./pages/personalAccount/BeforeSubsciption";
 import AfterSubsciption from "./pages/personalAccount/AfterSubsciption";
-import SubscriptionPlans from "./pages/Plans";
+import SubscriptionPlans from "./pages/plans/PlansContent";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AppInitializer from "./components/AppInitializer";
-import Success from "./pages/Success";
-import Cancel from "./pages/Cancel";
+import Success from "./pages/plans/Success";
+import Cancel from "./pages/plans/Cancel";
 import NotFound from "./generic-components/PageNotFound";
+import ScrollToTop from "./components/ScrollToTop";
 
 const App = () => {
   const accessToken = localStorage.getItem("access_token");
@@ -25,13 +26,12 @@ const App = () => {
   return (
     <AppInitializer>
       <Router>
+         <ScrollToTop />
         <ToastProvider>
           <AuthProvider>
             <div className="App">
               <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
               <Routes>
-                {/* Public Routes */}
-
                 <Route path="/auth/signup" element={<SignUpPage />} />
                 <Route path="/auth/login" element={<SignInPage />} />
                 <Route

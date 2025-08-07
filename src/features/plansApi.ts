@@ -24,6 +24,10 @@ export const plansApi = createApi({
       invalidatesTags: ["Plan"],
     }),
 
+    getActiveSubscription: builder.query({
+      query: (userId) => `/plans/active-subscription/${userId}`,
+    }),
+
     getAllPlans: builder.query<any[], void>({
       query: () => "/getall",
       providesTags: ["Plan"],
@@ -82,4 +86,5 @@ export const {
   useUpdatePlanMutation,
   useDeletePlanMutation,
   useCreateCheckoutSessionMutation,
+  useGetActiveSubscriptionQuery
 } = plansApi;

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, Link, useLocation } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import toast from "react-hot-toast";
 import frame from "../../assets/vector2.png";
@@ -10,9 +10,8 @@ import { IoMdCheckboxOutline, IoMdSquareOutline } from "react-icons/io";
 
 export const SignInPage = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const dispatch = useDispatch();
-  const [login, { isLoading, error }] = useLoginMutation();
+  const [login, { isLoading }] = useLoginMutation();
   const [isLoaded, setIsLoaded] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -25,6 +24,7 @@ export const SignInPage = () => {
   useEffect(() => {
     setIsLoaded(true);
   }, []);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
@@ -65,16 +65,26 @@ export const SignInPage = () => {
         password: formData.password,
       }).unwrap();
 
-      // Store in localStorage
       localStorage.setItem("access_token", result.access_token);
       localStorage.setItem("user", JSON.stringify(result.user));
       localStorage.setItem("userInfo", JSON.stringify(result.userInfo));
 
-      // Dispatch user data to Redux store
-      dispatch(setUser({user:result.user,userInfo:result.userInfo}));
+      dispatch(setUser({ user: result.user, userInfo: result.userInfo }));
 
-      toast.success("Login successful! Redirecting...");
-      navigate("/");
+      toast.success("Login successful! Checking subscription...");
+
+      const hasSubscription =
+        !!result.userInfo?.planId && !!result.userInfo?.plan;
+
+      console.log("[DEBUG] planId:", result.userInfo?.planId);
+      console.log("[DEBUG] plan:", result.userInfo?.plan);
+      console.log("[DEBUG] hasSubscription:", hasSubscription);
+
+      if (hasSubscription) {
+        navigate("/after-subscription");
+      } else {
+        navigate("/");
+      }
     } catch (err: any) {
       console.error("Login failed:", err);
       toast.error(err?.data?.message || "Login failed. Please try again.");
@@ -107,11 +117,11 @@ export const SignInPage = () => {
         ></div>
       </div>
 
-      <div className="relative z-30 flex justify-center items-center min-h-screen px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-8 sm:py-12">
+      <div className="relative z-30 flex justify-center items-center min-h-screen px-4 py-8">
         <div
           className={`bg-ui-medium/50 backdrop-blur-sm border border-[#8ef0f4] rounded-2xl 
             p-6 sm:p-16 w-full max-w-md sm:max-w-lg lg:max-w-xl xl:max-w-2xl
-            2xl:max-w-3xl flex flex-col justify-center transition-all duration-1000 delay-500 ${
+            flex flex-col justify-center transition-all duration-1000 delay-500 ${
               isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             }`}
         >
@@ -124,10 +134,7 @@ export const SignInPage = () => {
 
           <form onSubmit={handleSubmit} className="space-y-8">
             <div>
-              <label
-                htmlFor="email"
-                className="block text-base font-medium text-gray-200 mb-2"
-              >
+              <label htmlFor="email" className="text-gray-200 mb-2 block">
                 Email Address
               </label>
               <input
@@ -136,23 +143,18 @@ export const SignInPage = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                className={`w-full px-6 py-4 text-base bg-ui-dark/50 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8ef0f4] focus:border-primary transition-all duration-300 ${
+                className={`w-full px-6 py-4 text-base bg-ui-dark/50 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8ef0f4] ${
                   errors.email ? "border-red-500" : "border-primary/20"
                 }`}
                 placeholder="Enter your email"
               />
-              <div className="h-5">
-                {errors.email && (
-                  <p className="mt-1 text-sm text-red-400">{errors.email}</p>
-                )}
-              </div>
+              {errors.email && (
+                <p className="text-sm text-red-400 mt-1">{errors.email}</p>
+              )}
             </div>
 
             <div>
-              <label
-                htmlFor="password"
-                className="block text-base font-medium text-gray-200 mb-2"
-              >
+              <label htmlFor="password" className="text-gray-200 mb-2 block">
                 Password
               </label>
               <input
@@ -161,21 +163,19 @@ export const SignInPage = () => {
                 name="password"
                 value={formData.password}
                 onChange={handleInputChange}
-                className={`w-full px-6 py-4 text-base bg-ui-dark/50 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8ef0f4] focus:border-primary transition-all duration-300 ${
+                className={`w-full px-6 py-4 text-base bg-ui-dark/50 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8ef0f4] ${
                   errors.password ? "border-red-500" : "border-primary/20"
                 }`}
                 placeholder="Enter your password"
               />
-              <div className="h-5">
-                {errors.password && (
-                  <p className="mt-1 text-sm text-red-400">{errors.password}</p>
-                )}
-              </div>
+              {errors.password && (
+                <p className="text-sm text-red-400 mt-1">{errors.password}</p>
+              )}
             </div>
 
             <div className="flex items-center justify-between">
               <div
-                className="flex items-center space-x-3 cursor-pointer select-none"
+                className="flex items-center space-x-3 cursor-pointer"
                 onClick={() =>
                   setFormData((prev) => ({
                     ...prev,
@@ -200,15 +200,15 @@ export const SignInPage = () => {
 
               <Link
                 to="/auth/forgot-password"
-                className="text-sm text-gray-200 hover:text-cyber-blue transition-colors duration-300"
+                className="text-sm text-gray-200 hover:text-cyber-blue transition"
               >
                 Forgot password?
               </Link>
             </div>
 
-            <div className="w-full mt-6 flex justify-center group cursor-pointer">
+            <div className="w-full mt-6 flex justify-center">
               <div
-                className="w-full max-w-xs h-[100px] bg-no-repeat bg-center bg-contain relative transition-all duration-500"
+                className="w-full max-w-xs h-[100px] bg-no-repeat bg-center bg-contain relative"
                 style={{
                   backgroundImage: `url(${frame})`,
                   backgroundSize: "100% 100%",
@@ -217,15 +217,7 @@ export const SignInPage = () => {
                 <button
                   type="submit"
                   disabled={isSubmitting || isLoading}
-                  className="absolute inset-0 w-full h-full text-white text-sm sm:text-base font-semibold
-        transition-all duration-500 ease-out
-        rounded-md 
-        !bg-transparent 
-        !hover:bg-transparent 
-        !focus:bg-transparent 
-        !active:bg-transparent 
-        border-none outline-none
-        flex items-center justify-center"
+                  className="absolute inset-0 w-full h-full text-white text-sm sm:text-base font-semibold flex items-center justify-center"
                 >
                   {isSubmitting || isLoading ? "Signing in..." : "Sign In"}
                 </button>
@@ -235,10 +227,10 @@ export const SignInPage = () => {
 
           <div className="text-center mt-8">
             <p className="text-gray-300">
-              Don't have an account?{" "}
+              Don’t have an account?{" "}
               <Link
                 to="/auth/signup"
-                className="text-white hover:text-cyber-blue transition-colors duration-300 font-semibold"
+                className="text-white hover:text-cyber-blue font-semibold"
               >
                 Sign up here
               </Link>

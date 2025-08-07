@@ -1,17 +1,29 @@
 import { useEffect, useState } from "react";
-import bg from "../assets/bg_tariffs.jpg";
+import bg from "../../assets/bg_tariffs.jpg";
 import Footer from "@/generic-components/Footer";
-import line from "../assets/tariff_line.svg";
+import line from "../../assets/tariff_line.svg";
+import PlanCards from "./PlanCards"; 
 
 const TARGET_DATE = new Date("2025-09-01T00:00:00");
 
-export default function LaunchCountdown() {
+function getTimeLeft() {
+  const now = new Date();
+  const diff = TARGET_DATE.getTime() - now.getTime();
+  const days = Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)));
+  const hours = Math.max(0, Math.floor((diff / (1000 * 60 * 60)) % 24));
+  const minutes = Math.max(0, Math.floor((diff / (1000 * 60)) % 60));
+  const seconds = Math.max(0, Math.floor((diff / 1000) % 60));
+  return { days, hours, minutes, seconds };
+}
+
+export default function PlansContent() {
   const [timeLeft, setTimeLeft] = useState(getTimeLeft());
 
   useEffect(() => {
     const timer = setInterval(() => setTimeLeft(getTimeLeft()), 1000);
     return () => clearInterval(timer);
   }, []);
+
   const services = [
     {
       title: "INDIVIDUAL CONSULTATIONS",
@@ -30,51 +42,6 @@ export default function LaunchCountdown() {
     },
   ];
 
-  function getTimeLeft() {
-    const now = new Date();
-    const diff = TARGET_DATE.getTime() - now.getTime();
-    const days = Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)));
-    const hours = Math.max(0, Math.floor((diff / (1000 * 60 * 60)) % 24));
-    const minutes = Math.max(0, Math.floor((diff / (1000 * 60)) % 60));
-    const seconds = Math.max(0, Math.floor((diff / 1000) % 60));
-    return { days, hours, minutes, seconds };
-  }
-  <section className="relative py-16 text-white font-[Unbounded]">
-    <div className="max-w-6xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-      <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-        Additional Services
-      </h2>
-      <p className="text-base sm:text-lg mb-12 text-white/80">
-        On the platform, the following expert service purchase options are
-        available:
-      </p>
-
-      <div className="border border-cyan-600 rounded-2xl p-4 sm:p-6 grid gap-6 sm:gap-8 md:grid-cols-3">
-        {services.map((service, index) => (
-          <div
-            key={index}
-            className=" min-h-[300px] flex flex-col justify-between p-6 rounded-xl shadow-md relative"
-          >
-            <div>
-              <h3 className="text-lg sm:text-xl font-semibold text-cyan-300 mb-3">
-                {service.title}
-              </h3>
-              <p className="text-sm sm:text-base text-white/90">
-                {service.description}
-              </p>
-            </div>
-            <div className="mt-6">
-              <img
-                src={line}
-                alt="Divider"
-                className="w-full h-6 object-contain"
-              />
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>;
   return (
     <>
       <div
@@ -103,17 +70,14 @@ export default function LaunchCountdown() {
             There is still time to launch:
           </h2>
 
-          <div
-            className="flex flex-wrap justify-center items-center gap-4 sm:gap-6 md:gap-8
-      rounded-xl p-14 sm:p-6 md:p-8 backdrop-blur-lg shadow-2xl
-          w-full max-w-5xl mx-auto text-xs h-full"
-          >
+          <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-6 md:gap-8 rounded-xl p-14 sm:p-6 md:p-8 backdrop-blur-lg shadow-2xl w-full max-w-5xl mx-auto text-xs h-full">
             <TimeBox label="DAYS" value={timeLeft.days} />
             <TimeBox label="HOURS" value={timeLeft.hours} />
             <TimeBox label="MINUTES" value={timeLeft.minutes} />
             <TimeBox label="SECONDS" value={timeLeft.seconds} />
           </div>
         </div>
+
         <div className="text-center py-20 text-white">
           <h1 className="text-[2rem] lg:text-[5rem] mb-5 font-normal uppercase">
             Pricing
@@ -129,13 +93,16 @@ export default function LaunchCountdown() {
             </p>
           </div>
 
+          <PlanCards />
+
           <img
             src="https://optim.tildacdn.net/tild6636-3666-4264-b566-653863396561/-/resize/140x/-/format/webp/boostie.png.webp"
             alt="Boostie"
             className="fixed bottom-0 right-4 w-33 z-50 pointer-events-none"
           />
         </div>
-        <section className="relative  py-16 text-white font-[Unbounded] ">
+
+        <section className="relative py-16 text-white font-[Unbounded]">
           <div className="max-w-8xl mx-auto text-center px-4 sm:px-6 lg:px-8">
             <h2 className="text-3xl sm:text-4xl font-normal text-[#8DEFF4] mb-4">
               Additional Services
@@ -175,6 +142,7 @@ export default function LaunchCountdown() {
     </>
   );
 }
+
 function TimeBox({ label, value }: { label: string; value: number }) {
   return (
     <div className="flex flex-col items-center justify-center min-w-[80px] sm:min-w-[100px] bg-[#0A3B50]/10 rounded-lg p-4 sm:p-6 shadow-inner">

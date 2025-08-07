@@ -160,3 +160,9 @@
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
+iframe {
+  width: 100% !important;
+  min-width: 100% !important;
+  height: 100% !important;
+}
+

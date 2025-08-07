@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { useGetTestResultByEmailQuery } from "@/features/testResultApi";
-import { selectUser } from "@/store/userSlice";
 import vector2 from "../../assets/vector2.png";
 import PriseCard from "@/components/PriseCard";
 import MenuModal from "@/components/MenuModal";
@@ -11,9 +10,13 @@ import MenuCard from "@/components/NavbarMenu";
 import Header from "../../generic-components/Header";
 import { BeforeSubscriptionStages } from "@/generic-components/subscriptionStages";
 import Footer from "@/generic-components/Footer";
+import type { RootState } from "@/store/store";
+import PaymentHistory from "../plans/PaymentHistory";
+// import InvoiceHistory from "../plans/Invoices";
 
 const Dashboard: React.FC = () => {
-  const user = useSelector(selectUser);
+  const user = useSelector((state: RootState) => state.user.user);
+
   const navigate = useNavigate();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -36,7 +39,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <div
-      className="min-h-screen w-full text-white relative overflow-auto"
+      className="min-h-screen w-full text-white relative overflow-auto before:absolute before:inset-0 before:bg-[#2A4C57]/40 before:z-0"
       style={{
         backgroundImage: `url(${backgroundImage})`,
         backgroundSize: "cover",
@@ -54,25 +57,23 @@ const Dashboard: React.FC = () => {
         </p>
       </div>
 
-      <div className="relative z-10 flex flex-col items-center text-center px-4 py-24">
+      <div className="relative z-10 flex flex-col items-center text-center py-24">
         <h1 className="text-[2.5rem] sm:text-[4rem] md:text-[6rem] lg:text-[7rem] mb-10 leading-none tracking-tight font-normal pt-14">
           PERSONAL ACCOUNT
         </h1>
-    <div className="w-[400px] sm:w-[400px] h-[460px] rounded-md shadow-xl overflow-hidden">
-  <iframe
-    src="https://kinescope.io/embed/3kNR85cmGAPZe13Py7UgF8"
-    className="w-full h-full border-none"
-    allow="autoplay; fullscreen"
-    allowFullScreen
-    title="Kinescope Video"
-  ></iframe>
-</div>
-
-
+        <div className="w-[450px] sm:w-[400px] h-[700px] rounded-md shadow-xl overflow-hidden">
+          <iframe
+            src="https://kinescope.io/embed/3kNR85cmGAPZe13Py7UgF8"
+            className="w-full h-full border-none"
+            allow="autoplay; fullscreen"
+            allowFullScreen
+            title="Kinescope Video"
+          ></iframe>
+        </div>
       </div>
 
       <div className="w-full flex flex-col items-center py-10 px-4 z-10">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center w-full max-w-[91rem] px-6 md:px-20 py-10 bg-gradient-to-r from-[#1f3b47]/10 to-[#193540]/60 backdrop-blur-md rounded-md mb-6 text-white">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center w-full max-w-[91rem] px-6 md:px-20 py-10 bg-[#537F89]/30 backdrop-blur-md rounded-md mb-6 text-white">
           <div>
             <h2 className="text-xl md:text-4xl text-[#87F1FF] uppercase tracking-wide font-normal">
               Stage 1: Test
@@ -110,7 +111,7 @@ const Dashboard: React.FC = () => {
           ({ stage, title, description, button }) => (
             <div
               key={stage}
-              className="flex justify-between items-center w-full max-w-[91rem] px-4 sm:px-10 md:px-20 py-10 bg-gradient-to-r from-[#1f3b47] to-[#193540]/60 backdrop-blur-md rounded-md mb-6 text-white"
+              className="flex justify-between items-center w-full max-w-[91rem] px-4 sm:px-10 md:px-20 py-10 bg-[#537F89]/30 backdrop-blur-md rounded-md mb-6 text-white"
             >
               <div className="flex flex-col md:flex-row md:items-center md:justify-between justify-start w-full gap-4">
                 <div className="w-[82%] md:w-auto">
@@ -195,6 +196,8 @@ const Dashboard: React.FC = () => {
         />
       </div>
       <PriseCard />
+      <PaymentHistory />
+      {/* <InvoiceHistory/> */}
       <Footer />
     </div>
   );
