@@ -9,8 +9,8 @@ interface MenuCardProps {
 }
 
 const menuLinks = [
-  { label: "Free", path: "/" },
-  { label: "Paid", path: "/after-subscription" },
+  { label: "PERSONAL ACCOUNT FREE", path: "/" },
+  { label: "PERSONAL ACCOUNT PAID", path: "/after-subscription" },
   { label: "STAGE 2: STRATEGY", path: "/stage-2" },
   { label: "STAGE 3: CONTENT", path: "/stage-3" },
   { label: "STAGE 4: AUTOMATION", path: "/stage-4" },
@@ -88,7 +88,6 @@ const MenuCard: React.FC<MenuCardProps> = ({ onClose }) => {
               className="w-full mb-3 flex items-center text-left gap-2 text-white hover:text-[#f87171]"
             >
               <span className="flex-1">LOGOUT</span>
-           
             </button>
             <img src={line} className="mb-2" alt="line-logout" />
           </div>
