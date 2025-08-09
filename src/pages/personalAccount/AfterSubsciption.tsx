@@ -37,8 +37,8 @@ const Dashboard: React.FC = () => {
 
   return (
     <div
-  className="min-h-screen w-full text-white relative overflow-auto before:absolute before:inset-0 before:bg-[#2A4C57]/40 before:z-0"
-  style={{
+      className="min-h-screen w-full text-white relative overflow-auto before:absolute before:inset-0 before:bg-[#2A4C57]/40 before:z-0"
+      style={{
         backgroundImage:
           "url(https://static.tildacdn.net/tild6534-6232-4333-a431-313138303165/bg_1_1.jpg)",
         backgroundSize: "cover",

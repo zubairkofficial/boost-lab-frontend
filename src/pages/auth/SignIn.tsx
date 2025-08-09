@@ -78,7 +78,7 @@ export const SignInPage = () => {
 
       console.log("[DEBUG] planId:", result.userInfo?.planId);
       console.log("[DEBUG] plan:", result.userInfo?.plan);
-      console.log("[DEBUG] hasSubscription:", hasSubscription);
+      console.log("[DEBUG] hasSubscription:.....................", hasSubscription);
 
       if (hasSubscription) {
         navigate("/after-subscription");
