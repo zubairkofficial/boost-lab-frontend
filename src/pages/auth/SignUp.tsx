@@ -79,7 +79,7 @@ export const SignUpPage = () => {
       }).unwrap();
 
       showSuccess("Account Created!", "Registration successful");
-      navigate("/personal-account-free", { replace: true });
+      navigate("/personal-acount-free", { replace: true });
     } catch (err: any) {
       console.error("Signup failed:", err);
       const backendMessage =

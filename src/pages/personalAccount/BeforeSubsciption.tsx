@@ -215,7 +215,7 @@ const Dashboard: React.FC = () => {
         />
       </div>
       <PriseCard />
-      <PaymentHistory />
+      {/* <PaymentHistory /> */}
       {/* <InvoiceHistory/> */}
       <Footer />
     </div>

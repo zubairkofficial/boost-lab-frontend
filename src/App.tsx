@@ -35,6 +35,10 @@ const App = () => {
                 <Route path="/auth/signup" element={<SignUpPage />} />
                 <Route path="/auth/login" element={<SignInPage />} />
                 <Route
+                  path="/personal-acount-free"
+                  element={<BeforeSubsciption />}
+                />
+                <Route
                   path="/auth/confirm-email"
                   element={<ConfirmEmailPage />}
                 />
@@ -50,22 +54,21 @@ const App = () => {
 
                 {/* Protected Routes with Sidebar */}
                 <Route>
-                  <Route path="/personal-account-free" element={<BeforeSubsciption />} />
                   <Route
                     path="/after-subscription"
                     element={
-                      <ProtectedRoute>
+                      // <ProtectedRoute>
                         <AfterSubsciption />
-                      </ProtectedRoute>
+                      // </ProtectedRoute>
                     }
                   />
 
                   <Route
                     path="/plans"
                     element={
-                      <ProtectedRoute>
+                      // <ProtectedRoute>
                         <SubscriptionPlans />
-                      </ProtectedRoute>
+                      // </ProtectedRoute>
                     }
                   />
                   <Route
