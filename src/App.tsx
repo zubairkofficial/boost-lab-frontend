@@ -35,7 +35,7 @@ const App = () => {
                 <Route path="/auth/signup" element={<SignUpPage />} />
                 <Route path="/auth/login" element={<SignInPage />} />
                 <Route
-                  path="/personal-acount-free"
+                  path="/personal-account-free"
                   element={<BeforeSubsciption />}
                 />
                 <Route
@@ -58,7 +58,7 @@ const App = () => {
                     path="/after-subscription"
                     element={
                       // <ProtectedRoute>
-                        <AfterSubsciption />
+                      <AfterSubsciption />
                       // </ProtectedRoute>
                     }
                   />
@@ -67,7 +67,7 @@ const App = () => {
                     path="/plans"
                     element={
                       // <ProtectedRoute>
-                        <SubscriptionPlans />
+                      <SubscriptionPlans />
                       // </ProtectedRoute>
                     }
                   />
