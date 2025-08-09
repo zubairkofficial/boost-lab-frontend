@@ -26,7 +26,7 @@ const App = () => {
   return (
     <AppInitializer>
       <Router>
-         <ScrollToTop />
+        <ScrollToTop />
         <ToastProvider>
           <AuthProvider>
             <div className="App">
@@ -50,14 +50,7 @@ const App = () => {
 
                 {/* Protected Routes with Sidebar */}
                 <Route>
-                  <Route
-                    path="/"
-                    element={
-                      <ProtectedRoute>
-                        <BeforeSubsciption />
-                      </ProtectedRoute>
-                    }
-                  />
+                  <Route path="/personal-account-free" element={<BeforeSubsciption />} />
                   <Route
                     path="/after-subscription"
                     element={

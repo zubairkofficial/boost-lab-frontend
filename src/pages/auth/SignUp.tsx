@@ -64,7 +64,6 @@ export const SignUpPage = () => {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) {
@@ -74,18 +73,13 @@ export const SignUpPage = () => {
     setIsSubmitting(true);
     try {
       await signup({
-        name: formData.Name,
+        name: formData.Name, // send Name as 'name'
         email: formData.email,
         password: formData.password,
       }).unwrap();
-      showSuccess(
-        "Account Created!",
-        "Please check your email to confirm your account"
-      );
-      navigate(
-        `/auth/confirm-email?email=${encodeURIComponent(formData.email)}`,
-        { replace: true }
-      );
+
+      showSuccess("Account Created!", "Registration successful");
+      navigate("/personal-account-free", { replace: true });
     } catch (err: any) {
       console.error("Signup failed:", err);
       const backendMessage =
@@ -126,14 +120,13 @@ export const SignUpPage = () => {
       </div>
 
       <div className="relative z-30 flex justify-center items-center min-h-screen px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-8 sm:py-12">
-       <div
-  className={`bg-ui-medium/50 backdrop-blur-sm border border-[#8ef0f4] rounded-2xl 
+        <div
+          className={`bg-ui-medium/50 backdrop-blur-sm border border-[#8ef0f4] rounded-2xl 
     p-6 sm:p-16 w-full max-w-md sm:max-w-lg lg:max-w-xl xl:max-w-2xl
     2xl:max-w-3xl flex flex-col justify-center transition-all duration-1000 delay-500 ${
       isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
     }`}
->
-
+        >
           <div>
             <div className="text-center mb-6">
               <h1 className="text-3xl md:text-4xl font-bold text-white font-cyber mb-2">
