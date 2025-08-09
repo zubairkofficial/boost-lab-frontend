@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import { useGetTestResultByEmailQuery } from "@/features/testResultApi";
 import vector2 from "../../assets/vector2.png";
 import PriseCard from "@/components/PriseCard";
@@ -16,23 +16,39 @@ import PaymentHistory from "../plans/PaymentHistory";
 
 const Dashboard: React.FC = () => {
   const user = useSelector((state: RootState) => state.user.user);
-
   const navigate = useNavigate();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isResultOpen, setIsResultOpen] = useState(false);
 
-  const { data: testResult, isLoading } = useGetTestResultByEmailQuery(
-    user?.email ?? "",
-    { skip: !isResultOpen }
-  );
+  const {
+    data: testResult,
+    isLoading,
+    isError,
+  } = useGetTestResultByEmailQuery(user?.email ?? "", {
+    skip: !isResultOpen || !user?.email,
+  });
+
+  const handleSeeResult = () => {
+    if (!user?.email) {
+      toast.error("Email not found. Please log in again.");
+      return;
+    }
+    setIsResultOpen(true);
+  };
 
   useEffect(() => {
-    if (isResultOpen && !isLoading && !testResult) {
+    if (isResultOpen && !isLoading && !testResult && !isError) {
       toast.error("Please give test and then see your results.");
       setIsResultOpen(false);
     }
-  }, [isResultOpen, isLoading, testResult, navigate]);
+  }, [isResultOpen, isLoading, testResult, isError]);
+
+  useEffect(() => {
+    if (isResultOpen && testResult && !isLoading) {
+      toast.success("Test results loaded successfully!");
+    }
+  }, [isResultOpen, testResult, isLoading]);
 
   const backgroundImage =
     "https://static.tildacdn.net/tild6534-6232-4333-a431-313138303165/bg_1_1.jpg";
@@ -49,6 +65,9 @@ const Dashboard: React.FC = () => {
         fontFamily: `'Unbounded', Arial, sans-serif`,
       }}
     >
+      {/* Toaster */}
+      <Toaster position="top-right" />
+
       <Header onMenuClick={() => setIsMenuOpen(true)} />
 
       <div className="absolute top-14 pt-8 sm:pt-14 left-6 z-60 ml-10">
@@ -84,7 +103,7 @@ const Dashboard: React.FC = () => {
           </div>
           <div
             className="flex items-center mt-6 md:mt-0 text-[#d2d2d2] text-sm cursor-pointer"
-            onClick={() => setIsResultOpen(true)}
+            onClick={handleSeeResult}
           >
             <img
               src="https://static.tildacdn.net/tild6231-3763-4066-a262-313738353561/result_icon.svg"
