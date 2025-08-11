@@ -109,9 +109,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       await signupMutation({ name, email, password }).unwrap();
 
       // Redirect to login after successful signup
-      navigate("/auth/login", {
-        state: { message: "Account created successfully! Please sign in." },
-      });
+      navigate("/auth/login", {});
     } catch (error) {
       console.error("Signup error:", error);
       throw error;
