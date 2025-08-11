@@ -35,7 +35,16 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
+const PublicRoute = ({ children }: { children: React.ReactNode }) => {
+  const { isAuthenticated, isLoading } = useAuth();
 
+  if (isLoading) return <div>Loading...</div>;
+  if (isAuthenticated) {
+    return <Navigate to="/personal-account-free" replace />;
+  }
+
+  return <>{children}</>;
+};
 
 const App = () => {
   return (
@@ -47,8 +56,22 @@ const App = () => {
             <div className="App">
               <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
               <Routes>
-                <Route path="/auth/signup" element={<SignUpPage />} />
-                <Route path="/auth/login" element={<SignInPage />} />
+                <Route
+                  path="/auth/signup"
+                  element={
+                    <PublicRoute>
+                      <SignUpPage />
+                    </PublicRoute>
+                  }
+                />
+                <Route
+                  path="/auth/login"
+                  element={
+                    <PublicRoute>
+                      <SignInPage />
+                    </PublicRoute>
+                  }
+                />
                 <Route
                   path="/auth/confirm-email"
                   element={<ConfirmEmailPage />}
