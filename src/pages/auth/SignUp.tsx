@@ -1,16 +1,11 @@
-import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { setUser, selectIsAuthenticated, selectIsLoading } from "../../store/userSlice";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useToast } from "../../contexts/ToastContext";
+import { useAuth } from "../../contexts/AuthContext";
 
 export const SignUpPage = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const { signup } = useAuth();
   const { showSuccess, showError } = useToast();
-
-  const isAuthenticated = useSelector(selectIsAuthenticated);
-  const isLoading = useSelector(selectIsLoading);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -21,22 +16,6 @@ export const SignUpPage = () => {
   });
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // Redirect logged-in users after loading completes
-  useEffect(() => {
-    if (!isLoading && isAuthenticated) {
-      navigate("/personal-account-free", { replace: true });
-    }
-  }, [isAuthenticated, isLoading, navigate]);
-
-  // Show loading while auth state is loading
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-white">
-        Loading...
-      </div>
-    );
-  }
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -85,39 +64,12 @@ export const SignUpPage = () => {
     }
 
     setIsSubmitting(true);
-
     try {
-      const res = await fetch(
-        `${
-          import.meta.env.VITE_BASE_URL
-        }/auth/register?email=${encodeURIComponent(
-          formData.email
-        )}&password=${encodeURIComponent(formData.password)}`,
-        {
-          method: "POST",
-        }
-      );
-
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.message || "Signup failed");
-      }
-
-      const result = await res.json();
-      console.log("result", result);
-
-      // Save tokens & user info locally
-      localStorage.setItem("access_token", result.access_token);
-      localStorage.setItem("user", JSON.stringify(result.user));
-      localStorage.setItem("userInfo", JSON.stringify(result.userInfo));
-
-      dispatch(setUser({ user: result.user, userInfo: result.userInfo }));
-
+      await signup(formData.name, formData.email, formData.password);
       showSuccess("Account created and logged in!");
-
-      navigate("/personal-account-free");
+      // navigation handled inside signup in AuthContext
     } catch (err: any) {
-      showError("Signup Failed", err.message);
+      showError("Signup Failed", err.message || "Unknown error");
     } finally {
       setIsSubmitting(false);
     }
@@ -190,10 +142,10 @@ export const SignUpPage = () => {
 
         <button
           type="submit"
-          disabled={isSubmitting || isLoading}
+          disabled={isSubmitting}
           className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
         >
-          {isSubmitting || isLoading ? "Signing up..." : "Sign Up"}
+          {isSubmitting ? "Signing up..." : "Sign Up"}
         </button>
 
         <p className="text-center text-gray-300 mt-4">
