@@ -1,7 +1,12 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { ToastProvider } from "./contexts/ToastContext";
-import { AuthProvider } from "./contexts/AuthContext";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { SignInPage } from "./pages/auth/SignIn";
 import { SignUpPage } from "./pages/auth/SignUp";
 import { ForgotPasswordPage } from "./pages/auth/ForgotPassword";
@@ -12,17 +17,37 @@ import ResultsPage from "./pages/ResultPage";
 import BeforeSubsciption from "./pages/personalAccount/BeforeSubsciption";
 import AfterSubsciption from "./pages/personalAccount/AfterSubsciption";
 import SubscriptionPlans from "./pages/plans/PlansContent";
-import ProtectedRoute from "./components/ProtectedRoute";
 import AppInitializer from "./components/AppInitializer";
 import Success from "./pages/plans/Success";
 import Cancel from "./pages/plans/Cancel";
 import NotFound from "./generic-components/PageNotFound";
 import ScrollToTop from "./components/ScrollToTop";
 
-const App = () => {
-  const accessToken = localStorage.getItem("access_token");
-  console.log("accessToken", accessToken);
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const { isAuthenticated, isLoading } = useAuth();
 
+  if (isLoading) return <div>Loading...</div>;
+
+  if (!isAuthenticated) {
+    return <Navigate to="/auth/login" replace />;
+  }
+
+  return <>{children}</>;
+};
+
+const PublicRoute = ({ children }: { children: React.ReactNode }) => {
+  const { isAuthenticated, isLoading } = useAuth();
+
+  if (isLoading) return <div>Loading...</div>;
+
+  if (isAuthenticated) {
+    return <Navigate to="/personal-account-free" replace />;
+  }
+
+  return <>{children}</>;
+};
+
+const App = () => {
   return (
     <AppInitializer>
       <Router>
@@ -32,9 +57,22 @@ const App = () => {
             <div className="App">
               <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
               <Routes>
-                {/* Public routes */}
-                <Route path="/auth/signup" element={<SignUpPage />} />
-                <Route path="/auth/login" element={<SignInPage />} />
+                <Route
+                  path="/auth/signup"
+                  element={
+                    <PublicRoute>
+                      <SignUpPage />
+                    </PublicRoute>
+                  }
+                />
+                <Route
+                  path="/auth/login"
+                  element={
+                    <PublicRoute>
+                      <SignInPage />
+                    </PublicRoute>
+                  }
+                />
                 <Route
                   path="/auth/confirm-email"
                   element={<ConfirmEmailPage />}
@@ -47,9 +85,6 @@ const App = () => {
                   path="/auth/reset-password"
                   element={<ResetPasswordPage />}
                 />
-                <Route path="*" element={<NotFound />} />
-
-                {/* Protected routes */}
                 <Route
                   path="/personal-account-free"
                   element={
@@ -106,6 +141,7 @@ const App = () => {
                     </ProtectedRoute>
                   }
                 />
+                <Route path="*" element={<NotFound />} />
               </Routes>
             </div>
           </AuthProvider>
