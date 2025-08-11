@@ -20,17 +20,19 @@ const Dashboard: React.FC = () => {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isResultOpen, setIsResultOpen] = useState(false);
-
+ const userLocal =localStorage.getItem("user")
+  const userData=  JSON.parse(userLocal??"")
   const {
     data: testResult,
     isLoading,
     isError,
-  } = useGetTestResultByEmailQuery(user?.email ?? "", {
-    skip: !isResultOpen || !user?.email,
+  } = useGetTestResultByEmailQuery(userData?.email ?? "", {
+    skip: !isResultOpen || !userData?.email,
   });
 
   const handleSeeResult = () => {
-    if (!user?.email) {
+   
+    if (!userData?.email) {
       toast.error("Email not found. Please log in again.");
       return;
     }

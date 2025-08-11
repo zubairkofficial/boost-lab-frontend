@@ -61,32 +61,45 @@ export const SignUpPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (!validateForm()) {
       showError("Please correct the highlighted errors");
       return;
     }
+
     setIsSubmitting(true);
+
     try {
-      const data = await signup({
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-      }).unwrap();
-      localStorage.setItem("user", JSON.stringify(data.user));
-      localStorage.setItem("access_token", data.access_token);
-      localStorage.setItem("refresh_token", data.refresh_token);
+      const res = await fetch(
+        `${
+          import.meta.env.VITE_BASE_URL
+        }/auth/register?email=${encodeURIComponent(
+          formData.email
+        )}&password=${encodeURIComponent(formData.password)}`,
+        {
+          method: "POST",
+        }
+      );
 
-      dispatch(setUser({ user: data.user, userInfo: data.userInfo || null }));
-
-      showSuccess("Account Created!", "Registration successful");
-      navigate("/personal-account-free", { replace: true });
-    } catch (err: any) {
-      const backendMessage =
-        err?.data?.message || "Signup failed. Please try again.";
-      if (backendMessage.toLowerCase().includes("email")) {
-        setErrors((prev) => ({ ...prev, email: backendMessage }));
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || "Signup failed");
       }
-      showError("Signup Failed", backendMessage);
+
+      const result = await res.json();
+console.log("result",result)
+      // Save tokens & user info locally, just like login
+        localStorage.setItem("access_token", result.access_token);
+      localStorage.setItem("user", JSON.stringify(result.user));
+      localStorage.setItem("userInfo", JSON.stringify(result.userInfo));
+
+      dispatch(setUser({ user: result.user, userInfo: result.userInfo }));
+
+      showSuccess("Account created and logged in!");
+
+      navigate("/personal-account-free");
+    } catch (err: any) {
+      showError("Signup Failed", err.message);
     } finally {
       setIsSubmitting(false);
     }
