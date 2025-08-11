@@ -1,14 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { useSignupMutation } from "../../features/auth/authApi";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser, selectIsAuthenticated, selectIsLoading } from "../../store/userSlice";
 import { useToast } from "../../contexts/ToastContext";
-import { setUser } from "../../store/userSlice";
 
 export const SignUpPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { showSuccess, showError } = useToast();
+
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const isLoading = useSelector(selectIsLoading);
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -19,7 +22,21 @@ export const SignUpPage = () => {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [signup, { isLoading }] = useSignupMutation();
+  // Redirect logged-in users after loading completes
+  useEffect(() => {
+    if (!isLoading && isAuthenticated) {
+      navigate("/personal-account-free", { replace: true });
+    }
+  }, [isAuthenticated, isLoading, navigate]);
+
+  // Show loading while auth state is loading
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-white">
+        Loading...
+      </div>
+    );
+  }
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -87,9 +104,10 @@ export const SignUpPage = () => {
       }
 
       const result = await res.json();
-console.log("result",result)
-      // Save tokens & user info locally, just like login
-        localStorage.setItem("access_token", result.access_token);
+      console.log("result", result);
+
+      // Save tokens & user info locally
+      localStorage.setItem("access_token", result.access_token);
       localStorage.setItem("user", JSON.stringify(result.user));
       localStorage.setItem("userInfo", JSON.stringify(result.userInfo));
 
