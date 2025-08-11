@@ -107,9 +107,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const signup = async (name: string, email: string, password: string) => {
     try {
       await signupMutation({ name, email, password }).unwrap();
-
-      // Redirect to login after successful signup
-      navigate("/auth/login", {});
+      navigate("personal-account-free", {});
     } catch (error) {
       console.error("Signup error:", error);
       throw error;
@@ -120,7 +118,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     localStorage.removeItem("access_token");
     localStorage.removeItem("user");
     setUser(null);
-    navigate("/");
+    navigate("/auth/login");
   };
 
   const updateUser = (userData: Partial<User>) => {

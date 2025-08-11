@@ -85,6 +85,8 @@ const App = () => {
                   path="/auth/reset-password"
                   element={<ResetPasswordPage />}
                 />
+
+                {/* Protected routes */}
                 <Route
                   path="/personal-account-free"
                   element={
@@ -141,6 +143,7 @@ const App = () => {
                     </ProtectedRoute>
                   }
                 />
+                {/* Catch all unmatched routes */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </div>
