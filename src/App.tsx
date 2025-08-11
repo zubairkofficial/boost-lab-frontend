@@ -57,22 +57,8 @@ const App = () => {
             <div className="App">
               <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
               <Routes>
-                <Route
-                  path="/auth/signup"
-                  element={
-                    <PublicRoute>
-                      <SignUpPage />
-                    </PublicRoute>
-                  }
-                />
-                <Route
-                  path="/auth/login"
-                  element={
-                    <PublicRoute>
-                      <SignInPage />
-                    </PublicRoute>
-                  }
-                />
+                <Route path="/auth/signup" element={<SignUpPage />} />
+                <Route path="/auth/login" element={<SignInPage />} />
                 <Route
                   path="/auth/confirm-email"
                   element={<ConfirmEmailPage />}
@@ -85,8 +71,6 @@ const App = () => {
                   path="/auth/reset-password"
                   element={<ResetPasswordPage />}
                 />
-
-                {/* Protected routes */}
                 <Route
                   path="/personal-account-free"
                   element={
@@ -143,7 +127,6 @@ const App = () => {
                     </ProtectedRoute>
                   }
                 />
-                {/* Catch all unmatched routes */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </div>
