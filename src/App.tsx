@@ -35,17 +35,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
-const PublicRoute = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated, isLoading } = useAuth();
 
-  if (isLoading) return <div>Loading...</div>;
-
-  if (isAuthenticated) {
-    return <Navigate to="/personal-account-free" replace />;
-  }
-
-  return <>{children}</>;
-};
 
 const App = () => {
   return (

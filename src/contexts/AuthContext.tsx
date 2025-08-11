@@ -107,9 +107,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const signup = async (name: string, email: string, password: string) => {
     try {
       await signupMutation({ name, email, password }).unwrap();
-      navigate("personal-account-free", {});
+      const loginResult = await loginMutation({ email, password }).unwrap();
+      localStorage.setItem("access_token", loginResult.access_token);
+      localStorage.setItem("user", JSON.stringify(loginResult.user));
+      setUser(loginResult.user);
+      navigate("/personal-account-free");
     } catch (error) {
-      console.error("Signup error:", error);
+      console.error("Signup or login error:", error);
       throw error;
     }
   };
