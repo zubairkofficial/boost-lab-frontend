@@ -92,6 +92,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = async (email: string, password: string) => {
     try {
       const result = await loginMutation({ email, password }).unwrap();
+
       localStorage.setItem("access_token", result.access_token);
       localStorage.setItem("user", JSON.stringify(result.user));
       setUser(result.user);
@@ -107,11 +108,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       await signupMutation({ name, email, password }).unwrap();
       const loginResult = await loginMutation({ email, password }).unwrap();
-
       localStorage.setItem("access_token", loginResult.access_token);
       localStorage.setItem("user", JSON.stringify(loginResult.user));
       setUser(loginResult.user);
-      navigate("/personal-account-free");
+
+      navigate("/personal-account-free"); 
     } catch (error) {
       console.error("Signup or login error:", error);
       throw error;
@@ -122,7 +123,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     localStorage.removeItem("access_token");
     localStorage.removeItem("user");
     setUser(null);
-    navigate("/auth/login");
+    navigate("/");
   };
 
   const updateUser = (userData: Partial<User>) => {
