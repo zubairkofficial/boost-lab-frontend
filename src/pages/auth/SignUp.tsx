@@ -77,7 +77,7 @@ export const SignUpPage = () => {
       console.log("hy.........a",data.user, data.access_token, data.refresh_token);
 
       showSuccess("Account Created!", "Registration successful");
-      navigate("/personal-acount-free", { replace: true });
+      navigate("/personal-account-free", { replace: true });
     } catch (err: any) {
       const backendMessage =
         err?.data?.message || "Signup failed. Please try again.";
