@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { useSignupMutation } from "../../features/auth/authApi";
 import { useToast } from "../../contexts/ToastContext";
+import { setUser } from "../../store/userSlice";
 
 export const SignUpPage = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { showSuccess, showError } = useToast();
   const [formData, setFormData] = useState({
     name: "",
@@ -69,12 +72,11 @@ export const SignUpPage = () => {
         email: formData.email,
         password: formData.password,
       }).unwrap();
-
-      // ✅ Save to localStorage
       localStorage.setItem("user", JSON.stringify(data.user));
       localStorage.setItem("access_token", data.access_token);
       localStorage.setItem("refresh_token", data.refresh_token);
-      console.log("hy.........a",data.user, data.access_token, data.refresh_token);
+
+      dispatch(setUser({ user: data.user, userInfo: data.userInfo || null }));
 
       showSuccess("Account Created!", "Registration successful");
       navigate("/personal-account-free", { replace: true });
@@ -150,7 +152,7 @@ export const SignUpPage = () => {
             onChange={handleInputChange}
           />
           <span className="text-white">I agree to the terms</span>
-        </label>s
+        </label>
         {errors.agreeToTerms && (
           <p className="text-red-500 text-sm">{errors.agreeToTerms}</p>
         )}
