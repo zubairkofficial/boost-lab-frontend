@@ -46,9 +46,9 @@ const App = () => {
                 <Route
                   path="/personal-account-free"
                   element={
-                    <ProtectedRoute>
-                      <BeforeSubsciption />
-                    </ProtectedRoute>
+                    // <ProtectedRoute>
+                    <BeforeSubsciption />
+                    // </ProtectedRoute>
                   }
                 />
                 <Route
