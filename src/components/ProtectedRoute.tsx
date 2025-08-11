@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { H1, BodyText } from "./ui/typography";
-import {
-  selectUser,
-  selectIsAuthenticated,
-  selectIsLoading,
-} from "../store/userSlice";
+import { useAuth } from "../contexts/AuthContext";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -21,15 +15,13 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   fallbackPath = "/auth/login",
   requireSubscription = false,
 }) => {
-  const isAuthenticated = useSelector(selectIsAuthenticated);
-  console.log("isAuthenticated",isAuthenticated)
-  const user = useSelector(selectUser);
-  const isLoading = useSelector(selectIsLoading);
+  const { user, isAuthenticated, isLoading } = useAuth();
   const location = useLocation();
   const [hasActiveSubscription, setHasActiveSubscription] = useState<
     boolean | null
   >(null);
   const [checkingSubscription, setCheckingSubscription] = useState(false);
+
   useEffect(() => {
     const checkSubscription = async () => {
       if (!isAuthenticated || !user || !requireSubscription) {
@@ -38,24 +30,19 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
       }
 
       setCheckingSubscription(true);
+
       try {
-        const userInfo = JSON.parse(localStorage.getItem("userInfo") || "{}");
+        // Replace with your actual subscription API and auth header
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/plans/active-subscription/${
-            userInfo.id
-          }`,
+          `${import.meta.env.VITE_BASE_URL}/plans/active-subscription/${user.id}`,
           {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+              Authorization: `Bearer ${localStorage.getItem("access_token")}`,
             },
           }
         );
 
-        if (response.ok) {
-          setHasActiveSubscription(true);
-        } else {
-          setHasActiveSubscription(false);
-        }
+        setHasActiveSubscription(response.ok);
       } catch (error) {
         console.error("Error checking subscription:", error);
         setHasActiveSubscription(false);
@@ -72,10 +59,10 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
       <div className="min-h-screen bg-gradient-primary flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-cyber-blue border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <H1 className="text-white font-font">Loading...</H1>
-          <BodyText className="text-gray-300 font-font">
+          <h1 className="text-white font-font">Loading...</h1>
+          <p className="text-gray-300 font-font">
             Please wait while we verify your credentials
-          </BodyText>
+          </p>
         </div>
       </div>
     );

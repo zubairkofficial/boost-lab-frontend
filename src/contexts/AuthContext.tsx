@@ -10,7 +10,7 @@ import { useLoginMutation, useSignupMutation } from "../features/auth/authApi";
 
 interface User {
   id: string;
-  name: string;
+  name?: string;
   email: string;
   role: "user" | "admin";
   subscription?: {
@@ -24,9 +24,9 @@ interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<User>;
   logout: () => void;
-  signup: (name: string, email: string, password: string) => Promise<void>;
+  signup: (name: string, email: string, password: string) => Promise<User>;
   updateUser: (userData: Partial<User>) => void;
 }
 
@@ -47,40 +47,37 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const navigate = useNavigate();
   const [loginMutation] = useLoginMutation();
   const [signupMutation] = useSignupMutation();
 
-  // Check for existing token on app load
+  // Check auth on load
   useEffect(() => {
     const checkAuth = async () => {
       try {
         const token = localStorage.getItem("access_token");
         const userData = localStorage.getItem("user");
-
         if (token && userData) {
+          // Verify token with backend
           const response = await fetch(
             `${import.meta.env.VITE_BASE_URL}/auth/verify`,
             {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
+              headers: { Authorization: `Bearer ${token}` },
             }
           );
-
           if (response.ok) {
-            const user = JSON.parse(userData);
-            setUser(user);
+            const userObj = JSON.parse(userData);
+            setUser(userObj);
           } else {
-            // Token invalid, clear storage
             localStorage.removeItem("access_token");
             localStorage.removeItem("user");
+            setUser(null);
           }
         }
       } catch (error) {
         console.error("Auth check failed:", error);
         localStorage.removeItem("access_token");
         localStorage.removeItem("user");
+        setUser(null);
       } finally {
         setIsLoading(false);
       }
@@ -89,41 +86,37 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     checkAuth();
   }, []);
 
-  const login = async (email: string, password: string) => {
-    try {
-      const result = await loginMutation({ email, password }).unwrap();
+  const login = async (email: string, password: string): Promise<User> => {
+    const result = await loginMutation({ email, password }).unwrap();
 
-      localStorage.setItem("access_token", result.access_token);
-      localStorage.setItem("user", JSON.stringify(result.user));
-      setUser(result.user);
+    localStorage.setItem("access_token", result.access_token);
+    localStorage.setItem("user", JSON.stringify(result.user));
+    setUser(result.user);
 
-      navigate("/personal-account-free");
-    } catch (error) {
-      console.error("Login error:", error);
-      throw error;
-    }
+    return result.user;
   };
 
-  const signup = async (name: string, email: string, password: string) => {
-    try {
-      await signupMutation({ name, email, password }).unwrap();
-      const loginResult = await loginMutation({ email, password }).unwrap();
-      localStorage.setItem("access_token", loginResult.access_token);
-      localStorage.setItem("user", JSON.stringify(loginResult.user));
-      setUser(loginResult.user);
+  const signup = async (
+    name: string,
+    email: string,
+    password: string
+  ): Promise<User> => {
+    await signupMutation({ name, email, password }).unwrap();
 
-      navigate("/personal-account-free"); 
-    } catch (error) {
-      console.error("Signup or login error:", error);
-      throw error;
-    }
+    // After signup, login to get tokens and user
+    const loginResult = await loginMutation({ email, password }).unwrap();
+
+    localStorage.setItem("access_token", loginResult.access_token);
+    localStorage.setItem("user", JSON.stringify(loginResult.user));
+    setUser(loginResult.user);
+
+    return loginResult.user;
   };
 
   const logout = () => {
     localStorage.removeItem("access_token");
     localStorage.removeItem("user");
     setUser(null);
-    navigate("/");
   };
 
   const updateUser = (userData: Partial<User>) => {

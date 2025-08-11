@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { ToastProvider } from "./contexts/ToastContext";
 import { AuthProvider } from "./contexts/AuthContext";
-// import { SignInPage } from "./pages/auth/SignIn";
+import { SignInPage } from "./pages/auth/SignIn";
 import { SignUpPage } from "./pages/auth/SignUp";
 import { ForgotPasswordPage } from "./pages/auth/ForgotPassword";
 import ConfirmEmailPage from "./pages/auth/ConfirmEmail";
@@ -30,7 +30,7 @@ const App = () => {
               <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
               <Routes>
                 <Route path="/auth/signup" element={<SignUpPage />} />
-                {/* <Route path="/auth/login" element={<SignInPage />} /> */}
+                <Route path="/auth/login" element={<SignInPage />} />
                 <Route
                   path="/auth/confirm-email"
                   element={<ConfirmEmailPage />}
