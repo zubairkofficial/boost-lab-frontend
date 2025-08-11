@@ -11,7 +11,7 @@ import Header from "../../generic-components/Header";
 import { BeforeSubscriptionStages } from "@/generic-components/subscriptionStages";
 import Footer from "@/generic-components/Footer";
 import type { RootState } from "@/store/store";
-import PaymentHistory from "../plans/PaymentHistory";
+// import PaymentHistory from "../plans/PaymentHistory";
 // import InvoiceHistory from "../plans/Invoices";
 
 const Dashboard: React.FC = () => {

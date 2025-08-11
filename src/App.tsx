@@ -32,12 +32,9 @@ const App = () => {
             <div className="App">
               <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
               <Routes>
+                {/* Public routes */}
                 <Route path="/auth/signup" element={<SignUpPage />} />
                 <Route path="/auth/login" element={<SignInPage />} />
-                <Route
-                  path="/personal-account-free"
-                  element={<BeforeSubsciption />}
-                />
                 <Route
                   path="/auth/confirm-email"
                   element={<ConfirmEmailPage />}
@@ -52,58 +49,63 @@ const App = () => {
                 />
                 <Route path="*" element={<NotFound />} />
 
-                {/* Protected Routes with Sidebar */}
-                <Route>
-                  <Route
-                    path="/after-subscription"
-                    element={
-                      // <ProtectedRoute>
+                {/* Protected routes */}
+                <Route
+                  path="/personal-account-free"
+                  element={
+                    <ProtectedRoute>
+                      <BeforeSubsciption />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/after-subscription"
+                  element={
+                    <ProtectedRoute>
                       <AfterSubsciption />
-                      // </ProtectedRoute>
-                    }
-                  />
-
-                  <Route
-                    path="/plans"
-                    element={
-                      // <ProtectedRoute>
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/plans"
+                  element={
+                    <ProtectedRoute>
                       <SubscriptionPlans />
-                      // </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/take-test"
-                    element={
-                      <ProtectedRoute>
-                        <TakeTestPage />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/success"
-                    element={
-                      <ProtectedRoute>
-                        <Success />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/cancel"
-                    element={
-                      <ProtectedRoute>
-                        <Cancel />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/results"
-                    element={
-                      <ProtectedRoute>
-                        <ResultsPage />
-                      </ProtectedRoute>
-                    }
-                  />
-                </Route>
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/take-test"
+                  element={
+                    <ProtectedRoute>
+                      <TakeTestPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/success"
+                  element={
+                    <ProtectedRoute>
+                      <Success />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/cancel"
+                  element={
+                    <ProtectedRoute>
+                      <Cancel />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/results"
+                  element={
+                    <ProtectedRoute>
+                      <ResultsPage />
+                    </ProtectedRoute>
+                  }
+                />
               </Routes>
             </div>
           </AuthProvider>

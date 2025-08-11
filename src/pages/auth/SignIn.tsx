@@ -49,7 +49,6 @@ export const SignInPage = () => {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) {
@@ -60,10 +59,21 @@ export const SignInPage = () => {
     setIsSubmitting(true);
 
     try {
-      const result = await login({
-        email: formData.email,
-        password: formData.password,
-      }).unwrap();
+      const url = `${
+        import.meta.env.VITE_BASE_URL
+      }/auth/login?email=${encodeURIComponent(
+        formData.email
+      )}&password=${encodeURIComponent(formData.password)}`;
+      const res = await fetch(url, {
+        method: "POST",
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || "Login failed");
+      }
+
+      const result = await res.json();
 
       localStorage.setItem("access_token", result.access_token);
       localStorage.setItem("user", JSON.stringify(result.user));
@@ -78,16 +88,19 @@ export const SignInPage = () => {
 
       console.log("[DEBUG] planId:", result.userInfo?.planId);
       console.log("[DEBUG] plan:", result.userInfo?.plan);
-      console.log("[DEBUG] hasSubscription:.....................", hasSubscription);
+      console.log(
+        "[DEBUG] hasSubscription:.....................",
+        hasSubscription
+      );
 
       if (hasSubscription) {
         navigate("/after-subscription");
       } else {
-        navigate("/");
+        navigate("/personal-account-free");
       }
     } catch (err: any) {
       console.error("Login failed:", err);
-      toast.error(err?.data?.message || "Login failed. Please try again.");
+      toast.error(err.message || "Login failed. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
