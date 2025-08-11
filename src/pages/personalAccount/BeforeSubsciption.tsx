@@ -20,8 +20,8 @@ const Dashboard: React.FC = () => {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isResultOpen, setIsResultOpen] = useState(false);
- const userLocal =localStorage.getItem("user")
-  const userData=  JSON.parse(userLocal??"")
+  const userLocal = localStorage.getItem("user");
+  const userData = JSON.parse(userLocal ?? "");
   const {
     data: testResult,
     isLoading,
@@ -31,7 +31,6 @@ const Dashboard: React.FC = () => {
   });
 
   const handleSeeResult = () => {
-   
     if (!userData?.email) {
       toast.error("Email not found. Please log in again.");
       return;
