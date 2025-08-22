@@ -10,18 +10,28 @@ import { Link } from "react-router-dom";
 import Header from "@/generic-components/Header";
 import Footer from "@/generic-components/Footer";
 import type { RootState } from "@/store/store";
+// import Invoices from "../plans/Invoices";
+import toast, { Toaster } from "react-hot-toast";
 
 const Dashboard: React.FC = () => {
   const user = useSelector((state: RootState) => state.user.user);
+
+  // fallback: get user from localStorage in case Redux doesn't have email
+  const userLocal = localStorage.getItem("user");
+  const userData = JSON.parse(userLocal ?? "{}");
+  const email = user?.email || userData?.email;
 
   const [isClient, setIsClient] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isResultOpen, setIsResultOpen] = useState(false);
 
-  const { data: testResult, isLoading } = useGetTestResultByEmailQuery(
-    user?.email ?? "",
-    { skip: !isResultOpen }
-  );
+  const {
+    data: testResult,
+    isLoading,
+    isError,
+  } = useGetTestResultByEmailQuery(email ?? "", {
+    skip: !isResultOpen || !email,
+  });
 
   const iconSrcList = [
     "https://static.tildacdn.net/tild6434-3931-4336-a566-393838356233/check_icon.svg",
@@ -32,6 +42,19 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  useEffect(() => {
+    if (isResultOpen && !isLoading && (!testResult || isError)) {
+      toast.error("Please give test and then see your results.");
+      setIsResultOpen(false);
+    }
+  }, [isResultOpen, isLoading, testResult, isError]);
+
+  useEffect(() => {
+    if (isResultOpen && testResult && !isLoading) {
+      toast.success("Test results loaded successfully!");
+    }
+  }, [isResultOpen, testResult, isLoading]);
 
   if (!isClient) return null;
 
@@ -48,7 +71,9 @@ const Dashboard: React.FC = () => {
         fontFamily: `'Unbounded', Arial, sans-serif`,
       }}
     >
+      <Toaster position="top-right" />
       <Header onMenuClick={() => setIsMenuOpen(true)} />
+
       <div className="absolute top-14 pt-8 sm:pt-14 left-6 z-60 ml-10">
         <p className="text-lg font-light tracking-wide font-ptSans">
           WELCOME TO YOUR BOOSTLAB
@@ -73,6 +98,7 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
       </div>
+
       <div className="flex flex-col items-center px-4 py-10">
         {isMenuOpen && <MenuCard onClose={() => setIsMenuOpen(false)} />}
 
@@ -94,7 +120,13 @@ const Dashboard: React.FC = () => {
                 <div className="flex items-center gap-4 w-full md:w-auto md:justify-end">
                   {isResultStage ? (
                     <div
-                      onClick={() => setIsResultOpen(true)}
+                      onClick={() => {
+                        if (!email) {
+                          toast.error("Email not found. Please log in again.");
+                          return;
+                        }
+                        setIsResultOpen(true);
+                      }}
                       className="flex items-center gap-4 cursor-pointer md:px-32 px-0"
                     >
                       <img
@@ -114,8 +146,7 @@ const Dashboard: React.FC = () => {
                         className="hidden md:block w-10 h-10 md:w-16 md:h-16"
                       />
                       <Link
-                        to="https://boostlab.ph/test"
-                        target="_blank"
+                        to={import.meta.env.VITE_FRONTEND_URL}
                         className="text-xl md:text-2xl font-medium text-[#98EBA5]"
                       >
                         START THE TEST
@@ -138,7 +169,7 @@ const Dashboard: React.FC = () => {
             </div>
           )
         )}
-
+        {isMenuOpen && <MenuCard onClose={() => setIsMenuOpen(false)} />}
         {isResultOpen && (
           <MenuModal
             isModalOpen={isResultOpen}
@@ -172,6 +203,7 @@ const Dashboard: React.FC = () => {
         alt="Boostie"
         className="fixed bottom-0 right-4 w-20 z-50 pointer-events-none"
       />
+      {/* <Invoices /> */}
       <Footer />
     </div>
   );

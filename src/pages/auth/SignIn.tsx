@@ -58,10 +58,7 @@ export const SignInPage = () => {
 
     try {
       const user = await login(formData.email, formData.password);
-
-      // Check subscription status in user object (adjust if different structure)
-      const hasSubscription =
-        user.subscription?.status === "active";
+      const hasSubscription = user.subscription?.status === "active";
 
       toast.success("Login successful!");
 
@@ -79,16 +76,23 @@ export const SignInPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#293C44] relative overflow-hidden font-font flex items-center justify-center w-full">
-      {/* Background & styles omitted for brevity */}
+    <div className="min-h-screen bg-gradient-to-br from-dark-blue via-dark-grey to-ui-dark relative overflow-hidden font-font flex items-center justify-center w-full">
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat w-full"
+        style={{
+          backgroundImage:
+            "url(https://static.tildacdn.net/tild6534-6232-4333-a431-313138303165/bg_1_1.jpg)",
+        }}
+      />
+      <div className="absolute inset-0 bg-gradient-to-br from-dark-blue/80 via-dark-grey/70 to-ui-dark/90"></div>
 
       <div className="relative z-30 flex justify-center items-center min-h-screen px-4 py-8">
         <div
-          className={`bg-ui-medium/50 backdrop-blur-sm border border-[#8ef0f4] rounded-2xl 
-            p-6 sm:p-16 w-full max-w-md sm:max-w-lg lg:max-w-xl xl:max-w-2xl
-            flex flex-col justify-center transition-all duration-1000 delay-500 ${
-              isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
+          className={`bg-ui-medium/20 backdrop-blur-sm border border-[#8ef0f4] rounded-2xl 
+  py-8 px-12 w-full max-w-4xl sm:max-w-5xl lg:max-w-6xl
+  flex flex-col justify-center transition-all duration-1000 delay-500 ${
+    isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+  }`}
         >
           <div className="text-center mb-8">
             <H2 className="text-white font-font mb-4">Welcome back</H2>
@@ -190,17 +194,7 @@ export const SignInPage = () => {
             </div>
           </form>
 
-          <div className="text-center mt-8">
-            <p className="text-gray-300">
-              Don’t have an account?{" "}
-              <Link
-                to="/auth/signup"
-                className="text-white hover:text-cyber-blue font-semibold"
-              >
-                Sign up here
-              </Link>
-            </p>
-          </div>
+          
         </div>
       </div>
     </div>

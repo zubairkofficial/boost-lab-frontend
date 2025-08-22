@@ -4,25 +4,24 @@ import frame from "../assets/vector2.png";
 
 export default function PersonalInfo() {
   const features = [
-   
     {
-      title: "Growth Plan",
-      price: 129,
-      oldPrice: 199,
-      billingCycle: "(€6/MONTH)",
+      title: "Starter Plan",
+      price: 19,
+      oldPrice: 49,
+      billingCycle: "( 1 MONTH )",
       features: [
-        "Best value for progress",
-        "Enjoy stable growth and enough time to implement all strategies at a better price per month.",
+        "1 month full access to BOOSTLAB",
+        "Flexible entry with no long-term commitment",
       ],
     },
     {
       title: "Annual Plan",
-      price: 199,
-      oldPrice: 299,
-      billingCycle: "(€12/MONTH)",
+      price: 149,
+      oldPrice: 199,
+      billingCycle: "( 12 MONTHS )",
       features: [
-        "Maximum savings & confidence",
-        "Get full access for a whole year, save up to 40%, and focus on your long-term success.",
+        "12 months unlimited access to BOOSTLAB",
+        "The best deal with maximum savings",
       ],
     },
   ];
@@ -37,7 +36,7 @@ export default function PersonalInfo() {
               className="bg-[#154E62]/60 backdrop-blur-md border border-cyan-500/30 shadow-2xl text-white min-h-[35rem] flex flex-col justify-between relative mb-6"
             >
               <div className="p-8 flex flex-col flex-grow gap-3">
-                <h3 className="text-5xl font-semibold text-cyan-300 pt-2">
+                <h3 className="text-4xl font-semibold text-center text-cyan-300 pt-2 pb-4">
                   {item.title}
                 </h3>
 
@@ -48,7 +47,7 @@ export default function PersonalInfo() {
                       <img
                         src={line}
                         alt="divider"
-                        className="h-10 w-full mt-0"
+                        className="h-16 w-full mt-0"
                       />
                     </li>
                   ))}

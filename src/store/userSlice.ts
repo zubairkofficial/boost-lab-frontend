@@ -24,28 +24,30 @@ interface User {
   phone: string;
   is_anonymous: boolean;
   aud: string;
-  // Add other user properties as needed
 }
 
 interface UserState {
-  user: User|null;
-  userInfo:{id:number}|null,
+  user: User | null;
+  userInfo: { id: number } | null;
   isAuthenticated: boolean;
   isLoading: boolean;
 }
 
 const initialState: UserState = {
   user: null,
+  userInfo: null,
   isAuthenticated: false,
-  isLoading: true, // Start with loading true for initialization
-userInfo:null
+  isLoading: true,
 };
 
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<any>) => {
+    setUser: (
+      state,
+      action: PayloadAction<{ user: User; userInfo: { id: number } }>
+    ) => {
       state.user = action.payload.user;
       state.userInfo = action.payload.userInfo;
       state.isAuthenticated = true;
@@ -56,23 +58,24 @@ const userSlice = createSlice({
       state.isAuthenticated = !!action.payload;
       state.isLoading = false;
     },
-    setUserInfoFromStorage: (state, action: PayloadAction<any | null>) => {
-      state.userInfo = action.payload;
+    setUserInfoFromStorage: (
+      state,
+      action: PayloadAction<{ id: string } | null>
+    ) => {
+      state.userInfo = action.payload
+        ? { id: Number(action.payload.id) }
+        : null;
       state.isAuthenticated = !!action.payload;
       state.isLoading = false;
     },
     clearUser: (state) => {
       state.user = null;
+      state.userInfo = null;
       state.isAuthenticated = false;
       state.isLoading = false;
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload;
-    },
-    updateUser: (state, action: PayloadAction<Partial<User>>) => {
-      if (state.user) {
-        state.user = { ...state.user, ...action.payload };
-      }
     },
   },
 });
@@ -83,13 +86,14 @@ export const {
   setUserInfoFromStorage,
   clearUser,
   setLoading,
-  updateUser,
 } = userSlice.actions;
+
 export default userSlice.reducer;
 
 // Selectors
 export const selectUser = (state: { user: UserState }) => state.user.user;
-export const selectUserInfo = (state: { user: UserState }) => state.user.userInfo;
+export const selectUserInfo = (state: { user: UserState }) =>
+  state.user.userInfo;
 export const selectIsAuthenticated = (state: { user: UserState }) =>
   state.user.isAuthenticated;
 export const selectIsLoading = (state: { user: UserState }) =>

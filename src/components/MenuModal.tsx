@@ -6,7 +6,7 @@ import TestResult from "./TestResult";
 interface MenuModalProps {
   isModalOpen: boolean;
   setIsModalOpen: (open: boolean) => void;
-  testResult: string;
+  testResult?: any; 
   isLoading: boolean;
 }
 

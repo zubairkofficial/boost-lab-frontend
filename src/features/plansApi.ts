@@ -14,6 +14,7 @@ export const plansApi = createApi({
         oldPrice: number;
         price: number;
         description?: string;
+        duration: number;
       }
     >({
       query: (body) => ({
@@ -24,8 +25,16 @@ export const plansApi = createApi({
       invalidatesTags: ["Plan"],
     }),
 
+    cancelSubscription: builder.mutation<any, { userId: number }>({
+      query: ({ userId }) => ({
+        url: `/cancel-subscription/${userId}`,
+        method: "POST",
+      }),
+      invalidatesTags: ["Plan"],
+    }),
+
     getActiveSubscription: builder.query({
-      query: (userId) => `/plans/active-subscription/${userId}`,
+      query: (userId) => `/active-subscription/${userId}`,
     }),
 
     getAllPlans: builder.query<any[], void>({
@@ -47,6 +56,7 @@ export const plansApi = createApi({
           oldPrice: number;
           price: number;
           description?: string;
+          duration?: number;
         }>;
       }
     >({
@@ -86,5 +96,6 @@ export const {
   useUpdatePlanMutation,
   useDeletePlanMutation,
   useCreateCheckoutSessionMutation,
-  useGetActiveSubscriptionQuery
+  useGetActiveSubscriptionQuery,
+  useCancelSubscriptionMutation,
 } = plansApi;

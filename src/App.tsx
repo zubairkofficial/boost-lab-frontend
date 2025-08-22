@@ -3,7 +3,6 @@ import { Toaster } from "react-hot-toast";
 import { ToastProvider } from "./contexts/ToastContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import { SignInPage } from "./pages/auth/SignIn";
-import { SignUpPage } from "./pages/auth/SignUp";
 import { ForgotPasswordPage } from "./pages/auth/ForgotPassword";
 import ConfirmEmailPage from "./pages/auth/ConfirmEmail";
 import ResetPasswordPage from "./pages/auth/ResetPassword";
@@ -18,6 +17,8 @@ import Success from "./pages/plans/Success";
 import Cancel from "./pages/plans/Cancel";
 import NotFound from "./generic-components/PageNotFound";
 import ScrollToTop from "./components/ScrollToTop";
+import PhotoIdentity from "./pages/quizPages/Start";
+import QuizWizard from "./pages/quizPages/QuizWizard";
 
 const App = () => {
   return (
@@ -29,7 +30,8 @@ const App = () => {
             <div className="App">
               <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
               <Routes>
-                <Route path="/auth/signup" element={<SignUpPage />} />
+                 <Route path="/" element={<PhotoIdentity />} />
+                 <Route path="/test" element={<QuizWizard />} />
                 <Route path="/auth/login" element={<SignInPage />} />
                 <Route
                   path="/auth/confirm-email"

@@ -25,16 +25,17 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   useEffect(() => {
     const checkSubscription = async () => {
       if (!isAuthenticated || !user || !requireSubscription) {
-        setHasActiveSubscription(true);
+        setHasActiveSubscription(true); // allow access
         return;
       }
 
       setCheckingSubscription(true);
 
       try {
-        // Replace with your actual subscription API and auth header
         const response = await fetch(
-          `${import.meta.env.VITE_BASE_URL}/plans/active-subscription/${user.id}`,
+          `${import.meta.env.VITE_BASE_URL}/plans/active-subscription/${
+            user.userId
+          }`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -42,7 +43,18 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
           }
         );
 
-        setHasActiveSubscription(response.ok);
+        if (!response.ok) {
+          setHasActiveSubscription(false);
+          return;
+        }
+
+        const data = await response.json();
+
+        // backend should return subscription object or { status: "active" }
+        const isActive =
+          data?.status === "active" || data?.subscription?.status === "active";
+
+        setHasActiveSubscription(isActive);
       } catch (error) {
         console.error("Error checking subscription:", error);
         setHasActiveSubscription(false);
@@ -54,7 +66,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     checkSubscription();
   }, [isAuthenticated, user, requireSubscription]);
 
-  if (isLoading || checkingSubscription) {
+  if (isLoading || checkingSubscription || hasActiveSubscription === null) {
     return (
       <div className="min-h-screen bg-gradient-primary flex items-center justify-center">
         <div className="text-center">

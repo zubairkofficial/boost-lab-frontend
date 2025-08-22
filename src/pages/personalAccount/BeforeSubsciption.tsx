@@ -11,8 +11,6 @@ import Header from "../../generic-components/Header";
 import { BeforeSubscriptionStages } from "@/generic-components/subscriptionStages";
 import Footer from "@/generic-components/Footer";
 import type { RootState } from "@/store/store";
-// import PaymentHistory from "../plans/PaymentHistory";
-// import InvoiceHistory from "../plans/Invoices";
 
 const Dashboard: React.FC = () => {
   const user = useSelector((state: RootState) => state.user.user);
@@ -20,8 +18,10 @@ const Dashboard: React.FC = () => {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isResultOpen, setIsResultOpen] = useState(false);
+
   const userLocal = localStorage.getItem("user");
-  const userData = JSON.parse(userLocal ?? "");
+  const userData = JSON.parse(userLocal ?? "{}");
+
   const {
     data: testResult,
     isLoading,
@@ -66,9 +66,7 @@ const Dashboard: React.FC = () => {
         fontFamily: `'Unbounded', Arial, sans-serif`,
       }}
     >
-      {/* Toaster */}
       <Toaster position="top-right" />
-
       <Header onMenuClick={() => setIsMenuOpen(true)} />
 
       <div className="absolute top-14 pt-8 sm:pt-14 left-6 z-60 ml-10">
@@ -88,7 +86,7 @@ const Dashboard: React.FC = () => {
             allow="autoplay; fullscreen"
             allowFullScreen
             title="Kinescope Video"
-          ></iframe>
+          />
         </div>
       </div>
 
@@ -197,6 +195,7 @@ const Dashboard: React.FC = () => {
           </div>
         ))}
       </div>
+
       <div className="text-center">
         <h1 className="text-[2rem] lg:text-[5rem] mb-5 font-normal">Pricing</h1>
         <div className="flex justify-center">
@@ -216,8 +215,6 @@ const Dashboard: React.FC = () => {
         />
       </div>
       <PriseCard />
-      {/* <PaymentHistory /> */}
-      {/* <InvoiceHistory/> */}
       <Footer />
     </div>
   );

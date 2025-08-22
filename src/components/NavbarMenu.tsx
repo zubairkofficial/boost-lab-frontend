@@ -1,15 +1,18 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { X } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import line from "../assets/line_tablet.svg";
 import toast from "react-hot-toast";
+import { useAuth } from "../contexts/AuthContext";
+
+import { useGetActiveSubscriptionQuery } from "../features/plansApi";
 
 interface MenuCardProps {
   onClose: () => void;
 }
 
 const menuLinks = [
-  { label: "PERSONAL ACCOUNT FREE", path: "/" },
+  { label: "PERSONAL ACCOUNT FREE", path: "/personal-account-free" },
   { label: "PERSONAL ACCOUNT PAID", path: "/after-subscription" },
   { label: "STAGE 2: STRATEGY", path: "/stage-2" },
   { label: "STAGE 3: CONTENT", path: "/stage-3" },
@@ -19,23 +22,40 @@ const menuLinks = [
   { label: "SERVICES", path: "/services" },
 ];
 
-const lockedLabels = [
-  "LIBRARY",
-  "STAGE 2: STRATEGY",
-  "STAGE 3: CONTENT",
-  "STAGE 4: AUTOMATION",
-  "STAGE 5: AD Launch and Monetization",
-];
-
 const MenuCard: React.FC<MenuCardProps> = ({ onClose }) => {
-  const navigate = useNavigate();
+  const location = useLocation();
+  const { user, logout } = useAuth();
+
+  const { data: activeSubscription } = useGetActiveSubscriptionQuery(
+    user?.userId,
+    {
+      skip: !user?.userId,
+      refetchOnMountOrArgChange: true,
+      refetchOnFocus: true,
+      refetchOnReconnect: true,}
+  );
+
+  const hasActiveSubscription = useMemo(() => {
+    if (!activeSubscription) return false;
+    const isActive = activeSubscription.status === "active";
+    const notExpired = new Date(activeSubscription.expiresAt) > new Date();
+    return isActive && notExpired;
+  }, [activeSubscription]);
 
   const handleLogout = () => {
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("user");
+    logout();
     toast.success("Signed out successfully");
     onClose();
-    navigate("/auth/login");
+  };
+
+  const isLocked = (label: string) => {
+    if (label === "PERSONAL ACCOUNT FREE") return false;
+    if (label === "SERVICES") return false;
+
+    if (!hasActiveSubscription) {
+      return true;
+    }
+    return false;
   };
 
   return (
@@ -53,10 +73,11 @@ const MenuCard: React.FC<MenuCardProps> = ({ onClose }) => {
 
         <ul className="space-y-4 text-base flex flex-col mx-5">
           {menuLinks.map(({ label, path }, index) => {
-            const isLocked = lockedLabels.includes(label);
+            const locked = isLocked(label);
+
             return (
               <div key={index}>
-                {isLocked ? (
+                {locked ? (
                   <button
                     disabled
                     aria-disabled="true"

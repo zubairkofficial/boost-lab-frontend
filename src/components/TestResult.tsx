@@ -1,10 +1,11 @@
 function TestResult({ testResult }: any) {
-  if (!testResult?.content) return null;
+  console.log("testResult", testResult);
+  if (!testResult?.html_report) return null;
 
   // Replace heading tags with <p> to render everything uniformly
-  const normalizedContent = testResult.content
-    .replace(/<\/?h[1-6]>/g, '<p>')
-    .replace(/<\/h[1-6]>/g, '</p>');
+  const normalizedContent = testResult?.html_report
+    .replace(/<\/?h[1-6]>/g, "<p>")
+    .replace(/<\/h[1-6]>/g, "</p>");
 
   return (
     <div className="w-full max-h-[75vh] overflow-y-visible px-10 rounded-xl bg-[#1D4552] text-white text-[18px] leading-relaxed scroll-smooth scrollbar-thin scrollbar-thumb-white/30 scrollbar-track-transparent">

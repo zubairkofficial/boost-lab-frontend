@@ -27,14 +27,11 @@ export default function FuturisticButton({
       onMouseLeave={() => setIsHovered(false)}
       onClick={onClick}
     >
-     {/* Glow effect */}
       <div
         className={`absolute inset-0 rounded-full blur-[6px] transition-opacity duration-100 ${
          isHovered ? "opacity-100 shadow-[0_0_150px_15px_rgba(142,240,244,0.9)]" : "opacity-0"
         }`}
       ></div>
-
-      {/* Main button content */}
       <div className="relative">
         <svg
           width="160"
@@ -62,7 +59,6 @@ export default function FuturisticButton({
           </g>
         </svg>
 
-        {/* Corner accent */}
         <svg
           width="42"
           height="42"
