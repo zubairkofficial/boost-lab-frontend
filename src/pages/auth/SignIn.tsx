@@ -63,7 +63,7 @@ export const SignInPage = () => {
       toast.success("Login successful!");
 
       if (hasSubscription) {
-        navigate("/after-subscription");
+        navigate("/personal-account");
       } else {
         navigate("/personal-account-free");
       }

@@ -87,7 +87,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       localStorage.setItem("user_id", data.user.userId);
 
       if (data.user.subscription?.status === "active") {
-        navigate("/after-subscription");
+        navigate("/personal-account");
       } else {
         navigate("/personal-account-free");
       }

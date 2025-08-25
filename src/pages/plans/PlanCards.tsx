@@ -45,13 +45,10 @@ export default function PlanCards() {
     skip: !user?.userId,
     refetchOnMountOrArgChange: true,
   });
-
-  // Local state to immediately reflect subscription changes
   const [activeSubscription, setActiveSubscription] = useState(
     activeSubscriptionData || null
   );
 
-  // Sync local state with query data
   useEffect(() => {
     setActiveSubscription(activeSubscriptionData || null);
   }, [activeSubscriptionData]);

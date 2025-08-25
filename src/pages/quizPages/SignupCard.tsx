@@ -56,16 +56,16 @@ export default function SignupCard({
       );
 
       const data = await res.json();
+
       if (!res.ok) {
-        if (data.message?.toLowerCase().includes("already exists")) {
+        if (data.message?.toLowerCase().includes("already")) {
           toast.error("Email already registered. Redirecting to login...");
           navigate("/auth/login");
           return;
         }
+
         throw new Error(data.message || "Signup failed");
       }
-      if (!res.ok) throw new Error(data.message || "Signup failed");
-
       localStorage.setItem("access_token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
       localStorage.setItem("user_id", data.user.userId.toString());
@@ -91,19 +91,18 @@ export default function SignupCard({
       animate="animate"
       exit="exit"
       transition={{ duration: 0.4 }}
-      className="min-h-screen bg-[#063241] text-white flex flex-col py-10 w-full px-14 container mx-autos"
+      className="min-h-screen bg-[#063241] text-white flex flex-col py-10 w-full px-14 container mx-auto"
     >
       <div className="flex items-center space-x-3 mb-6 px-10">
         <img src={iconImage} alt="Icon" className="w-8 h-8" />
         <h1 className="text-2xl font-semibold">Find Out Your Photo Identity</h1>
       </div>
+
       <div className="w-full bg-[#05454E] h-1.5 rounded-full mb-10 mx-auto">
         <div className="bg-[#62D4D8] h-1.5 w-[100%] rounded-full"></div>
       </div>
-      <div
-        className="flex-1 flex flex-col justify-center px-10"
-        style={{ fontFamily: "'Unbounded', sans-serif" }}
-      >
+
+      <div className="flex-1 flex flex-col justify-center px-10">
         <h2 className="text-2xl font-semibold mb-3 text-[#8EF0F4]">
           You're one step away from your result
         </h2>
@@ -119,7 +118,7 @@ export default function SignupCard({
                 : field.charAt(0).toUpperCase() + field.slice(1)}
             </label>
             <input
-              className="w-full p-4 rounded-md text-[#8EF0F4] placeholder-gray-300 bg-[#1E4A57] focus:outline-none "
+              className="w-full p-4 rounded-md text-[#8EF0F4] placeholder-gray-300 bg-[#1E4A57] focus:outline-none"
               placeholder={
                 field === "name"
                   ? "Sarah Cohen"
@@ -158,7 +157,7 @@ export default function SignupCard({
       <div className="flex justify-between items-center px-10">
         <p className="text-sm">Step: 6/6</p>
         <div className="flex gap-2">
-          <button className="bg-[#1E4A57] p-3  hover:bg-[#255a6b] transition">
+          <button className="bg-[#1E4A57] p-3 hover:bg-[#255a6b] transition">
             <ArrowLeft className="w-5 h-5 text-white" />
           </button>
           <button
