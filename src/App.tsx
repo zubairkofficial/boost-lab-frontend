@@ -45,7 +45,7 @@ const App = () => {
                   element={<ResetPasswordPage />}
                 />
                 <Route
-                  path="/personal-account"
+                  path="/personal-account-free"
                   element={
                     <ProtectedRoute>
                       <BeforeSubsciption />
@@ -53,7 +53,7 @@ const App = () => {
                   }
                 />
                 <Route
-                  path="/after-subscription"
+                  path="/personal-account"
                   element={
                     <ProtectedRoute>
                       <AfterSubsciption />

@@ -13,7 +13,7 @@ interface MenuCardProps {
 
 const menuLinks = [
   { label: "PERSONAL ACCOUNT FREE", path: "/personal-account" },
-  { label: "PERSONAL ACCOUNT PAID", path: "/after-subscription" },
+  { label: "PERSONAL ACCOUNT PAID", path: "/personal-account" },
   { label: "STAGE 2: STRATEGY", path: "/stage-2" },
   { label: "STAGE 3: CONTENT", path: "/stage-3" },
   { label: "STAGE 4: AUTOMATION", path: "/stage-4" },
