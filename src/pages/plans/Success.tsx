@@ -83,7 +83,7 @@ export default function Success() {
               Thank you! Your subscription is now active.
             </p>
             <Link
-              to="/after-subscription"
+              to="/personal-account"
               className="bg-cyan-500 hover:bg-cyan-600 transition-colors px-8 py-3 text-white text-sm sm:text-base font-semibold rounded-lg shadow-md"
             >
               Go to Dashboard
