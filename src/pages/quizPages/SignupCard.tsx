@@ -58,10 +58,34 @@ export default function SignupCard({
       const data = await res.json();
 
       if (!res.ok) {
-        if (data.message?.toLowerCase().includes("already")) {
-          toast.error("Email already registered. Redirecting to login...");
-          navigate("/auth/login");
-          return;
+        const message = data.message?.toLowerCase();
+
+        if (message?.includes("already")) {
+          const subscriptionRes = await fetch(
+            `${
+              import.meta.env.VITE_BASE_URL
+            }/plans/active-subscription-by-email/${userInfo.email}`
+          );
+
+          const subscriptionData = await subscriptionRes.json();
+
+          if (subscriptionData.subscribed) {
+            localStorage.setItem("access_token", subscriptionData.token);
+            localStorage.setItem("user", JSON.stringify(subscriptionData.user));
+            localStorage.setItem(
+              "user_id",
+              subscriptionData.user.userId.toString()
+            );
+            setUser(subscriptionData.user);
+
+            toast.success("Test Submitted! Redirecting...");
+            navigate("/personal-account");
+            return;
+          } else {
+            toast.error("Email already registered. Redirecting to login...");
+            navigate("/auth/login");
+            return;
+          }
         }
 
         throw new Error(data.message || "Signup failed");
@@ -69,7 +93,6 @@ export default function SignupCard({
       localStorage.setItem("access_token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
       localStorage.setItem("user_id", data.user.userId.toString());
-
       setUser(data.user);
 
       toast.success("Signup successful! Redirecting...");
