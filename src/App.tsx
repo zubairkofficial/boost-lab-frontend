@@ -10,7 +10,6 @@ import TakeTestPage from "./pages/TakeTestPage";
 import ResultsPage from "./pages/ResultPage";
 import BeforeSubsciption from "./pages/personalAccount/BeforeSubsciption";
 import AfterSubsciption from "./pages/personalAccount/AfterSubsciption";
-import SubscriptionPlans from "./pages/plans/PlansContent";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AppInitializer from "./components/AppInitializer";
 import Success from "./pages/plans/Success";
@@ -30,8 +29,8 @@ const App = () => {
             <div className="App">
               <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
               <Routes>
-                 <Route path="/" element={<PhotoIdentity />} />
-                 <Route path="/test" element={<QuizWizard />} />
+                <Route path="/" element={<PhotoIdentity />} />
+                <Route path="/test" element={<QuizWizard />} />
                 <Route path="/auth/login" element={<SignInPage />} />
                 <Route
                   path="/auth/confirm-email"
@@ -46,7 +45,7 @@ const App = () => {
                   element={<ResetPasswordPage />}
                 />
                 <Route
-                  path="/personal-account-free"
+                  path="/personal-account"
                   element={
                     <ProtectedRoute>
                       <BeforeSubsciption />
@@ -61,14 +60,7 @@ const App = () => {
                     </ProtectedRoute>
                   }
                 />
-                <Route
-                  path="/plans"
-                  element={
-                    <ProtectedRoute>
-                      <SubscriptionPlans />
-                    </ProtectedRoute>
-                  }
-                />
+
                 <Route
                   path="/take-test"
                   element={

@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 interface User {
-  userId: number; 
+  userId: number;
   name?: string;
   email: string;
   role: "user" | "admin";
@@ -69,10 +69,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const login = async (email: string, password: string) => {
     try {
-      const res = await axios.post("http://localhost:3000/api/v1/auth/login", {
-        email,
-        password,
-      });
+      const res = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/auth/login`,
+        {
+          email,
+          password,
+        }
+      );
 
       const data = res.data;
 

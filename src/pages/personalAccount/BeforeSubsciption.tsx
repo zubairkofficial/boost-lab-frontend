@@ -11,6 +11,7 @@ import Header from "../../generic-components/Header";
 import { BeforeSubscriptionStages } from "@/generic-components/subscriptionStages";
 import Footer from "@/generic-components/Footer";
 import type { RootState } from "@/store/store";
+import PlanCards from "../plans/PlanCards";
 
 const Dashboard: React.FC = () => {
   const user = useSelector((state: RootState) => state.user.user);
@@ -196,25 +197,7 @@ const Dashboard: React.FC = () => {
         ))}
       </div>
 
-      <div className="text-center">
-        <h1 className="text-[2rem] lg:text-[5rem] mb-5 font-normal">Pricing</h1>
-        <div className="flex justify-center">
-          <p className="max-w-4xl text-base sm:text-lg leading-relaxed">
-            Buy Now, pay with a 42% discount, register, and get ready to turn
-            your passion for photography into a career with BOOSTLAB. Join us
-            and be part of the photography revolution! 🔓 First month/year
-            access only. No auto-renewal. On September 1st, you’ll receive an
-            invitation to activate your subscription and continue your access to
-            BOOSTLAB.
-          </p>
-        </div>
-        <img
-          src="https://optim.tildacdn.net/tild6636-3666-4264-b566-653863396561/-/resize/140x/-/format/webp/boostie.png.webp"
-          alt="Boostie"
-          className="fixed bottom-0 right-4 w-33 z-50 pointer-events-none"
-        />
-      </div>
-      <PriseCard />
+      <PlanCards />
       <Footer />
     </div>
   );

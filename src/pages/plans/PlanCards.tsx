@@ -132,16 +132,13 @@ export default function PlanCards() {
     );
 
   return (
-    <div
-      className="min-h-screen bg-fixed bg-cover bg-no-repeat container mx-auto"
-      style={{ backgroundImage: `url(${bg})` }}
-    >
+    <div>
       <div className="max-w-8xl mx-auto py-20 px-6 sm:px-14">
         <div className="text-center mb-16">
           <h1 className="text-5xl font-bold text-white mb-4">
             Choose Your Plan
           </h1>
-          <p className="text-xl text-cyan-300 max-w-2xl mx-auto">
+          <p className="text-xl text-white max-w-2xl mx-auto">
             Select the perfect subscription plan for your needs. Upgrade or
             downgrade at any time.
           </p>
@@ -163,9 +160,14 @@ export default function PlanCards() {
                 className={`bg-[#154E62]/60 backdrop-blur-md border border-cyan-500/30 shadow-2xl text-white min-h-[35rem] flex flex-col justify-between rounded-2xl relative mb-6`}
               >
                 <div className="p-8 flex flex-col flex-grow gap-3">
-                  <h3 className="text-4xl font-semibold text-cyan-300 pt-2 pb-6">
-                    {plan.name}
-                  </h3>
+                  <div className="flex flex-col items-center justify-center">
+                    <h3
+                      className="text-4xl text-center font-normal text-[#8DEFF4] pt-2 pb-6"
+                      style={{ fontFamily: "'Unbounded', Arial, sans-serif" }}
+                    >
+                      {plan.name}
+                    </h3>
+                  </div>
 
                   <div className="flex flex-col gap-4 flex-grow">
                     {Array.isArray(plan.description)
@@ -180,50 +182,34 @@ export default function PlanCards() {
                           </div>
                         ))
                       : plan.description && (
-                          <p className="text-sm text-slate-200">
+                          <p
+                            className="text-sm text-slate-200"
+                            style={{
+                              fontFamily: "'PT Sans', Arial, sans-serif",
+                            }}
+                          >
                             {plan.description}
                           </p>
                         )}
                   </div>
 
-                  <div className="flex flex-wrap gap-x-2 items-center text-white text-base sm:text-lg mt-4">
-                    {plan.oldPrice && (
-                      <span className="line-through text-slate-400 text-sm sm:text-xl">
-                        €{plan.oldPrice}
-                      </span>
-                    )}
-                    <span className="font-bold text-cyan-400 text-lg sm:text-2xl">
+                  <div
+                    className="flex flex-wrap gap-x-2 items-center text-white text-base sm:text-lg mt-4"
+                    style={{
+                      fontFamily: "'PT Sans', Arial, sans-serif",
+                    }}
+                  >
+                    <span className="font-bold text-[#8DEFF4] text-lg sm:text-2xl">
                       €{plan.price}
                     </span>
-                    <span className="text-cyan-400 text-sm sm:text-lg font-medium break-words">
+                    <span className="text-[#8DEFF4] text-sm sm:text-lg font-medium break-words">
                       {getDurationText(plan.duration)}
                     </span>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 mt-2 px-8">
-                  <input
-                    type="checkbox"
-                    checked={autoRenewMap[plan.id] || false}
-                    onChange={(e) =>
-                      setAutoRenewMap((prev) => ({
-                        ...prev,
-                        [plan.id]: e.target.checked,
-                      }))
-                    }
-                    id={`auto-renew-${plan.id}`}
-                    className="accent-cyan-400"
-                  />
-                  <label
-                    htmlFor={`auto-renew-${plan.id}`}
-                    className="text-white text-sm"
-                  >
-                    Auto-Renew
-                  </label>
-                </div>
-
                 <div
-                  className={`w-full mt-6 ${
+                  className={`w-full mt-2 ${
                     isLoadingThisPlan
                       ? "cursor-not-allowed opacity-50"
                       : "cursor-pointer group"
@@ -243,7 +229,10 @@ export default function PlanCards() {
                       backgroundSize: "100% 100%",
                     }}
                   >
-                    <span className="text-white text-sm sm:text-base font-semibold px-4 py-2 transition-all duration-500 ease-out rounded-md bg-transparent">
+                    <span
+                      className="text-white font-normal text-xl px-4 py-2 transition-all duration-500 ease-out rounded-md bg-transparent"
+                      style={{ fontFamily: "'Unbounded', Arial, sans-serif" }}
+                    >
                       {isSubscribed
                         ? "CANCEL SUBSCRIPTION"
                         : isLoadingThisPlan
