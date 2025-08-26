@@ -171,11 +171,13 @@ const Dashboard: React.FC = () => {
                   })
                 }
               >
-                <img
-                  src="https://static.tildacdn.net/tild6466-3537-4561-a136-313962393561/lock_icon.svg"
-                  alt="Lock Icon"
-                  className="w-18 h-18 mr-4"
-                />
+                {!hasActiveSubscription && (
+                  <img
+                    src="https://static.tildacdn.net/tild6466-3537-4561-a136-313962393561/lock_icon.svg"
+                    alt="Lock Icon"
+                    className="w-18 h-18 mr-4"
+                  />
+                )}
                 <span
                   className={`underline underline-offset-[4px] text-xl font-light px-2 ${
                     hasActiveSubscription ? "text-green-400" : "text-gray-400"
