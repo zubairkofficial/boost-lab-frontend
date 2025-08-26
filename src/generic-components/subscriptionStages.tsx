@@ -12,7 +12,7 @@ export const BeforeSubscriptionStages = [
             alt="SERVICES"
             className="w-[82%] md:w-[100%] sm:w-[92%] h-[110px]"
           />
-          <div className="absolute inset-0 flex items-center justify-center px-2">
+          <div className="absolute inset-0 flex items-center justify-center px-8">
             <span className="text-white text-xs sm:text-lg md:text-start font-semibold w-[71%]">
               START MY STRATEGY WITH BOOSTIE
             </span>

@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import frame from "../../assets/vector2.png";
 import line from "../../assets/tariff_line.svg";
-import bg from "../../assets/bg_tariffs.jpg";
 
 import {
   useGetAllPlansQuery,
@@ -20,7 +19,7 @@ type Plan = {
   price: number;
   oldPrice?: number;
   stripePriceId: string;
-  duration: number;
+  duration: number; // in months
 };
 
 const durationMap: Record<number, string> = {
@@ -31,7 +30,6 @@ const durationMap: Record<number, string> = {
 
 export default function PlanCards() {
   const { data: plans = [], isLoading, isError } = useGetAllPlansQuery();
-  const [autoRenewMap, setAutoRenewMap] = useState<Record<number, boolean>>({});
   const [createCheckoutSession] = useCreateCheckoutSessionMutation();
   const [cancelSubscription] = useCancelSubscriptionMutation();
   const { user } = useAuth();
@@ -81,7 +79,6 @@ export default function PlanCards() {
       const { url } = await createCheckoutSession({
         stripePriceId: plan.stripePriceId,
         id: user.userId,
-        autoRenew: autoRenewMap[plan.id] || false,
       }).unwrap();
 
       if (!url) throw new Error("Stripe checkout URL missing.");
@@ -109,8 +106,8 @@ export default function PlanCards() {
       }).unwrap();
 
       toast.success("Subscription cancelled successfully");
-      setActiveSubscription(null); // update immediately
-      refetchSubscription(); // sync with server
+      setActiveSubscription(null);
+      refetchSubscription();
     } catch (error: any) {
       console.error("Cancel subscription error:", error);
       toast.error(error?.message || "Failed to cancel subscription");
@@ -151,62 +148,133 @@ export default function PlanCards() {
               loadingPlanId === activeSubscription?.plan?.id ||
               isFetchingSubscription;
 
+            const perMonth = (plan.price / plan.duration).toFixed(2);
+
             return (
               <div
                 key={plan.id}
-                className={`bg-[#154E62]/60 backdrop-blur-md border border-cyan-500/30 shadow-2xl text-white min-h-[35rem] flex flex-col justify-between rounded-2xl relative mb-6`}
+                className="bg-[#154E62]/60 backdrop-blur-md border border-cyan-500/30 shadow-2xl text-white min-h-[35rem] flex flex-col justify-between rounded-bl-[68px] 
+             rounded-tr-none rounded-tl-none rounded-br-none relative mb-6"
               >
                 <div className="p-8 flex flex-col flex-grow gap-3">
-                  <div className="flex flex-col items-center justify-center">
-                    <h3
-                      className="text-4xl text-center font-normal text-[#8DEFF4] pt-2 pb-6"
-                      style={{ fontFamily: "'Unbounded', Arial, sans-serif" }}
-                    >
-                      {plan.name}
-                    </h3>
-                  </div>
+                  <h3
+                    className="text-5xl font-normal text-[#8DEFF4] pt-2 pb-6"
+                    style={{ fontFamily: "'Unbounded', Arial, sans-serif" }}
+                  >
+                    {plan.name}
+                  </h3>
 
                   <div className="flex flex-col gap-4 flex-grow">
                     {Array.isArray(plan.description)
-                      ? plan.description.map((desc, i) => (
-                          <div key={i} className="flex flex-col gap-1">
-                            <p className="text-sm text-slate-200">{desc}</p>
-                            <img
-                              src={line}
-                              alt="divider"
-                              className="h-10 w-full mt-0"
-                            />
-                          </div>
-                        ))
-                      : plan.description && (
-                          <p
-                            className="text-sm text-slate-200"
-                            style={{
-                              fontFamily: "'PT Sans', Arial, sans-serif",
-                            }}
-                          >
-                            {plan.description}
-                          </p>
-                        )}
+                      ? plan.description.map((desc, i) => {
+                          const words = desc.split(" ");
+                          const mid = Math.ceil(words.length / 2);
+                          const firstHalf = words.slice(0, mid).join(" ");
+                          const secondHalf = words.slice(mid).join(" ");
+
+                          return (
+                            <div key={i} className="flex flex-col pt-6">
+                              <div className="flex flex-col text-[16px] text-normal">
+                                {words.length > 3 ? (
+                                  <>
+                                    <p className="text-slate-200">
+                                      {firstHalf}
+                                    </p>
+                                    <p className="text-slate-200">
+                                      {secondHalf}
+                                    </p>
+                                  </>
+                                ) : (
+                                  <p className="text-[16px] text-slate-200">
+                                    {desc}
+                                  </p>
+                                )}
+                              </div>
+                              <div className="mt-[-24px]">
+                                <img
+                                  src={line}
+                                  alt="divider"
+                                  className="block w-full m-0 p-0 leading-none"
+                                />
+                              </div>
+                            </div>
+                          );
+                        })
+                      : plan.description &&
+                        (() => {
+                          const words = plan.description.split(" ");
+                          const mid = Math.ceil(words.length / 2);
+                          const firstHalf = words.slice(0, mid).join(" ");
+                          const secondHalf = words.slice(mid).join(" ");
+
+                          return (
+                            <div className="flex flex-col">
+                              <div className="flex flex-col">
+                                {words.length > 3 ? (
+                                  <>
+                                    <p
+                                      className="text-sm text-slate-200"
+                                      style={{
+                                        fontFamily:
+                                          "'PT Sans', Arial, sans-serif",
+                                      }}
+                                    >
+                                      {firstHalf}
+                                    </p>
+                                    <p
+                                      className="text-sm text-slate-200"
+                                      style={{
+                                        fontFamily:
+                                          "'PT Sans', Arial, sans-serif",
+                                      }}
+                                    >
+                                      {secondHalf}
+                                    </p>
+                                  </>
+                                ) : (
+                                  <p
+                                    className="text-sm text-slate-200"
+                                    style={{
+                                      fontFamily:
+                                        "'PT Sans', Arial, sans-serif",
+                                    }}
+                                  >
+                                    {plan.description}
+                                  </p>
+                                )}
+                              </div>
+                              <img
+                                src={line}
+                                alt="divider"
+                                className="w-full h-0 m-0 p-0"
+                              />
+                            </div>
+                          );
+                        })()}
                   </div>
 
                   <div
-                    className="flex flex-wrap gap-x-2 items-center text-white text-base sm:text-lg mt-4"
-                    style={{
-                      fontFamily: "'PT Sans', Arial, sans-serif",
-                    }}
+                    className="flex flex-col"
+                    style={{ fontFamily: "'PT Sans', Arial, sans-serif" }}
                   >
-                    <span className="font-bold text-[#8DEFF4] text-lg sm:text-2xl">
-                      €{plan.price}
-                    </span>
-                    <span className="text-[#8DEFF4] text-sm sm:text-lg font-medium break-words">
-                      {getDurationText(plan.duration)}
-                    </span>
+                    <div className="flex flex-wrap items-baseline gap-x-4">
+                      {plan.oldPrice && (
+                        <span className="text-xl sm:text-2xl font-normal text-white line-through opacity-70 mr-2">
+                          €{plan.oldPrice}
+                        </span>
+                      )}
+
+                      <span className="text-3xl sm:text-4xl font-semibold text-[#8DEFF4]">
+                        €{plan.price}
+                      </span>
+                      <span className="text-sm sm:text-base font-normal text-[#8DEFF4] opacity-80">
+                        / €{perMonth} / MONTH
+                      </span>
+                    </div>
                   </div>
                 </div>
-
                 <div
-                  className={`w-full mt-2 ${
+                  className={`w-full mt-[20px] mb-[-2px] ${
                     isLoadingThisPlan
                       ? "cursor-not-allowed opacity-50"
                       : "cursor-pointer group"
@@ -220,7 +288,7 @@ export default function PlanCards() {
                   }}
                 >
                   <div
-                    className="w-full h-[130px] bg-no-repeat bg-center bg-contain flex items-center justify-center"
+                    className="w-[103%] h-[120px] bg-no-repeat bg-center flex items-center justify-center relative left-1/2 -translate-x-1/2"
                     style={{
                       backgroundImage: `url(${frame})`,
                       backgroundSize: "100% 100%",

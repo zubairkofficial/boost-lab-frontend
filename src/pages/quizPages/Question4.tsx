@@ -2,8 +2,8 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 
-import naturalLightImg from "../../assets/1.webp";
-import uniqueLightImg from "../../assets/2.webp";
+import naturalLightImg from "../../assets/light01.png";
+import uniqueLightImg from "../../assets/light2.png";
 
 import iconImage from "../../assets/quiz.svg";
 

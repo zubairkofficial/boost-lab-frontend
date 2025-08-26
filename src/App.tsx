@@ -18,6 +18,7 @@ import NotFound from "./generic-components/PageNotFound";
 import ScrollToTop from "./components/ScrollToTop";
 import PhotoIdentity from "./pages/quizPages/Start";
 import QuizWizard from "./pages/quizPages/QuizWizard";
+import Stage2_ChatBotPage from "./pages/agents/Stage2_Chatbot";
 
 const App = () => {
   return (
@@ -57,6 +58,14 @@ const App = () => {
                   element={
                     <ProtectedRoute>
                       <AfterSubsciption />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/Stage2_ChatBotPage"
+                  element={
+                    <ProtectedRoute>
+                      <Stage2_ChatBotPage />
                     </ProtectedRoute>
                   }
                 />

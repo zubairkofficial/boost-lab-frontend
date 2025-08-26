@@ -13,7 +13,7 @@ interface MenuCardProps {
 
 const menuLinks = [
   { label: "PERSONAL ACCOUNT FREE", path: "/personal-account-free" },
-  { label: "PERSONAL ACCOUNT PAID", path: "/personal-account" },
+  { label: "PERSONAL ACCOUNT", path: "/personal-account" },
   { label: "STAGE 2: STRATEGY", path: "/stage-2" },
   { label: "STAGE 3: CONTENT", path: "/stage-3" },
   { label: "STAGE 4: AUTOMATION", path: "/stage-4" },
@@ -60,7 +60,7 @@ const MenuCard: React.FC<MenuCardProps> = ({ onClose }) => {
 
   return (
     <div
-      className="fixed inset-0 bg-[#49909A]/5 backdrop-blur-md z-[100] flex items-center justify-center text-2xl"
+      className="fixed inset-0 bg-[#49909A]/1 backdrop-blur-md z-[90] flex items-center justify-center text-2xl"
       style={{ fontFamily: "'Unbounded', Arial, sans-serif" }}
     >
       <div className="bg-[#2A515D]/60 w-[90%] max-w-md p-6 rounded-lg relative shadow-2xl text-white max-h-[80vh] overflow-y-auto hide-scrollbar">

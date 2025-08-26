@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { useGetTestResultByEmailQuery } from "@/features/testResultApi";
+import { useGetActiveSubscriptionQuery } from "@/features/plansApi";
 import vector2 from "../../assets/vector2.png";
-import PriseCard from "@/components/PriseCard";
 import MenuModal from "@/components/MenuModal";
 import MenuCard from "@/components/NavbarMenu";
 import Header from "../../generic-components/Header";
@@ -16,6 +16,7 @@ import PlanCards from "../plans/PlanCards";
 const Dashboard: React.FC = () => {
   const user = useSelector((state: RootState) => state.user.user);
   const navigate = useNavigate();
+  const planCardsRef = useRef<HTMLDivElement>(null);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isResultOpen, setIsResultOpen] = useState(false);
@@ -25,11 +26,25 @@ const Dashboard: React.FC = () => {
 
   const {
     data: testResult,
-    isLoading,
-    isError,
+    isLoading: isTestLoading,
+    isError: isTestError,
   } = useGetTestResultByEmailQuery(userData?.email ?? "", {
     skip: !isResultOpen || !userData?.email,
   });
+
+  const { data: activeSubscription } = useGetActiveSubscriptionQuery(
+    userData?.userId,
+    {
+      skip: !userData?.userId,
+    }
+  );
+
+  const hasActiveSubscription = useMemo(() => {
+    if (!activeSubscription) return false;
+    const isActive = activeSubscription.status === "active";
+    const notExpired = new Date(activeSubscription.expiresAt) > new Date();
+    return isActive && notExpired;
+  }, [activeSubscription]);
 
   const handleSeeResult = () => {
     if (!userData?.email) {
@@ -40,17 +55,17 @@ const Dashboard: React.FC = () => {
   };
 
   useEffect(() => {
-    if (isResultOpen && !isLoading && !testResult && !isError) {
+    if (isResultOpen && !isTestLoading && !testResult && !isTestError) {
       toast.error("Please give test and then see your results.");
       setIsResultOpen(false);
     }
-  }, [isResultOpen, isLoading, testResult, isError]);
+  }, [isResultOpen, isTestLoading, testResult, isTestError]);
 
   useEffect(() => {
-    if (isResultOpen && testResult && !isLoading) {
+    if (isResultOpen && testResult && !isTestLoading) {
       toast.success("Test results loaded successfully!");
     }
-  }, [isResultOpen, testResult, isLoading]);
+  }, [isResultOpen, testResult, isTestLoading]);
 
   const backgroundImage =
     "https://static.tildacdn.net/tild6534-6232-4333-a431-313138303165/bg_1_1.jpg";
@@ -80,7 +95,7 @@ const Dashboard: React.FC = () => {
         <h1 className="text-[2.5rem] sm:text-[4rem] md:text-[6rem] lg:text-[7rem] mb-10 leading-none tracking-tight font-normal pt-14">
           PERSONAL ACCOUNT
         </h1>
-        <div className="w-[450px] sm:w-[400px] h-[700px] rounded-md shadow-xl overflow-hidden">
+        <div className="w-[450px] sm:w-[400px] h-[700px] shadow-xl overflow-hidden border border-cyan-200">
           <iframe
             src="https://kinescope.io/embed/3kNR85cmGAPZe13Py7UgF8"
             className="w-full h-full border-none"
@@ -122,57 +137,61 @@ const Dashboard: React.FC = () => {
             isModalOpen={isResultOpen}
             setIsModalOpen={setIsResultOpen}
             testResult={testResult}
-            isLoading={isLoading}
+            isLoading={isTestLoading}
           />
         )}
 
-        {BeforeSubscriptionStages.map(
-          ({ stage, title, description, button }) => (
-            <div
-              key={stage}
-              className="flex justify-between items-center w-full max-w-[91rem] px-4 sm:px-10 md:px-20 py-10 bg-[#537F89]/30 backdrop-blur-md rounded-md mb-6 text-white"
-            >
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between justify-start w-full gap-4">
-                <div className="w-[82%] md:w-auto">
-                  <h2
-                    className={`text-xl md:text-4xl text-[#87F1FF] uppercase tracking-wide font-normal ${
-                      stage === "LET BOOSTI BUILD YOUR PERSONALIZED STRATEGY"
-                        ? "py-5"
-                        : ""
-                    }`}
-                  >
-                    {stage}
-                    {title ? `: ${title}` : ""}
-                  </h2>
-                  <p className="mt-2 text-white text-sm md:text-base font-normal">
-                    {description}
-                  </p>
-                  {button && (
-                    <div className="block lg:hidden mt-4 w-[50px]">
-                      {button}
-                    </div>
-                  )}
-                </div>
-                {button ? (
-                  <div className="hidden lg:flex items-center mt-4 md:mt-0 justify-end w-full md:w-auto">
-                    {button}
-                  </div>
-                ) : (
-                  <div className="flex items-center justify-start w-full md:w-auto">
-                    <img
-                      src="https://static.tildacdn.net/tild6466-3537-4561-a136-313962393561/lock_icon.svg"
-                      alt="Lock Icon"
-                      className="w-18 h-18 mr-4"
-                    />
-                    <span className="underline underline-offset-[4px] text-xl font-light px-2">
-                      Not Available
-                    </span>
-                  </div>
+        {BeforeSubscriptionStages.map(({ stage, title, description }) => (
+          <div
+            key={stage}
+            className="flex justify-between items-center w-full max-w-[91rem] px-4 sm:px-10 md:px-20 py-10 bg-[#537F89]/30 backdrop-blur-md rounded-md mb-6 text-white"
+          >
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between justify-start w-full gap-4">
+              <div className="w-[82%] md:w-auto">
+                <h2
+                  className={`text-xl md:text-4xl text-[#87F1FF] uppercase tracking-wide font-normal ${
+                    stage === "LET BOOSTI BUILD YOUR PERSONALIZED STRATEGY"
+                      ? "py-5"
+                      : ""
+                  }`}
+                >
+                  {stage}
+                  {title ? `: ${title}` : ""}
+                </h2>
+                <p className="mt-2 text-white text-sm md:text-base font-normal">
+                  {description}
+                </p>
+              </div>
+
+              <div
+                className="flex items-center justify-start w-full md:w-auto cursor-pointer group relative"
+                onClick={() =>
+                  planCardsRef.current?.scrollIntoView({
+                    behavior: "smooth",
+                  })
+                }
+              >
+                <img
+                  src="https://static.tildacdn.net/tild6466-3537-4561-a136-313962393561/lock_icon.svg"
+                  alt="Lock Icon"
+                  className="w-18 h-18 mr-4"
+                />
+                <span
+                  className={`underline underline-offset-[4px] text-xl font-light px-2 ${
+                    hasActiveSubscription ? "text-green-400" : "text-gray-400"
+                  }`}
+                >
+                  {hasActiveSubscription ? "Available" : "Not Available"}
+                </span>
+                {!hasActiveSubscription && (
+                  <span className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 px-3 py-1.5 text-sm text-white rounded-lg bg-white/20 backdrop-blur-md shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none z-50">
+                    Unlock
+                  </span>
                 )}
               </div>
             </div>
-          )
-        )}
+          </div>
+        ))}
       </div>
 
       <div className="w-[70%] px-6 py-10 max-w-screen-xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
@@ -197,7 +216,10 @@ const Dashboard: React.FC = () => {
         ))}
       </div>
 
-      <PlanCards />
+      <div ref={planCardsRef}>
+        <PlanCards />
+      </div>
+
       <Footer />
     </div>
   );

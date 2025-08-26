@@ -10,7 +10,6 @@ import { Link } from "react-router-dom";
 import Header from "@/generic-components/Header";
 import Footer from "@/generic-components/Footer";
 import type { RootState } from "@/store/store";
-// import Invoices from "../plans/Invoices";
 import toast, { Toaster } from "react-hot-toast";
 
 const Dashboard: React.FC = () => {
@@ -152,6 +151,20 @@ const Dashboard: React.FC = () => {
                         START THE TEST
                       </Link>
                     </div>
+                  ) : index === 2 ? (
+                    <div className="flex items-center gap-4 lg:px-18 md:px-0">
+                      <img
+                        src={iconSrcList[2]}
+                        alt="Available Icon"
+                        className="hidden md:block w-10 h-10 md:w-16 md:h-16"
+                      />
+                      <Link
+                        to="/Stage2_ChatBotPage"
+                        className="text-xl md:text-2xl font-medium text-[#98EBA5]"
+                      >
+                        AVAILABLE
+                      </Link>
+                    </div>
                   ) : (
                     <div className="flex items-center gap-4 lg:px-18 md:px-0">
                       <img
@@ -169,7 +182,7 @@ const Dashboard: React.FC = () => {
             </div>
           )
         )}
-        {isMenuOpen && <MenuCard onClose={() => setIsMenuOpen(false)} />}
+
         {isResultOpen && (
           <MenuModal
             isModalOpen={isResultOpen}
@@ -203,7 +216,7 @@ const Dashboard: React.FC = () => {
         alt="Boostie"
         className="fixed bottom-0 right-4 w-20 z-50 pointer-events-none"
       />
-      {/* <Invoices /> */}
+
       <Footer />
     </div>
   );
