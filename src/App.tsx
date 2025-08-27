@@ -62,7 +62,7 @@ const App = () => {
                   }
                 />
                 <Route
-                  path="/Stage2_ChatBotPage"
+                  path="/strategy-generation"
                   element={
                     <ProtectedRoute>
                       <Stage2_ChatBotPage />
