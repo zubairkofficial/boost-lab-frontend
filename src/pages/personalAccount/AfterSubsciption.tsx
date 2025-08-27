@@ -159,7 +159,7 @@ const Dashboard: React.FC = () => {
                         className="hidden md:block w-10 h-10 md:w-16 md:h-16"
                       />
                       <Link
-                        to="/Stage2_ChatBotPage"
+                        to="/strategy-generation"
                         className="text-xl md:text-2xl font-medium text-[#98EBA5]"
                       >
                         AVAILABLE
