@@ -180,7 +180,7 @@ const Dashboard: React.FC = () => {
                 )}
                 <span
                   className={`underline underline-offset-[4px] text-xl font-light px-2 ${
-                    hasActiveSubscription ? "text-green-400" : "text-gray-400"
+                    hasActiveSubscription ? "text-gray-300" : "text-gray-400"
                   }`}
                 >
                   {hasActiveSubscription ? "Available" : "Not Available"}
