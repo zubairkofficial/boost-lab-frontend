@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import ReactMarkdown from "react-markdown";
 import toast, { Toaster } from "react-hot-toast";
@@ -29,6 +29,7 @@ const AUDIT_QUESTIONS = [
 
 const ProfessionalChatbot = () => {
   const { user } = useAuth();
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -52,10 +53,18 @@ const ProfessionalChatbot = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
   const [showDocument, setShowDocument] = useState(false);
   const [docChunks, setDocChunks] = useState<string[]>([]);
   const [displayedDoc, setDisplayedDoc] = useState<string[]>([]);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  // Auto-scroll whenever messages, typing, or document updates
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, isTyping, displayedDoc]);
 
   const handleSendMessage = () => {
     if (!currentAnswer.trim()) return;
@@ -128,13 +137,14 @@ const ProfessionalChatbot = () => {
         { email: user.email, audit_answers: answers },
         { withCredentials: true }
       );
-      console.log(response.data);
+
       const strategy: string = response.data?.strategy;
       if (!strategy) {
         toast.error("No strategy returned from server");
         setShowDocument(false);
         return;
       }
+
       const chunks = strategy.split("\n").filter((line: string) => line.trim());
       setDocChunks(chunks);
     } catch (err) {
@@ -149,12 +159,12 @@ const ProfessionalChatbot = () => {
   useEffect(() => {
     if (!docChunks.length) return;
     let i = 0;
-    const t = setInterval(() => {
+    const interval = setInterval(() => {
       setDisplayedDoc((prev) => [...prev, docChunks[i]]);
       i++;
-      if (i >= docChunks.length) clearInterval(t);
+      if (i >= docChunks.length) clearInterval(interval);
     }, 300);
-    return () => clearInterval(t);
+    return () => clearInterval(interval);
   }, [docChunks]);
 
   return (
@@ -172,6 +182,7 @@ const ProfessionalChatbot = () => {
     >
       <Toaster position="top-right" />
       <div className="relative z-10 w-full max-w-6xl h-[90vh] bg-[#537F89]/40 backdrop-blur-md rounded-2xl shadow-xl border border-[#87F1FF]/40 flex flex-col overflow-hidden text-white">
+        {/* Header */}
         <div className="bg-[#2A4C57] text-[#87F1FF] p-6 flex items-center gap-4 border-b border-[#87F1FF]/30">
           <div className="w-12 h-12 bg-[#87F1FF] rounded-full flex items-center justify-center text-[#2A4C57] font-bold">
             S
@@ -189,7 +200,9 @@ const ProfessionalChatbot = () => {
             <span className="text-sm text-slate-300">Online</span>
           </div>
         </div>
-        <div className="flex-1 overflow-y-auto p-6 space-y-4 hide-scrollbar ">
+
+        {/* Chat / Document Container */}
+        <div className="flex-1 overflow-y-auto p-6 space-y-4 hide-scrollbar">
           {showDocument ? (
             isLoading ? (
               <div className="flex flex-col items-center justify-center h-full">
@@ -203,18 +216,17 @@ const ProfessionalChatbot = () => {
               </div>
             ) : (
               <div className="w-full max-w-5xl mx-auto">
-                <div>
-                  <h1 className="text-2xl font-semibold mb-4 text-[#87F1FF]">
-                    Personalized Marketing Strategy
-                  </h1>
-                  <p className="text-sm text-gray-300 mb-6">
-                    Generated for {user?.email ?? "your account"}
-                  </p>
-                  <div className="prose max-w-none text-white">
-                    {displayedDoc.map((chunk, i) => (
-                      <ReactMarkdown key={i}>{chunk}</ReactMarkdown>
-                    ))}
-                  </div>
+                <h1 className="text-2xl font-semibold mb-4 text-[#87F1FF]">
+                  Personalized Marketing Strategy
+                </h1>
+                <p className="text-sm text-gray-300 mb-6">
+                  Generated for {user?.email ?? "your account"}
+                </p>
+                <div className="prose max-w-none text-white">
+                  {displayedDoc.map((chunk, i) => (
+                    <ReactMarkdown key={i}>{chunk}</ReactMarkdown>
+                  ))}
+                  <div ref={messagesEndRef} />
                 </div>
               </div>
             )
@@ -270,9 +282,12 @@ const ProfessionalChatbot = () => {
                   </div>
                 </div>
               )}
+              <div ref={messagesEndRef} />
             </>
           )}
         </div>
+
+        {/* Input Area */}
         {!showDocument && (
           <div className="border-t border-[#87F1FF]/30 p-4 bg-[#2A4C57]/80">
             <div className="flex gap-3">
@@ -305,8 +320,8 @@ const ProfessionalChatbot = () => {
               )}
             </div>
             <div className="mt-2 text-xs text-gray-300 text-center">
-              Question {Math.min(currentQuestion + 1, AUDIT_QUESTIONS.length)}{" "}
-              of {AUDIT_QUESTIONS.length} • Press Enter to send
+              Question {Math.min(currentQuestion + 1, AUDIT_QUESTIONS.length)} of{" "}
+              {AUDIT_QUESTIONS.length} • Press Enter to send
             </div>
           </div>
         )}
