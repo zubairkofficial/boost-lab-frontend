@@ -14,8 +14,6 @@ import toast, { Toaster } from "react-hot-toast";
 
 const Dashboard: React.FC = () => {
   const user = useSelector((state: RootState) => state.user.user);
-
-  // fallback: get user from localStorage in case Redux doesn't have email
   const userLocal = localStorage.getItem("user");
   const userData = JSON.parse(userLocal ?? "{}");
   const email = user?.email || userData?.email;
