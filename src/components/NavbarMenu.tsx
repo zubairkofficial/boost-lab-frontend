@@ -50,10 +50,10 @@ const MenuCard: React.FC<MenuCardProps> = ({ onClose }) => {
   };
 
   const isLocked = (label: string) => {
+    if (label === "PERSONAL ACCOUNT FREE") return true;
     if (label === "SERVICES") return false;
-
-    if (!hasActiveSubscription && label !== "PERSONAL ACCOUNT FREE") {
-      return true;
+    if (label === "PERSONAL ACCOUNT FREE") {
+      return hasActiveSubscription; 
     }
     return false;
   };
