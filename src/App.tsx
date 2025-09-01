@@ -17,7 +17,7 @@ import Cancel from "./pages/plans/Cancel";
 import NotFound from "./generic-components/PageNotFound";
 import ScrollToTop from "./components/ScrollToTop";
 import PhotoIdentity from "./pages/quizPages/Start";
-import QuizWizard from "./pages/quizPages/QuizWizard";
+import QuizWizard from "./pages/quizPages/QuizMain";
 import Stage2_ChatBotPage from "./pages/agents/Stage2_Chatbot";
 
 const App = () => {

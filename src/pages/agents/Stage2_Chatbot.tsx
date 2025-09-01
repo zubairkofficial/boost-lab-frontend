@@ -93,7 +93,7 @@ export default function BoostieChat() {
           };
           return newMessages;
         });
-        await new Promise((r) => setTimeout(r, 100)); // small delay for effect
+        await new Promise((r) => setTimeout(r, 100));
       }
     } catch (error: any) {
       toast.error(error?.response?.data?.message || "Something went wrong");
@@ -117,7 +117,6 @@ export default function BoostieChat() {
     >
       <Toaster position="top-right" />
       <div className="relative z-10 w-full max-w-6xl h-[100%] bg-[#537F89]/40 backdrop-blur-md rounded-2xl shadow-xl border border-[#87F1FF]/40 flex flex-col overflow-hidden text-white">
-        {/* Header */}
         <div className="bg-[#2A4C57] text-[#87F1FF] p-6 flex items-center gap-4 border-b border-[#87F1FF]/30">
           <div>
             <h1 className="text-xl font-semibold">
@@ -132,8 +131,6 @@ export default function BoostieChat() {
             <span className="text-sm text-slate-300">Online</span>
           </div>
         </div>
-
-        {/* Chat area */}
         <div
           ref={scrollRef}
           className="flex-1 overflow-y-auto p-6 space-y-4 hide-scrollbar"
@@ -168,8 +165,6 @@ export default function BoostieChat() {
             </div>
           ))}
         </div>
-
-        {/* Input box */}
         <div className="border-t border-[#87F1FF]/30 p-7 bg-[#2A4C57]/80">
           <div className="flex gap-3">
             <textarea
