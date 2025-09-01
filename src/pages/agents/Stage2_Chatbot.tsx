@@ -76,18 +76,13 @@ export default function BoostieChat() {
         { withCredentials: true }
       );
 
-      // Split bot response into chunks
       const botChunks = res.data.strategy.match(/.{1,200}/g) || [];
-
-      // Add one empty bot message first
       const botMessage: ChatMessage = {
         sender: "bot",
         message: "",
         createdAt: new Date().toISOString(),
       };
       setMessages((prev) => [...prev, botMessage]);
-
-      // Update the last bot message with each chunk
       for (const chunk of botChunks) {
         setMessages((prev) => {
           const newMessages = [...prev];
