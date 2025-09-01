@@ -45,18 +45,22 @@ const App = () => {
                   path="/auth/reset-password"
                   element={<ResetPasswordPage />}
                 />
+
+                {/* Free page: block if already subscribed */}
                 <Route
                   path="/personal-account-free"
                   element={
-                    <ProtectedRoute>
+                    <ProtectedRoute blockIfSubscribed={true}>
                       <BeforeSubsciption />
                     </ProtectedRoute>
                   }
                 />
+
+                {/* Paid pages: require subscription */}
                 <Route
                   path="/personal-account"
                   element={
-                    <ProtectedRoute>
+                    <ProtectedRoute requireSubscription={true}>
                       <AfterSubsciption />
                     </ProtectedRoute>
                   }
@@ -64,16 +68,15 @@ const App = () => {
                 <Route
                   path="/strategy-generation"
                   element={
-                    <ProtectedRoute>
+                    <ProtectedRoute requireSubscription={true}>
                       <Stage2_ChatBotPage />
                     </ProtectedRoute>
                   }
                 />
-
                 <Route
                   path="/take-test"
                   element={
-                    <ProtectedRoute>
+                    <ProtectedRoute requireSubscription={true}>
                       <TakeTestPage />
                     </ProtectedRoute>
                   }
@@ -81,7 +84,7 @@ const App = () => {
                 <Route
                   path="/success"
                   element={
-                    <ProtectedRoute>
+                    <ProtectedRoute requireSubscription={true}>
                       <Success />
                     </ProtectedRoute>
                   }
@@ -89,7 +92,7 @@ const App = () => {
                 <Route
                   path="/cancel"
                   element={
-                    <ProtectedRoute>
+                    <ProtectedRoute requireSubscription={true}>
                       <Cancel />
                     </ProtectedRoute>
                   }
@@ -97,11 +100,12 @@ const App = () => {
                 <Route
                   path="/results"
                   element={
-                    <ProtectedRoute>
+                    <ProtectedRoute requireSubscription={true}>
                       <ResultsPage />
                     </ProtectedRoute>
                   }
                 />
+
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </div>

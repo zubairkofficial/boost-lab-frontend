@@ -7,6 +7,7 @@ interface ProtectedRouteProps {
   requiredRole?: "user" | "admin";
   fallbackPath?: string;
   requireSubscription?: boolean;
+  blockIfSubscribed?: boolean; // optional: block free pages for subscribed users
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
@@ -14,6 +15,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   requiredRole = "user",
   fallbackPath = "/auth/login",
   requireSubscription = false,
+  blockIfSubscribed = false,
 }) => {
   const { user, isAuthenticated, isLoading } = useAuth();
   const location = useLocation();
@@ -24,13 +26,17 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   useEffect(() => {
     const checkSubscription = async () => {
-      if (!isAuthenticated || !user || !requireSubscription) {
-        setHasActiveSubscription(true); // allow access
+      if (!isAuthenticated || !user) {
+        setHasActiveSubscription(false);
+        return;
+      }
+
+      if (!requireSubscription && !blockIfSubscribed) {
+        setHasActiveSubscription(true);
         return;
       }
 
       setCheckingSubscription(true);
-
       try {
         const response = await fetch(
           `${import.meta.env.VITE_BASE_URL}/plans/active-subscription/${
@@ -49,8 +55,6 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
         }
 
         const data = await response.json();
-
-        // backend should return subscription object or { status: "active" }
         const isActive =
           data?.status === "active" || data?.subscription?.status === "active";
 
@@ -64,7 +68,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     };
 
     checkSubscription();
-  }, [isAuthenticated, user, requireSubscription]);
+  }, [isAuthenticated, user, requireSubscription, blockIfSubscribed]);
 
   if (isLoading || checkingSubscription || hasActiveSubscription === null) {
     return (
@@ -106,11 +110,15 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   if (requireSubscription && hasActiveSubscription === false) {
     return (
       <Navigate
-        to="/plans"
+        to="/personal-account-free"
         state={{ message: "Active subscription required to access this page." }}
         replace
       />
     );
+  }
+
+  if (blockIfSubscribed && hasActiveSubscription === true) {
+    return <Navigate to="/personal-account" replace />;
   }
 
   return <>{children}</>;
