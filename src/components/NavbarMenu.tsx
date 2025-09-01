@@ -32,7 +32,8 @@ const MenuCard: React.FC<MenuCardProps> = ({ onClose }) => {
       skip: !user?.userId,
       refetchOnMountOrArgChange: true,
       refetchOnFocus: true,
-      refetchOnReconnect: true,}
+      refetchOnReconnect: true,
+    }
   );
 
   const hasActiveSubscription = useMemo(() => {
@@ -49,10 +50,9 @@ const MenuCard: React.FC<MenuCardProps> = ({ onClose }) => {
   };
 
   const isLocked = (label: string) => {
-    if (label === "PERSONAL ACCOUNT FREE") return false;
     if (label === "SERVICES") return false;
 
-    if (!hasActiveSubscription) {
+    if (!hasActiveSubscription && label !== "PERSONAL ACCOUNT FREE") {
       return true;
     }
     return false;
