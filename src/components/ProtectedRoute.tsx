@@ -7,7 +7,7 @@ interface ProtectedRouteProps {
   requiredRole?: "user" | "admin";
   fallbackPath?: string;
   requireSubscription?: boolean;
-  blockIfSubscribed?: boolean; // optional: block free pages for subscribed users
+  blockIfSubscribed?: boolean; 
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
@@ -48,9 +48,9 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
             },
           }
         );
-
         if (!response.ok) {
-          setHasActiveSubscription(false);
+          console.warn("Failed to check subscription, keeping state null");
+          setHasActiveSubscription(null);
           return;
         }
 
@@ -61,7 +61,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
         setHasActiveSubscription(isActive);
       } catch (error) {
         console.error("Error checking subscription:", error);
-        setHasActiveSubscription(false);
+        setHasActiveSubscription(null);
       } finally {
         setCheckingSubscription(false);
       }

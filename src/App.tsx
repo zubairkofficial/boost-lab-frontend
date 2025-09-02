@@ -56,7 +56,6 @@ const App = () => {
                   }
                 />
 
-                {/* Paid pages: require subscription */}
                 <Route
                   path="/personal-account"
                   element={

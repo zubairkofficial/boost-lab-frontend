@@ -5,6 +5,9 @@ import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
 import axios from "axios";
 import { Toaster, toast } from "react-hot-toast";
+import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
+import rehypeSanitize from "rehype-sanitize";
 import ReactMarkdown from "react-markdown";
 
 interface ChatMessage {
@@ -69,31 +72,32 @@ export default function BoostieChat() {
     try {
       const res = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/agent/strategy`,
-        {
-          email,
-          audit_answers: [input],
-        },
+        { email, audit_answers: [input] },
         { withCredentials: true }
       );
 
-      const botChunks = res.data.strategy.match(/.{1,200}/g) || [];
+      const fullText = res.data.strategy;
+      const chunkedText = fullText.split("\n\n").filter(Boolean);
+
+      // Start with an empty bot message
       const botMessage: ChatMessage = {
         sender: "bot",
         message: "",
         createdAt: new Date().toISOString(),
       };
+
       setMessages((prev) => [...prev, botMessage]);
-      for (const chunk of botChunks) {
-        setMessages((prev) => {
-          const newMessages = [...prev];
-          const lastIndex = newMessages.length - 1;
-          newMessages[lastIndex] = {
-            ...newMessages[lastIndex],
-            message: newMessages[lastIndex].message + chunk,
-          };
-          return newMessages;
-        });
-        await new Promise((r) => setTimeout(r, 100));
+
+      // Update the single bot message progressively
+      for (const chunk of chunkedText) {
+        botMessage.message += chunk + "\n\n";
+        setMessages((prev) => [
+          ...prev.slice(0, -1),
+          botMessage, // replace the last message with updated text
+        ]);
+
+        // Optional delay for chunk effect
+        await new Promise((resolve) => setTimeout(resolve, 150));
       }
     } catch (error: any) {
       toast.error(error?.response?.data?.message || "Something went wrong");
@@ -117,6 +121,7 @@ export default function BoostieChat() {
     >
       <Toaster position="top-right" />
       <div className="relative z-10 w-full max-w-6xl h-[100%] bg-[#537F89]/40 backdrop-blur-md rounded-2xl shadow-xl border border-[#87F1FF]/40 flex flex-col overflow-hidden text-white">
+        {/* Header */}
         <div className="bg-[#2A4C57] text-[#87F1FF] p-6 flex items-center gap-4 border-b border-[#87F1FF]/30">
           <div>
             <h1 className="text-xl font-semibold">
@@ -131,9 +136,10 @@ export default function BoostieChat() {
             <span className="text-sm text-slate-300">Online</span>
           </div>
         </div>
+
         <div
           ref={scrollRef}
-          className="flex-1 overflow-y-auto p-6 space-y-4 hide-scrollbar"
+          className="flex-1 overflow-y-auto p-6 space-y-6 hide-scrollbar"
         >
           {messages.map((msg, idx) => (
             <div
@@ -143,19 +149,103 @@ export default function BoostieChat() {
               }`}
             >
               <div
-                className={`max-w-[90%] px-4 py-3 shadow-sm rounded-2xl ${
+                className={`max-w-[85%] px-5 py-4 shadow-sm rounded-2xl ${
                   msg.sender === "user"
-                    ? "bg-[#87F1FF] text-[#2A4C57] rounded-br-md"
-                    : "bg-[#537F89]/60 text-white rounded-bl-md"
+                    ? " bg-[#87F1FF] text-[#2A4C57] rounded-br-md"
+                    : " bg-[#4A747F] text-[#fff] rounded-bl-md"
                 }`}
               >
-                <div className="text-sm leading-relaxed">
-                  <ReactMarkdown>{msg.message}</ReactMarkdown>
+                <div className="text-sm leading-relaxed prose prose-invert max-w-none">
+                  <div className="prose prose-invert max-w-none">
+                    <ReactMarkdown
+                      remarkPlugins={[remarkGfm]}
+                      rehypePlugins={[rehypeRaw, rehypeSanitize]}
+                      components={{
+                        // Paragraph
+                        p: ({ node, ...props }) => (
+                          <p
+                            className="m-0 mb-2 leading-relaxed text-sm"
+                            {...props}
+                          />
+                        ),
+
+                        h1: ({ node, ...props }) => (
+                          <h1 className="text-lg font-bold" {...props} />
+                        ),
+                        h2: ({ node, ...props }) => (
+                          <h2
+                            className="text-md font-semibold mb-2"
+                            {...props}
+                          />
+                        ),
+                        h3: ({ node, ...props }) => (
+                          <h3
+                            className="text-sm font-semibold mb-1"
+                            {...props}
+                          />
+                        ),
+
+                        // Lists
+                        ul: ({ node, ...props }) => (
+                          <ul
+                            className="list-disc list-inside mb-2 pl-4"
+                            {...props}
+                          />
+                        ),
+                        ol: ({ node, ...props }) => (
+                          <ol
+                            className="list-decimal list-inside mb-2 pl-4"
+                            {...props}
+                          />
+                        ),
+                        li: ({ node, ...props }) => (
+                          <li
+                            className="mb-1 text-sm leading-relaxed"
+                            {...props}
+                          />
+                        ),
+                        // Inline code & code blocks
+                        code: ({ node, inline, className, ...props }: any) => (
+                          <code
+                            className={`${
+                              inline
+                                ? "bg-[#2A4C57]/50 px-1 py-0.5 rounded text-sm font-mono"
+                                : "bg-[#2A4C57]/30 p-2 rounded block overflow-auto text-sm font-mono"
+                            } ${className || ""}`}
+                            {...props}
+                          />
+                        ),
+                        pre: ({ node, ...props }) => (
+                          <pre
+                            className="bg-[#2A4C57]/30 p-3 rounded overflow-auto mb-2"
+                            {...props}
+                          />
+                        ),
+                        // Blockquotes
+                        blockquote: ({ node, ...props }) => (
+                          <blockquote
+                            className="border-l-4 border-[#87F1FF] pl-4 italic text-gray-200 mb-2"
+                            {...props}
+                          />
+                        ),
+                        // Links
+                        a: ({ node, ...props }) => (
+                          <a
+                            className="text-[#87F1FF] underline hover:text-white"
+                            {...props}
+                          />
+                        ),
+                        // Bold and Italics handled automatically by ReactMarkdown
+                      }}
+                    >
+                      {msg.message}
+                    </ReactMarkdown>
+                  </div>
                 </div>
                 {msg.createdAt && (
                   <div
                     className={`text-xs mt-2 opacity-70 ${
-                      msg.sender === "user" ? "text-[#2A4C57]" : "text-gray-300"
+                      msg.sender === "user" ? "text-[#2A4C57]" : "text-gray-400"
                     }`}
                   >
                     {new Date(msg.createdAt).toLocaleTimeString()}
@@ -165,7 +255,9 @@ export default function BoostieChat() {
             </div>
           ))}
         </div>
-        <div className="border-t border-[#87F1FF]/30 p-7 bg-[#2A4C57]/80">
+
+        {/* Input */}
+        <div className="border-t border-[#87F1FF]/30 p-6 bg-[#2A4C57]/80">
           <div className="flex gap-3">
             <textarea
               value={input}
