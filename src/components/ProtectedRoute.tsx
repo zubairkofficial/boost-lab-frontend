@@ -7,7 +7,7 @@ interface ProtectedRouteProps {
   requiredRole?: "user" | "admin";
   fallbackPath?: string;
   requireSubscription?: boolean;
-  blockIfSubscribed?: boolean; 
+  blockIfSubscribed?: boolean;
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
@@ -72,7 +72,18 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   if (isLoading || checkingSubscription || hasActiveSubscription === null) {
     return (
-      <div className="min-h-screen bg-gradient-primary flex items-center justify-center">
+      <div
+        className="min-h-screen bg-gradient-primary flex items-center justify-center"
+        style={{
+          backgroundImage:
+            "url(https://static.tildacdn.net/tild6534-6232-4333-a431-313138303165/bg_1_1.jpg)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          backgroundAttachment: "fixed",
+          fontFamily: `'PT Sans', sans-serif`,
+        }}
+      >
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-cyber-blue border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <h1 className="text-white font-font">Loading...</h1>

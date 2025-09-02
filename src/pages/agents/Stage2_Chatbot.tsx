@@ -174,7 +174,7 @@ export default function BoostieChat() {
                         ),
                         h2: ({ node, ...props }) => (
                           <h2
-                            className="text-md font-semibold mb-2"
+                            className="text-md text-lg font-semibold mb-2"
                             {...props}
                           />
                         ),
@@ -193,14 +193,11 @@ export default function BoostieChat() {
                           />
                         ),
                         ol: ({ node, ...props }) => (
-                          <ol
-                            className="list-decimal list-inside mb-2 pl-4"
-                            {...props}
-                          />
+                          <ol className="list-decimal mb-2 pl-4" {...props} />
                         ),
                         li: ({ node, ...props }) => (
                           <li
-                            className="mb-1 text-sm leading-relaxed"
+                            className="mb-1 text-sm"
                             {...props}
                           />
                         ),
@@ -221,21 +218,18 @@ export default function BoostieChat() {
                             {...props}
                           />
                         ),
-                        // Blockquotes
                         blockquote: ({ node, ...props }) => (
                           <blockquote
                             className="border-l-4 border-[#87F1FF] pl-4 italic text-gray-200 mb-2"
                             {...props}
                           />
                         ),
-                        // Links
                         a: ({ node, ...props }) => (
                           <a
                             className="text-[#87F1FF] underline hover:text-white"
                             {...props}
                           />
                         ),
-                        // Bold and Italics handled automatically by ReactMarkdown
                       }}
                     >
                       {msg.message}
