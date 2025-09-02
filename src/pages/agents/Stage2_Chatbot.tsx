@@ -79,7 +79,6 @@ export default function BoostieChat() {
       const fullText = res.data.strategy;
       const chunkedText = fullText.split("\n\n").filter(Boolean);
 
-      // Start with an empty bot message
       const botMessage: ChatMessage = {
         sender: "bot",
         message: "",
@@ -88,15 +87,9 @@ export default function BoostieChat() {
 
       setMessages((prev) => [...prev, botMessage]);
 
-      // Update the single bot message progressively
       for (const chunk of chunkedText) {
         botMessage.message += chunk + "\n\n";
-        setMessages((prev) => [
-          ...prev.slice(0, -1),
-          botMessage, // replace the last message with updated text
-        ]);
-
-        // Optional delay for chunk effect
+        setMessages((prev) => [...prev.slice(0, -1), botMessage]);
         await new Promise((resolve) => setTimeout(resolve, 150));
       }
     } catch (error: any) {
@@ -121,7 +114,6 @@ export default function BoostieChat() {
     >
       <Toaster position="top-right" />
       <div className="relative z-10 w-full max-w-6xl h-[100%] bg-[#537F89]/40 backdrop-blur-md rounded-2xl shadow-xl border border-[#87F1FF]/40 flex flex-col overflow-hidden text-white">
-        {/* Header */}
         <div className="bg-[#2A4C57] text-[#87F1FF] p-6 flex items-center gap-4 border-b border-[#87F1FF]/30">
           <div>
             <h1 className="text-xl font-semibold">
@@ -161,7 +153,6 @@ export default function BoostieChat() {
                       remarkPlugins={[remarkGfm]}
                       rehypePlugins={[rehypeRaw, rehypeSanitize]}
                       components={{
-                        // Paragraph
                         p: ({ node, ...props }) => (
                           <p
                             className="m-0 mb-2 leading-relaxed text-sm"
@@ -184,8 +175,6 @@ export default function BoostieChat() {
                             {...props}
                           />
                         ),
-
-                        // Lists
                         ul: ({ node, ...props }) => (
                           <ul
                             className="list-disc list-inside mb-2 pl-4"
@@ -196,12 +185,8 @@ export default function BoostieChat() {
                           <ol className="list-decimal mb-2 pl-4" {...props} />
                         ),
                         li: ({ node, ...props }) => (
-                          <li
-                            className="mb-1 text-sm"
-                            {...props}
-                          />
+                          <li className="mb-1 text-sm" {...props} />
                         ),
-                        // Inline code & code blocks
                         code: ({ node, inline, className, ...props }: any) => (
                           <code
                             className={`${
@@ -250,7 +235,6 @@ export default function BoostieChat() {
           ))}
         </div>
 
-        {/* Input */}
         <div className="border-t border-[#87F1FF]/30 p-6 bg-[#2A4C57]/80">
           <div className="flex gap-3">
             <textarea

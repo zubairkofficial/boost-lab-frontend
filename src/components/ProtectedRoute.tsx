@@ -73,7 +73,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   if (isLoading || checkingSubscription || hasActiveSubscription === null) {
     return (
       <div
-        className="min-h-screen bg-gradient-primary flex items-center justify-center"
+        className="min-h-screen flex items-center justify-center"
         style={{
           backgroundImage:
             "url(https://static.tildacdn.net/tild6534-6232-4333-a431-313138303165/bg_1_1.jpg)",
@@ -84,11 +84,11 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
           fontFamily: `'PT Sans', sans-serif`,
         }}
       >
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-cyber-blue border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <h1 className="text-white font-font">Loading...</h1>
-          <p className="text-gray-300 font-font">
-            Please wait while we verify your credentials
+        <div className="flex flex-col items-center justify-center bg-opacity-70 p-8 rounded-xl shadow-lg animate-fade-in">
+          <div className="w-24 h-24 border-4 border-cyber-blue border-t-transparent rounded-full animate-spin mb-6"></div>
+          <h1 className="text-white text-3xl font-bold mb-2">Loading...</h1>
+          <p className="text-gray-300 text-center max-w-sm">
+            Please wait while we verify your credentials.
           </p>
         </div>
       </div>
