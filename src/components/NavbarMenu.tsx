@@ -12,8 +12,8 @@ interface MenuCardProps {
 }
 
 const menuLinks = [
-  { label: "PERSONAL ACCOUNT FREE", path: "/personal-account-free" },
   { label: "PERSONAL ACCOUNT", path: "/personal-account" },
+  { label: "STAGE 1: TEST", path: "/" },
   { label: "STAGE 2: STRATEGY", path: "/stage-2" },
   { label: "STAGE 3: CONTENT", path: "/stage-3" },
   { label: "STAGE 4: AUTOMATION", path: "/stage-4" },
@@ -64,7 +64,7 @@ const MenuCard: React.FC<MenuCardProps> = ({ onClose }) => {
       className="fixed inset-0 bg-[#49909A]/1 backdrop-blur-md z-[90] flex items-center justify-center text-2xl"
       style={{ fontFamily: "'Unbounded', Arial, sans-serif" }}
     >
-      <div className="bg-[#2A515D]/60 w-[90%] max-w-md p-6 rounded-lg relative shadow-2xl text-white max-h-[80vh] overflow-y-auto hide-scrollbar">
+      <div className="bg-[#2A515D]/60 w-[90%] max-w-md py-6 rounded-lg relative shadow-2xl text-white max-h-[80vh] overflow-y-auto hide-scrollbar">
         <button
           className="absolute top-4 right-4 text-[#6dafb8]"
           onClick={onClose}
@@ -82,7 +82,7 @@ const MenuCard: React.FC<MenuCardProps> = ({ onClose }) => {
                   <button
                     disabled
                     aria-disabled="true"
-                    className="cursor-not-allowed mb-3 flex items-center text-left gap-2 text-white/50 w-full"
+                    className="cursor-not-allowed mb-3 flex items-center text-left gap-0 text-white/50 w-full"
                   >
                     <span className="flex-1">{label}</span>
                     <img

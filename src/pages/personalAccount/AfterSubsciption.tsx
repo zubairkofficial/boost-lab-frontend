@@ -11,6 +11,7 @@ import Header from "@/generic-components/Header";
 import Footer from "@/generic-components/Footer";
 import type { RootState } from "@/store/store";
 import toast, { Toaster } from "react-hot-toast";
+import BoostieChat from "../agents/Stage2_Chatbot";
 
 const Dashboard: React.FC = () => {
   const user = useSelector((state: RootState) => state.user.user);
@@ -21,6 +22,7 @@ const Dashboard: React.FC = () => {
   const [isClient, setIsClient] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isResultOpen, setIsResultOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   const {
     data: testResult,
@@ -191,7 +193,7 @@ const Dashboard: React.FC = () => {
         )}
       </div>
 
-      <div className="w-[65%] px-6 py-10 max-w-screen-xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+      <div className="w-full lg:w-[70%] px-6 py-10 max-w-screen-xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
         {["SERVICES", "LIBRARY"].map((label) => (
           <div
             key={label}
@@ -209,11 +211,29 @@ const Dashboard: React.FC = () => {
         ))}
       </div>
 
-      <img
-        src="https://optim.tildacdn.net/tild6636-3666-4264-b566-653863396561/-/resize/140x/-/format/webp/boostie.png.webp"
-        alt="Boostie"
-        className="fixed bottom-0 right-4 w-20 z-50 pointer-events-none"
-      />
+      <div
+        className="fixed bottom-4 right-4 z-50 flex items-end gap-2 cursor-pointer"
+        onClick={() => setIsChatOpen(true)}
+      >
+        <div
+          className="relative bg-white text-[#2A4C57] px-3 py-2 rounded-2xl shadow-md text-sm font-medium 
+                  before:content-[''] before:absolute before:-bottom-2 before:right-6 
+                  before:border-8 before:border-transparent before:border-t-white animate-bounce"
+        >
+          I'm here. Let’s talk.
+        </div>
+        <img
+          src="https://optim.tildacdn.net/tild6636-3666-4264-b566-653863396561/-/resize/140x/-/format/webp/boostie.png.webp"
+          alt="Boostie"
+          className="w-20"
+        />
+      </div>
+
+      {isChatOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <BoostieChat onClose={() => setIsChatOpen(false)} />
+        </div>
+      )}
 
       <Footer />
     </div>

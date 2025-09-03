@@ -49,6 +49,10 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
           }
         );
         if (!response.ok) {
+          if (response.status === 404) {
+            setHasActiveSubscription(false);
+            return;
+          }
           console.warn("Failed to check subscription, keeping state null");
           setHasActiveSubscription(null);
           return;
