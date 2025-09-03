@@ -19,7 +19,7 @@ interface ChatMessage {
   createdAt?: string;
 }
 
-export default function BoostieChat({ onClose }: { onClose: () => void }) {
+export default function BoostieChat() {
   const user = useSelector((state: RootState) => state.user.user);
   const userLocal = localStorage.getItem("user");
   const userData = JSON.parse(userLocal ?? "{}");
@@ -28,7 +28,7 @@ export default function BoostieChat({ onClose }: { onClose: () => void }) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // ✅ for redirect
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -120,17 +120,16 @@ export default function BoostieChat({ onClose }: { onClose: () => void }) {
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-white">
           <div>
             <h1 className="text-lg font-semibold text-gray-900">
-              Stage 2:Marketing Strategy
+              Stage 2: Marketing Strategy
             </h1>
             <p className="text-sm text-gray-500">
               Professional Strategy Development
             </p>
           </div>
+
+          {/* ✅ Cross button now navigates back */}
           <button
-            onClick={() => {
-              onClose();
-              navigate("/personal-account");
-            }}
+            onClick={() => navigate(-1)}
             className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
           >
             <X className="w-5 h-5 text-gray-500" />
@@ -142,14 +141,14 @@ export default function BoostieChat({ onClose }: { onClose: () => void }) {
             {messages.map((msg, idx) => (
               <div key={idx} className="group">
                 <div className="flex gap-4">
-                  {/* Avatar placeholder */}
+                  {/* Avatar */}
                   <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
                     <span className="text-xs font-medium text-gray-600">
                       {msg.sender === "user" ? "U" : "AI"}
                     </span>
                   </div>
 
-                  {/* Message content */}
+                  {/* Message */}
                   <div className="flex-1 min-w-0">
                     <div className="text-sm font-medium text-gray-900 mb-1">
                       {msg.sender === "user" ? "You" : "Boostie"}
@@ -162,77 +161,6 @@ export default function BoostieChat({ onClose }: { onClose: () => void }) {
                         <ReactMarkdown
                           remarkPlugins={[remarkGfm]}
                           rehypePlugins={[rehypeRaw, rehypeSanitize]}
-                          components={{
-                            p: ({ node, ...props }) => (
-                              <p className="mb-3 leading-relaxed" {...props} />
-                            ),
-                            h1: ({ node, ...props }) => (
-                              <h1
-                                className="text-xl font-semibold mb-3 text-gray-900"
-                                {...props}
-                              />
-                            ),
-                            h2: ({ node, ...props }) => (
-                              <h2
-                                className="text-lg font-semibold mb-2 text-gray-900"
-                                {...props}
-                              />
-                            ),
-                            h3: ({ node, ...props }) => (
-                              <h3
-                                className="text-base font-semibold mb-2 text-gray-900"
-                                {...props}
-                              />
-                            ),
-                            ul: ({ node, ...props }) => (
-                              <ul
-                                className="list-disc list-inside mb-3 space-y-1"
-                                {...props}
-                              />
-                            ),
-                            ol: ({ node, ...props }) => (
-                              <ol
-                                className="list-decimal list-inside mb-3 space-y-1"
-                                {...props}
-                              />
-                            ),
-                            li: ({ node, ...props }) => (
-                              <li className="text-gray-800" {...props} />
-                            ),
-                            code: ({
-                              node,
-                              inline,
-                              className,
-                              ...props
-                            }: any) => (
-                              <code
-                                className={`${
-                                  inline
-                                    ? "bg-gray-100 px-1.5 py-0.5 rounded text-sm font-mono text-gray-800"
-                                    : "bg-gray-50 p-3 rounded-lg block overflow-auto text-sm font-mono text-gray-800"
-                                } ${className || ""}`}
-                                {...props}
-                              />
-                            ),
-                            pre: ({ node, ...props }) => (
-                              <pre
-                                className="bg-gray-50 p-4 rounded-lg overflow-auto mb-3"
-                                {...props}
-                              />
-                            ),
-                            blockquote: ({ node, ...props }) => (
-                              <blockquote
-                                className="border-l-4 border-gray-300 pl-4 italic text-gray-600 mb-3"
-                                {...props}
-                              />
-                            ),
-                            a: ({ node, ...props }) => (
-                              <a
-                                className="text-blue-600 hover:text-blue-800 underline"
-                                {...props}
-                              />
-                            ),
-                          }}
                         >
                           {msg.message}
                         </ReactMarkdown>
@@ -253,9 +181,7 @@ export default function BoostieChat({ onClose }: { onClose: () => void }) {
               <div className="group">
                 <div className="flex gap-4">
                   <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
-                    <span className="text-xs font-medium text-gray-600">
-                      B
-                    </span>
+                    <span className="text-xs font-medium text-gray-600">B</span>
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="text-sm font-medium text-gray-900 mb-1">
@@ -279,6 +205,7 @@ export default function BoostieChat({ onClose }: { onClose: () => void }) {
           </div>
         </div>
 
+        {/* Input */}
         <div className="border-t border-gray-200 bg-white p-4">
           <div className="max-w-3xl mx-auto">
             <div className="relative flex items-end gap-3">

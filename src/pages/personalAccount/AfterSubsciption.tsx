@@ -6,12 +6,11 @@ import MenuCard from "@/components/NavbarMenu";
 import { AfterSubscriptionStages } from "@/generic-components/subscriptionStages";
 import boosties from "../../assets/boostrGirl.png";
 import vector2 from "../../assets/vector2.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Header from "@/generic-components/Header";
 import Footer from "@/generic-components/Footer";
 import type { RootState } from "@/store/store";
 import toast, { Toaster } from "react-hot-toast";
-import BoostieChat from "../agents/Stage2_Chatbot";
 
 const Dashboard: React.FC = () => {
   const user = useSelector((state: RootState) => state.user.user);
@@ -22,7 +21,7 @@ const Dashboard: React.FC = () => {
   const [isClient, setIsClient] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isResultOpen, setIsResultOpen] = useState(false);
-  const [isChatOpen, setIsChatOpen] = useState(false);
+  const navigate = useNavigate();
 
   const {
     data: testResult,
@@ -152,19 +151,19 @@ const Dashboard: React.FC = () => {
                       </Link>
                     </div>
                   ) : index === 2 ? (
-                    <div className="flex items-center gap-4 lg:px-18 md:px-0">
+                    <Link
+                      to="/strategy-generation"
+                      className="flex items-center gap-4 lg:px-18 md:px-0 cursor-pointer"
+                    >
                       <img
                         src={iconSrcList[2]}
                         alt="Available Icon"
                         className="hidden md:block w-10 h-10 md:w-16 md:h-16"
                       />
-                      <Link
-                        to="/strategy-generation"
-                        className="text-xl md:text-2xl font-medium text-[#98EBA5]"
-                      >
+                      <span className="text-xl md:text-2xl font-medium text-[#98EBA5]">
                         AVAILABLE
-                      </Link>
-                    </div>
+                      </span>
+                    </Link>
                   ) : (
                     <div className="flex items-center gap-4 lg:px-18 md:px-0">
                       <img
@@ -213,10 +212,10 @@ const Dashboard: React.FC = () => {
 
       <div
         className="fixed bottom-4 right-4 z-50 flex items-end gap-2 cursor-pointer"
-        onClick={() => setIsChatOpen(true)}
+        onClick={() => navigate("/strategy-generation")}
       >
         <div
-          className="relative bg-white text-[#2A4C57] px-3 py-2 rounded-2xl shadow-md text-sm font-medium 
+          className="relative bg-white text-[#2A4C57] px-3 py-2 rounded-2xl shadow-md text-sm 
                   before:content-[''] before:absolute before:-bottom-2 before:right-6 
                   before:border-8 before:border-transparent before:border-t-white animate-bounce"
         >
@@ -228,12 +227,6 @@ const Dashboard: React.FC = () => {
           className="w-20"
         />
       </div>
-
-      {isChatOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <BoostieChat onClose={() => setIsChatOpen(false)} />
-        </div>
-      )}
 
       <Footer />
     </div>
