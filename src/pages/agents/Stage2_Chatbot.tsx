@@ -28,7 +28,7 @@ export default function BoostieChat() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate(); // ✅ for redirect
+  const navigate = useNavigate();
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -113,48 +113,54 @@ export default function BoostieChat() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-white flex items-center justify-center">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center text-white overflow-auto before:absolute before:inset-0 before:bg-[#2A4C57]/95 before:z-0"
+      style={{
+        backgroundImage:
+          "url(https://static.tildacdn.net/tild6534-6232-4333-a431-313138303165/bg_1_1.jpg)",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
       <Toaster position="top-right" />
 
-      <div className="w-full max-w-4xl h-full bg-white flex flex-col">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-white">
-          <div>
-            <h1 className="text-lg font-semibold text-gray-900">
+      <div className="w-full max-w-4xl h-full flex flex-col relative z-10">
+        <div className="flex items-center justify-between py-4 border-b border-[#87F1FF]/30 bg-[#2A4C57]/60 backdrop-blur-md">
+          <div className="px-6">
+            <h1 className="text-lg font-semibold text-white">
               Stage 2: Marketing Strategy
             </h1>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-white">
               Professional Strategy Development
             </p>
           </div>
 
-          {/* ✅ Cross button now navigates back */}
           <button
             onClick={() => navigate(-1)}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 rounded-lg transition-colors cursor-pointer"
           >
-            <X className="w-5 h-5 text-gray-500" />
+            <X className="w-6 h-6 text-[#87F1FF]" />
           </button>
         </div>
 
-        <div ref={scrollRef} className="flex-1 overflow-y-auto bg-white">
-          <div className="max-w-3xl mx-auto px-4 py-6 space-y-6">
+        <div ref={scrollRef} className="flex-1 overflow-y-scroll hide-scrollbar bg-transparent">
+          <div className="max-w-6xl mx-auto px-4 py-6 space-y-6">
             {messages.map((msg, idx) => (
               <div key={idx} className="group">
                 <div className="flex gap-4">
-                  {/* Avatar */}
-                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
-                    <span className="text-xs font-medium text-gray-600">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#537F89]/70 flex items-center justify-center">
+                    <span className="text-xs font-medium text-white">
                       {msg.sender === "user" ? "U" : "AI"}
                     </span>
                   </div>
 
-                  {/* Message */}
                   <div className="flex-1 min-w-0">
-                    <div className="text-sm font-medium text-gray-900 mb-1">
+                    <div className="text-sm font-medium text-[#87F1FF] mb-1">
                       {msg.sender === "user" ? "You" : "Boostie"}
                     </div>
 
-                    <div className="prose prose-gray max-w-none text-gray-800 leading-relaxed">
+                    <div className="prose max-w-none text-white leading-relaxed">
                       {msg.sender === "user" ? (
                         <p className="whitespace-pre-wrap">{msg.message}</p>
                       ) : (
@@ -180,21 +186,21 @@ export default function BoostieChat() {
             {loading && (
               <div className="group">
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
-                    <span className="text-xs font-medium text-gray-600">B</span>
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#537F89]/70 flex items-center justify-center">
+                    <span className="text-xs font-medium text-white">B</span>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-sm font-medium text-gray-900 mb-1">
-                      Assistant
+                    <div className="text-sm font-medium text-[#87F1FF] mb-1">
+                      Boostie
                     </div>
                     <div className="flex items-center space-x-1">
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                      <div className="w-2 h-2 bg-[#98EBA5] rounded-full animate-bounce"></div>
                       <div
-                        className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                        className="w-2 h-2 bg-[#98EBA5] rounded-full animate-bounce"
                         style={{ animationDelay: "0.1s" }}
                       ></div>
                       <div
-                        className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                        className="w-2 h-2 bg-[#98EBA5] rounded-full animate-bounce"
                         style={{ animationDelay: "0.2s" }}
                       ></div>
                     </div>
@@ -206,8 +212,8 @@ export default function BoostieChat() {
         </div>
 
         {/* Input */}
-        <div className="border-t border-gray-200 bg-white p-4">
-          <div className="max-w-3xl mx-auto">
+        <div className=" border-[#87F1FF]/30 bg-[#2A4C57]/60 backdrop-blur-md p-4">
+          <div className="max-w-6xl mx-auto">
             <div className="relative flex items-end gap-3">
               <div className="flex-1 relative">
                 <textarea
@@ -215,7 +221,7 @@ export default function BoostieChat() {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Type your message..."
-                  className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none text-gray-900 placeholder-gray-500"
+                  className="w-full px-4 py-3 pr-12 border border-[#87F1FF]/40 rounded-xl bg-[#537F89]/30 focus:outline-none resize-none text-white placeholder-gray-300"
                   rows={1}
                   disabled={loading}
                   onKeyDown={(e) => {
@@ -232,7 +238,7 @@ export default function BoostieChat() {
 
                 <button
                   onClick={sendMessage}
-                  className="absolute right-2 bottom-3 p-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="absolute right-2 bottom-3 p-2 bg-[#98EBA5] text-[#2A4C57] rounded-lg  disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   disabled={loading || !input.trim()}
                 >
                   <Send className="w-4 h-4 text-center" />

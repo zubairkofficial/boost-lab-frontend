@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useGetTestResultByEmailQuery } from "@/features/testResultApi";
+import { useGetActiveSubscriptionQuery } from "@/features/plansApi";
 import MenuModal from "@/components/MenuModal";
 import MenuCard from "@/components/NavbarMenu";
 import { AfterSubscriptionStages } from "@/generic-components/subscriptionStages";
@@ -9,14 +10,16 @@ import vector2 from "../../assets/vector2.png";
 import { Link, useNavigate } from "react-router-dom";
 import Header from "@/generic-components/Header";
 import Footer from "@/generic-components/Footer";
-import type { RootState } from "@/store/store";
 import toast, { Toaster } from "react-hot-toast";
+import axios from "axios";
+import type { RootState } from "@/store/store";
 
 const Dashboard: React.FC = () => {
   const user = useSelector((state: RootState) => state.user.user);
   const userLocal = localStorage.getItem("user");
   const userData = JSON.parse(userLocal ?? "{}");
   const email = user?.email || userData?.email;
+  const stripeCustomerId = userData?.stripe_customer_id;
 
   const [isClient, setIsClient] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -31,15 +34,20 @@ const Dashboard: React.FC = () => {
     skip: !isResultOpen || !email,
   });
 
+  const userId = userData?.userId;
+  const { data: activeSubscription, isLoading: isSubscriptionLoading } =
+    useGetActiveSubscriptionQuery(userId ?? "", {
+      skip: !userId,
+      refetchOnMountOrArgChange: true,
+    });
+
   const iconSrcList = [
     "https://static.tildacdn.net/tild6434-3931-4336-a566-393838356233/check_icon.svg",
     "https://static.tildacdn.net/tild6231-3763-4066-a262-313738353561/result_icon.svg",
     "https://static.tildacdn.net/tild3137-3364-4466-b538-656661373730/open_icon.svg",
   ];
 
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
+  useEffect(() => setIsClient(true), []);
 
   useEffect(() => {
     if (isResultOpen && !isLoading && (!testResult || isError)) {
@@ -55,6 +63,23 @@ const Dashboard: React.FC = () => {
   }, [isResultOpen, testResult, isLoading]);
 
   if (!isClient) return null;
+  const handleManageSubscription = async () => {
+    if (!stripeCustomerId) {
+      toast.error("Customer ID not found.");
+      return;
+    }
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/plans/customer-portal`,
+        { customerId: stripeCustomerId }
+      );
+      const { url } = response.data;
+      window.open(url, "_blank");
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to open Stripe Customer Portal");
+    }
+  };
 
   return (
     <div
@@ -99,6 +124,34 @@ const Dashboard: React.FC = () => {
 
       <div className="flex flex-col items-center px-4 py-10">
         {isMenuOpen && <MenuCard onClose={() => setIsMenuOpen(false)} />}
+
+        <div className="w-full max-w-[91rem] bg-[#537F89]/30 backdrop-blur-md rounded-md mb-6 text-white px-4 sm:px-10 md:px-20 py-10 text-center">
+          <h2 className="text-2xl md:text-4xl text-[#87F1FF] uppercase tracking-wide font-normal mb-4">
+            Subscription & Payments
+          </h2>
+          <p className="text-sm md:text-base mb-2">
+            Plan:{" "}
+            {isSubscriptionLoading
+              ? "Loading..."
+              : activeSubscription?.plan?.name ?? "Free"}
+          </p>
+          <p className="text-sm md:text-base mb-2">Billing Email: {email}</p>
+          <p className="text-sm md:text-base mb-2">
+            Status: {activeSubscription?.status ?? "Inactive"}
+          </p>
+          <p className="text-sm md:text-base mb-2">
+            Valid Until:{" "}
+            {activeSubscription?.expiresAt
+              ? new Date(activeSubscription.expiresAt).toLocaleDateString()
+              : "N/A"}
+          </p>
+          <button
+            onClick={handleManageSubscription}
+            className="mt-4 px-6 py-2 bg-[#98EBA5] text-[#2A4C57] font-medium rounded hover:bg-[#87f1ff] transition"
+          >
+            Manage Subscription
+          </button>
+        </div>
 
         {AfterSubscriptionStages.map(
           ({ stage, title, description, isResultStage }, index) => (
@@ -158,7 +211,7 @@ const Dashboard: React.FC = () => {
                       <img
                         src={iconSrcList[2]}
                         alt="Available Icon"
-                        className="hidden md:block w-10 h-10 md:w-16 md:h-16"
+                        className="hidden md:block w-10 md:w-16 md:h-16"
                       />
                       <span className="text-xl md:text-2xl font-medium text-[#98EBA5]">
                         AVAILABLE
@@ -227,7 +280,6 @@ const Dashboard: React.FC = () => {
           className="w-20"
         />
       </div>
-
       <Footer />
     </div>
   );
