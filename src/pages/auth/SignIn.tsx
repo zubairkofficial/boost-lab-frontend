@@ -76,11 +76,11 @@ export const SignInPage = () => {
     }
   };
   const handleGoogleLogin = async () => {
+    const redirectUrl = import.meta.env.VITE_APP_REDIRECT_URL;
+
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: {
-        redirectTo: "https://app.boostlab.ph/auth/callback", 
-      },
+      options: { redirectTo: redirectUrl },
     });
 
     if (error) {
@@ -88,6 +88,8 @@ export const SignInPage = () => {
       toast.error("Google login failed.");
     }
   };
+
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-dark-blue via-dark-grey to-ui-dark relative overflow-hidden font-font flex items-center justify-center w-full">
       <div
@@ -200,6 +202,7 @@ export const SignInPage = () => {
                 Continue with Google
               </button>
             </div>
+         
 
             <div className="w-full mt-6 flex justify-center">
               <div

@@ -67,7 +67,6 @@ export const SignUpPage = () => {
     try {
       await signup(formData.name, formData.email, formData.password);
       showSuccess("Account created and logged in!");
-      // navigation handled inside signup in AuthContext
     } catch (err: any) {
       showError("Signup Failed", err.message || "Unknown error");
     } finally {
