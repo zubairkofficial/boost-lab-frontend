@@ -5,6 +5,7 @@ import frame from "../../assets/vector2.png";
 import { BodyText, H2 } from "../../components/ui/typography";
 import { IoMdCheckboxOutline, IoMdSquareOutline } from "react-icons/io";
 import { useAuth } from "../../contexts/AuthContext";
+import { supabase } from "../../supabaseClient";
 
 export const SignInPage = () => {
   const navigate = useNavigate();
@@ -74,7 +75,19 @@ export const SignInPage = () => {
       setIsSubmitting(false);
     }
   };
+  const handleGoogleLogin = async () => {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: "https://app.boostlab.ph/auth/callback", 
+      },
+    });
 
+    if (error) {
+      console.error("Google login error:", error.message);
+      toast.error("Google login failed.");
+    }
+  };
   return (
     <div className="min-h-screen bg-gradient-to-br from-dark-blue via-dark-grey to-ui-dark relative overflow-hidden font-font flex items-center justify-center w-full">
       <div
@@ -174,6 +187,19 @@ export const SignInPage = () => {
                 Forgot password?
               </Link>
             </div>
+            <div className="mt-6 flex flex-col items-center">
+              <button
+                onClick={handleGoogleLogin}
+                className="flex items-center gap-3 px-6 py-3 rounded-xl border border-gray-300 bg-white text-gray-800 font-medium hover:bg-gray-100 transition"
+              >
+                <img
+                  src="https://developers.google.com/identity/images/g-logo.png"
+                  alt="Google"
+                  className="w-5 h-5"
+                />
+                Continue with Google
+              </button>
+            </div>
 
             <div className="w-full mt-6 flex justify-center">
               <div
@@ -193,8 +219,6 @@ export const SignInPage = () => {
               </div>
             </div>
           </form>
-
-          
         </div>
       </div>
     </div>

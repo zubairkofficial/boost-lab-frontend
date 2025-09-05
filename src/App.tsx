@@ -19,6 +19,7 @@ import ScrollToTop from "./components/ScrollToTop";
 import PhotoIdentity from "./pages/quizPages/Start";
 import QuizWizard from "./pages/quizPages/QuizMain";
 import Stage2_ChatBotPage from "./pages/agents/Stage2_Chatbot";
+import AuthCallback from "./pages/AuthCallback";
 
 const App = () => {
   return (
@@ -33,6 +34,8 @@ const App = () => {
                 <Route path="/" element={<PhotoIdentity />} />
                 <Route path="/test" element={<QuizWizard />} />
                 <Route path="/auth/login" element={<SignInPage />} />
+                <Route path="/auth/callback" element={<AuthCallback />} />
+
                 <Route
                   path="/auth/confirm-email"
                   element={<ConfirmEmailPage />}
