@@ -20,6 +20,7 @@ import PhotoIdentity from "./pages/quizPages/Start";
 import QuizWizard from "./pages/quizPages/QuizMain";
 import Stage2_ChatBotPage from "./pages/agents/Stage2_Chatbot";
 import AuthCallback from "./pages/AuthCallback";
+import Loginscreen from "./pages/quizPages/loginScreens";
 
 const App = () => {
   return (
@@ -32,6 +33,8 @@ const App = () => {
               <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
               <Routes>
                 <Route path="/" element={<PhotoIdentity />} />
+                <Route path="/loginscreen" element={<Loginscreen />} />
+
                 <Route path="/test" element={<QuizWizard />} />
                 <Route path="/auth/login" element={<SignInPage />} />
                 <Route path="/auth/callback" element={<AuthCallback />} />

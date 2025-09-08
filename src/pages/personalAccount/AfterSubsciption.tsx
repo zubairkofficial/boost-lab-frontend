@@ -97,13 +97,13 @@ const Dashboard: React.FC = () => {
       <Toaster position="top-right" />
       <Header onMenuClick={() => setIsMenuOpen(true)} />
 
-      <div className="absolute top-14 pt-8 sm:pt-14 left-6 z-60 ml-10">
-        <p className="text-lg font-light tracking-wide font-ptSans">
+      <div className="absolute top-14 pt-14 left-1/2 -translate-x-1/2 sm:left-6 sm:translate-x-0 z-60 pl-0 sm:pl-8">
+        <p className="text-[14px] sm:text-lg font-light tracking-wide font-ptSans text-center sm:text-left">
           WELCOME TO YOUR BOOSTLAB
         </p>
       </div>
 
-      <div className="relative z-10 flex flex-col items-center text-center px-4 py-30">
+      <div className="relative flex flex-col items-center text-center px-4 py-30">
         <h1 className="text-[2.5rem] sm:text-[4rem] md:text-[6rem] lg:text-[7rem] mb-10 leading-none tracking-tight font-normal pt-10">
           PERSONAL ACCOUNT
         </h1>
@@ -113,8 +113,8 @@ const Dashboard: React.FC = () => {
             alt="BOOSTIE"
             className="w-full object-cover rounded-t-xl"
           />
-          <div className="absolute bottom-2 left-0 w-full px-4 py-4 text-start rounded-b-xl">
-            <p className="text-xs sm:text-sm md:text-base leading-snug">
+          <div className="absolute bottom-0 sm:bottom-2 left-0 w-full px-4 py-4 text-start rounded-b-xl">
+            <p className="text-[10px] sm:text-sm md:text-base leading-snug">
               Hello, I'm BOOSTIE! I'm here to help you transition from hobby to
               profession in just 3 months at our lab. Let's go!
             </p>
@@ -125,7 +125,7 @@ const Dashboard: React.FC = () => {
       <div className="flex flex-col items-center px-4 py-10">
         {isMenuOpen && <MenuCard onClose={() => setIsMenuOpen(false)} />}
 
-        <div className="w-full max-w-[91rem] bg-[#537F89]/30 backdrop-blur-md rounded-md mb-6 text-white px-4 sm:px-10 md:px-20 py-10 text-center">
+        <div className="w-full max-w-[91rem] bg-[#537F89]/30 backdrop-blur-md rounded-md mb-6 text-white px-4 sm:border-0 border-1 border-[#537F89] sm:px-10 md:px-20 py-10 text-center">
           <h2 className="text-2xl md:text-4xl text-[#87F1FF] uppercase tracking-wide font-normal mb-4">
             Subscription & Payments
           </h2>
@@ -157,7 +157,7 @@ const Dashboard: React.FC = () => {
           ({ stage, title, description, isResultStage }, index) => (
             <div
               key={stage + index}
-              className="w-full max-w-[91rem] bg-[#537F89]/30 backdrop-blur-md rounded-md mb-6 text-white px-4 sm:px-10 md:px-20 py-10"
+              className="w-full max-w-[91rem] bg-[#537F89]/30 backdrop-blur-md border-1 border-[#537F89] sm:border-0 rounded-md mb-6 text-white px-4 sm:px-10 md:px-20 py-10"
             >
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                 <div className="w-full">
@@ -183,7 +183,7 @@ const Dashboard: React.FC = () => {
                       <img
                         src={iconSrcList[1]}
                         alt="Result Icon"
-                        className="hidden md:block w-10 h-10 md:w-16 md:h-14"
+                        className=" w-10 h-10 md:w-16 md:h-14"
                       />
                       <span className="text-xl md:text-2xl font-medium text-[#87F1FF]">
                         SEE RESULT
@@ -194,7 +194,7 @@ const Dashboard: React.FC = () => {
                       <img
                         src={iconSrcList[0]}
                         alt="Start Icon"
-                        className="hidden md:block w-10 h-10 md:w-16 md:h-16"
+                        className=" w-10 h-10 md:w-16 md:h-16"
                       />
                       <Link
                         to={import.meta.env.VITE_FRONTEND_URL}
@@ -211,7 +211,7 @@ const Dashboard: React.FC = () => {
                       <img
                         src={iconSrcList[2]}
                         alt="Available Icon"
-                        className="hidden md:block w-10 md:w-16 md:h-16"
+                        className="w-10 md:w-16 md:h-16"
                       />
                       <span className="text-xl md:text-2xl font-medium text-[#98EBA5]">
                         AVAILABLE
@@ -222,7 +222,7 @@ const Dashboard: React.FC = () => {
                       <img
                         src={iconSrcList[2]}
                         alt="Available Icon"
-                        className="hidden md:block w-10 h-10 md:w-16 md:h-16"
+                        className="w-10 h-10 md:w-16 md:h-16"
                       />
                       <span className="text-xl md:text-2xl font-medium text-[#98EBA5]">
                         AVAILABLE

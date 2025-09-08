@@ -28,6 +28,9 @@ export default function BoostieChat() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showRegenerate, setShowRegenerate] = useState(false);
+  const [stage2Complete, setStage2Complete] = useState(false);
+
   const navigate = useNavigate();
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -36,9 +39,7 @@ export default function BoostieChat() {
     inputRef.current?.focus();
   }, []);
   useEffect(() => {
-    if (!loading) {
-      inputRef.current?.focus();
-    }
+    if (!loading) inputRef.current?.focus();
   }, [loading]);
 
   useEffect(() => {
@@ -50,7 +51,6 @@ export default function BoostieChat() {
 
   useEffect(() => {
     if (!email) return;
-
     const fetchHistory = async () => {
       try {
         const res = await axios.get(
@@ -78,6 +78,19 @@ export default function BoostieChat() {
     };
 
     setMessages((prev) => [...prev, userMessage]);
+
+    // If Stage 2 is complete, check user input intent
+    if (stage2Complete) {
+      if (/^yes|move on|go ahead|proceed/i.test(input.trim())) {
+        // User wants Stage 3 → go straight
+        setShowRegenerate(false);
+        navigate("/stage3");
+      } else {
+        // User wants to tweak → show regenerate button
+        setShowRegenerate(true);
+      }
+    }
+
     setInput("");
     setLoading(true);
     inputRef.current?.focus();
@@ -105,8 +118,39 @@ export default function BoostieChat() {
         setMessages((prev) => [...prev.slice(0, -1), botMessage]);
         await new Promise((resolve) => setTimeout(resolve, 150));
       }
+
+      // Detect final Stage 2 completion prompt
+      if (fullText.includes("Are you ready to move on to Stage 3")) {
+        setStage2Complete(true);
+      }
     } catch (error: any) {
       toast.error(error?.response?.data?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const regenerateStrategy = async () => {
+    if (!email) return;
+    setLoading(true);
+    setShowRegenerate(false);
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/agent/strategy/regenerate`,
+        { email },
+        { withCredentials: true }
+      );
+
+      const fullText = res.data.strategy;
+      const botMessage: ChatMessage = {
+        sender: "bot",
+        message: fullText,
+        createdAt: new Date().toISOString(),
+      };
+
+      setMessages((prev) => [...prev, botMessage]);
+    } catch (err) {
+      toast.error("Failed to regenerate strategy");
     } finally {
       setLoading(false);
     }
@@ -144,7 +188,10 @@ export default function BoostieChat() {
           </button>
         </div>
 
-        <div ref={scrollRef} className="flex-1 overflow-y-scroll hide-scrollbar bg-transparent">
+        <div
+          ref={scrollRef}
+          className="flex-1 overflow-y-scroll hide-scrollbar bg-transparent"
+        >
           <div className="max-w-6xl mx-auto px-4 py-6 space-y-6">
             {messages.map((msg, idx) => (
               <div key={idx} className="group">
@@ -182,7 +229,6 @@ export default function BoostieChat() {
                 </div>
               </div>
             ))}
-
             {loading && (
               <div className="group">
                 <div className="flex gap-4">
@@ -230,10 +276,7 @@ export default function BoostieChat() {
                       sendMessage();
                     }
                   }}
-                  style={{
-                    minHeight: "48px",
-                    maxHeight: "120px",
-                  }}
+                  style={{ minHeight: "48px", maxHeight: "120px" }}
                 />
 
                 <button
