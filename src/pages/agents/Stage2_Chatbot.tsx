@@ -28,7 +28,6 @@ export default function BoostieChat() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [showRegenerate, setShowRegenerate] = useState(false);
   const [stage2Complete, setStage2Complete] = useState(false);
 
   const navigate = useNavigate();
@@ -79,18 +78,6 @@ export default function BoostieChat() {
 
     setMessages((prev) => [...prev, userMessage]);
 
-    // If Stage 2 is complete, check user input intent
-    if (stage2Complete) {
-      if (/^yes|move on|go ahead|proceed/i.test(input.trim())) {
-        // User wants Stage 3 → go straight
-        setShowRegenerate(false);
-        navigate("/stage3");
-      } else {
-        // User wants to tweak → show regenerate button
-        setShowRegenerate(true);
-      }
-    }
-
     setInput("");
     setLoading(true);
     inputRef.current?.focus();
@@ -118,39 +105,11 @@ export default function BoostieChat() {
         setMessages((prev) => [...prev.slice(0, -1), botMessage]);
         await new Promise((resolve) => setTimeout(resolve, 150));
       }
-
-      // Detect final Stage 2 completion prompt
       if (fullText.includes("Are you ready to move on to Stage 3")) {
         setStage2Complete(true);
       }
     } catch (error: any) {
       toast.error(error?.response?.data?.message || "Something went wrong");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const regenerateStrategy = async () => {
-    if (!email) return;
-    setLoading(true);
-    setShowRegenerate(false);
-    try {
-      const res = await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/agent/strategy/regenerate`,
-        { email },
-        { withCredentials: true }
-      );
-
-      const fullText = res.data.strategy;
-      const botMessage: ChatMessage = {
-        sender: "bot",
-        message: fullText,
-        createdAt: new Date().toISOString(),
-      };
-
-      setMessages((prev) => [...prev, botMessage]);
-    } catch (err) {
-      toast.error("Failed to regenerate strategy");
     } finally {
       setLoading(false);
     }
@@ -256,8 +215,6 @@ export default function BoostieChat() {
             )}
           </div>
         </div>
-
-        {/* Input */}
         <div className=" border-[#87F1FF]/30 bg-[#2A4C57]/60 backdrop-blur-md p-4">
           <div className="max-w-6xl mx-auto">
             <div className="relative flex items-end gap-3">
