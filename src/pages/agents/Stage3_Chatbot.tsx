@@ -31,11 +31,10 @@ export default function Stage3Chat() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  // Focus input
-  useEffect(() => inputRef.current?.focus(), []);
+  // Focus input on mount
   useEffect(() => {
-    if (!loading) inputRef.current?.focus();
-  }, [loading]);
+    inputRef.current?.focus();
+  }, []);
 
   // Scroll to bottom when messages update
   useEffect(() => {
@@ -45,38 +44,52 @@ export default function Stage3Chat() {
     });
   }, [messages]);
 
-  // Fetch Stage 2 strategy from DB
+  // Fetch Stage 3 history and Stage 2 strategy
   useEffect(() => {
     if (!userId) return;
 
-    const fetchStage2Strategy = async () => {
+    const fetchData = async () => {
       try {
-        const res = await axios.get(
+        // Fetch Stage 2 strategy
+        const strategyRes = await axios.get(
           `${import.meta.env.VITE_BASE_URL}/agent/strategy/${userId}`,
           { withCredentials: true }
         );
 
-        if (res.data.success && res.data.strategy) {
-          setStage2Strategy(res.data.strategy);
-
-          // Initialize Stage 3 chat with the bot's first message including Stage 2 strategy
-          setMessages([
-            {
-              sender: "bot",
-              message: `Hi, I’m Boostie. You’ve already completed your marketing strategy.\n\nNow let’s bring it to life through content.`,
-              createdAt: new Date().toISOString(),
-            },
-          ]);
-        } else {
+        if (!strategyRes.data.success || !strategyRes.data.strategy) {
           toast.error("Stage 2 strategy not found. Complete Stage 2 first.");
+          return;
+        }
+
+        setStage2Strategy(strategyRes.data.strategy);
+
+        // Fetch Stage 3 chat history
+        const historyRes = await axios.get(
+          `${import.meta.env.VITE_BASE_URL}/stage3/${userId}/history`,
+          { withCredentials: true }
+        );
+
+        if (historyRes.data.success && Array.isArray(historyRes.data.history)) {
+          if (historyRes.data.history.length > 0) {
+            setMessages(historyRes.data.history);
+          } else {
+            // No previous messages, show initial Stage 2 welcome
+            setMessages([
+              {
+                sender: "bot",
+                message: `Hi, I’m Boostie. You’ve already completed your marketing strategy.\n\nNow let’s bring it to life through content.`,
+                createdAt: new Date().toISOString(),
+              },
+            ]);
+          }
         }
       } catch (err: any) {
         console.error(err);
-        toast.error("Failed to fetch Stage 2 strategy");
+        toast.error("Failed to fetch Stage 2 strategy or Stage 3 history");
       }
     };
 
-    fetchStage2Strategy();
+    fetchData();
   }, [userId]);
 
   const sendMessage = async () => {
@@ -94,7 +107,7 @@ export default function Stage3Chat() {
     try {
       const res = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/stage3/${userId}/chat`,
-        { message: input, strategy: stage2Strategy },
+        { message: input }, // strategy is fetched backend-side
         { withCredentials: true }
       );
 
@@ -126,6 +139,7 @@ export default function Stage3Chat() {
     >
       <Toaster position="top-right" />
       <div className="w-full max-w-4xl h-full flex flex-col relative z-10">
+        {/* Header */}
         <div className="flex items-center justify-between py-4 border-b border-[#87F1FF]/30 bg-[#2A4C57]/60 backdrop-blur-md">
           <div className="px-6">
             <h1 className="text-lg font-semibold text-white">
@@ -141,6 +155,7 @@ export default function Stage3Chat() {
           </button>
         </div>
 
+        {/* Chat Messages */}
         <div
           ref={scrollRef}
           className="flex-1 overflow-y-scroll hide-scrollbar bg-transparent"
@@ -179,6 +194,8 @@ export default function Stage3Chat() {
                 </div>
               </div>
             ))}
+
+            {/* Loading Indicator */}
             {loading && (
               <div className="group">
                 <div className="flex gap-4">
@@ -207,6 +224,7 @@ export default function Stage3Chat() {
           </div>
         </div>
 
+        {/* Input Area */}
         <div className="border-[#87F1FF]/30 bg-[#2A4C57]/60 backdrop-blur-md p-4">
           <div className="max-w-6xl mx-auto">
             <div className="relative flex items-end gap-3">
