@@ -154,7 +154,7 @@ const Dashboard: React.FC = () => {
       <div className="flex flex-col items-center px-4 py-10">
         {isMenuOpen && <MenuCard onClose={() => setIsMenuOpen(false)} />}
 
-        <div className="w-full max-w-[91rem] bg-[#537F89]/30 backdrop-blur-md rounded-md mb-6 text-white px-4 sm:border-0 border-1 border-[#537F89] sm:px-10 md:px-20 py-10 text-center">
+        {/* <div className="w-full max-w-[91rem] bg-[#537F89]/30 backdrop-blur-md rounded-md mb-6 text-white px-4 sm:border-0 border-1 border-[#537F89] sm:px-10 md:px-20 py-10 text-center">
           <h2 className="text-2xl md:text-4xl text-[#87F1FF] uppercase tracking-wide font-normal mb-4">
             Subscription & Payments
           </h2>
@@ -180,7 +180,7 @@ const Dashboard: React.FC = () => {
           >
             Manage Subscription
           </button>
-        </div>
+        </div> */}
 
         {AfterSubscriptionStages.map(
           ({ stage, title, description, isResultStage }, index) => (
