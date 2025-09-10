@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { ToastProvider } from "./contexts/ToastContext";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -19,6 +24,7 @@ import ScrollToTop from "./components/ScrollToTop";
 import PhotoIdentity from "./pages/quizPages/Start";
 import QuizWizard from "./pages/quizPages/QuizMain";
 import Stage2_ChatBotPage from "./pages/agents/Stage2_Chatbot";
+import Stage3_ChatBotPage from "./pages/agents/Stage3_Chatbot";
 import AuthCallback from "./pages/AuthCallback";
 import Loginscreen from "./pages/quizPages/loginScreens";
 
@@ -52,7 +58,6 @@ const App = () => {
                   element={<ResetPasswordPage />}
                 />
 
-                {/* Free page: block if already subscribed */}
                 <Route
                   path="/personal-account-free"
                   element={
@@ -78,6 +83,15 @@ const App = () => {
                     </ProtectedRoute>
                   }
                 />
+                <Route
+                  path="/content"
+                  element={
+                    <ProtectedRoute requireSubscription={true}>
+                      <Stage3_ChatBotPage />
+                    </ProtectedRoute>
+                  }
+                />
+
                 <Route
                   path="/take-test"
                   element={

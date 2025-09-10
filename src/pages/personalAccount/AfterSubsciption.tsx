@@ -19,12 +19,33 @@ const Dashboard: React.FC = () => {
   const userLocal = localStorage.getItem("user");
   const userData = JSON.parse(userLocal ?? "{}");
   const email = user?.email || userData?.email;
+  const userId = userData?.userId;
   const stripeCustomerId = userData?.stripe_customer_id;
 
   const [isClient, setIsClient] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isResultOpen, setIsResultOpen] = useState(false);
+  const [stage2Strategy, setStage2Strategy] = useState<string | null>(null);
+
   const navigate = useNavigate();
+  useEffect(() => {
+    if (!userId) return;
+
+    const fetchStage2Strategy = async () => {
+      try {
+        const res = await axios.get(
+          `${import.meta.env.VITE_BASE_URL}/agent/strategy/${userId}`,
+          { withCredentials: true }
+        );
+        setStage2Strategy(res.data.strategy || null);
+      } catch (error) {
+        console.error(error);
+        setStage2Strategy(null);
+      }
+    };
+
+    fetchStage2Strategy();
+  }, [userId]);
 
   const {
     data: testResult,
@@ -34,7 +55,6 @@ const Dashboard: React.FC = () => {
     skip: !isResultOpen || !email,
   });
 
-  const userId = userData?.userId;
   const { data: activeSubscription, isLoading: isSubscriptionLoading } =
     useGetActiveSubscriptionQuery(userId ?? "", {
       skip: !userId,
@@ -63,6 +83,7 @@ const Dashboard: React.FC = () => {
   }, [isResultOpen, testResult, isLoading]);
 
   if (!isClient) return null;
+
   const handleManageSubscription = async () => {
     if (!stripeCustomerId) {
       toast.error("Customer ID not found.");
@@ -79,6 +100,14 @@ const Dashboard: React.FC = () => {
       console.error(error);
       toast.error("Failed to open Stripe Customer Portal");
     }
+  };
+
+  const handleStage3Click = () => {
+    if (!stage2Strategy) {
+      toast.error("Please complete Stage 2 first to unlock Stage 3.");
+      return;
+    }
+    navigate("/content");
   };
 
   return (
@@ -217,6 +246,20 @@ const Dashboard: React.FC = () => {
                         AVAILABLE
                       </span>
                     </Link>
+                  ) : index === 3 ? (
+                    <div
+                      onClick={handleStage3Click}
+                      className="flex items-center gap-4 lg:px-18 md:px-0 cursor-pointer"
+                    >
+                      <img
+                        src={iconSrcList[2]}
+                        alt="Available Icon"
+                        className="w-10 md:w-16 md:h-16"
+                      />
+                      <span className="text-xl md:text-2xl font-medium text-[#98EBA5]">
+                        AVAILABLE
+                      </span>
+                    </div>
                   ) : (
                     <div className="flex items-center gap-4 lg:px-18 md:px-0">
                       <img

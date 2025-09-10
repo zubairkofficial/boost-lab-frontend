@@ -189,7 +189,7 @@ export const SignInPage = () => {
                 Forgot password?
               </Link>
             </div>
-            <div className="mt-6 flex flex-col items-center">
+            {/* <div className="mt-6 flex flex-col items-center">
               <button
                 onClick={handleGoogleLogin}
                 className="flex items-center gap-3 px-6 py-3 rounded-xl border border-gray-300 bg-white text-gray-800 font-medium hover:bg-gray-100 transition"
@@ -201,7 +201,7 @@ export const SignInPage = () => {
                 />
                 Continue with Google
               </button>
-            </div>
+            </div> */}
          
 
             <div className="w-full mt-6 flex justify-center">

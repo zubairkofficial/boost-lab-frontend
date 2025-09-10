@@ -1,8 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
-import type { RootState } from "@/store/store";
 import axios from "axios";
 import { Toaster, toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -19,33 +17,27 @@ interface ChatMessage {
   createdAt?: string;
 }
 
-export default function BoostieChat() {
-  const user = useSelector((state: RootState) => state.user.user);
+export default function Stage3Chat() {
   const userLocal = localStorage.getItem("user");
   const userData = JSON.parse(userLocal ?? "{}");
-
   const userId = userData?.userId;
-  const email = user?.email || userData?.email;
 
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-
-  const [stage, setStage] = useState<2 | 3>(2);
-  const [stage2Complete, setStage2Complete] = useState(false);
   const [stage2Strategy, setStage2Strategy] = useState<string | null>(null);
 
   const navigate = useNavigate();
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  useEffect(() => {
-    inputRef.current?.focus();
-  }, []);
+  // Focus input
+  useEffect(() => inputRef.current?.focus(), []);
   useEffect(() => {
     if (!loading) inputRef.current?.focus();
   }, [loading]);
 
+  // Scroll to bottom when messages update
   useEffect(() => {
     scrollRef.current?.scrollTo({
       top: scrollRef.current.scrollHeight,
@@ -53,37 +45,42 @@ export default function BoostieChat() {
     });
   }, [messages]);
 
+  // Fetch Stage 2 strategy from DB
   useEffect(() => {
-    if ((stage === 2 && !email) || (stage === 3 && !userId)) return;
+    if (!userId) return;
 
-    const fetchHistory = async () => {
+    const fetchStage2Strategy = async () => {
       try {
-        const url =
-          stage === 2
-            ? `${import.meta.env.VITE_BASE_URL}/agent/chat/${email}`
-            : `${import.meta.env.VITE_BASE_URL}/stage3/${userId}/history`;
+        const res = await axios.get(
+          `${import.meta.env.VITE_BASE_URL}/agent/strategy/${userId}`,
+          { withCredentials: true }
+        );
 
-        const res = await axios.get(url, { withCredentials: true });
-        setMessages(res.data.history || []);
+        if (res.data.success && res.data.strategy) {
+          setStage2Strategy(res.data.strategy);
+
+          // Initialize Stage 3 chat with the bot's first message including Stage 2 strategy
+          setMessages([
+            {
+              sender: "bot",
+              message: `Hi, I’m Boostie. You’ve already completed your marketing strategy.\n\nNow let’s bring it to life through content.`,
+              createdAt: new Date().toISOString(),
+            },
+          ]);
+        } else {
+          toast.error("Stage 2 strategy not found. Complete Stage 2 first.");
+        }
       } catch (err: any) {
-        toast.error("Failed to load chat history");
+        console.error(err);
+        toast.error("Failed to fetch Stage 2 strategy");
       }
     };
 
-    fetchHistory();
-  }, [email, userId, stage]);
+    fetchStage2Strategy();
+  }, [userId]);
 
   const sendMessage = async () => {
-    if (!input.trim()) return;
-
-    if (stage === 2 && !email) {
-      toast.error("Email not found. Please log in again.");
-      return;
-    }
-    if (stage === 3 && !userId) {
-      toast.error("User not found. Please log in again.");
-      return;
-    }
+    if (!input.trim() || !userId || !stage2Strategy) return;
 
     const userMessage: ChatMessage = {
       sender: "user",
@@ -95,51 +92,24 @@ export default function BoostieChat() {
     setLoading(true);
 
     try {
-      if (stage === 2) {
-        const res = await axios.post(
-          `${import.meta.env.VITE_BASE_URL}/agent/strategy`,
-          { email, audit_answers: [input] },
-          { withCredentials: true }
-        );
+      const res = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/stage3/${userId}/chat`,
+        { message: input, strategy: stage2Strategy },
+        { withCredentials: true }
+      );
 
-        const fullText = res.data.strategy;
-        setStage2Strategy(fullText);
-
-        if (fullText.includes("Stage 3: Content & Branding")) {
-          setStage2Complete(true);
-        }
-
-        renderBotMessage(fullText);
-      } else if (stage === 3) {
-        const res = await axios.post(
-          `${import.meta.env.VITE_BASE_URL}/stage3/${userId}/chat`,
-          { message: input, strategy: stage2Strategy },
-          { withCredentials: true }
-        );
-
-        renderBotMessage(res.data.botReply);
-      }
+      setMessages((prev) => [
+        ...prev,
+        {
+          sender: "bot",
+          message: res.data.botReply,
+          createdAt: new Date().toISOString(),
+        },
+      ]);
     } catch (err: any) {
       toast.error(err?.response?.data?.message || "Something went wrong");
     } finally {
       setLoading(false);
-    }
-  };
-
-  const renderBotMessage = async (fullText: string) => {
-    const chunkedText = fullText.split("\n\n").filter(Boolean);
-    const botMessage: ChatMessage = {
-      sender: "bot",
-      message: "",
-      createdAt: new Date().toISOString(),
-    };
-
-    setMessages((prev) => [...prev, botMessage]);
-
-    for (const chunk of chunkedText) {
-      botMessage.message += chunk + "\n\n";
-      setMessages((prev) => [...prev.slice(0, -1), botMessage]);
-      await new Promise((resolve) => setTimeout(resolve, 150));
     }
   };
 
@@ -155,22 +125,14 @@ export default function BoostieChat() {
       }}
     >
       <Toaster position="top-right" />
-
       <div className="w-full max-w-4xl h-full flex flex-col relative z-10">
         <div className="flex items-center justify-between py-4 border-b border-[#87F1FF]/30 bg-[#2A4C57]/60 backdrop-blur-md">
           <div className="px-6">
             <h1 className="text-lg font-semibold text-white">
-              {stage === 2
-                ? "Stage 2: Marketing Strategy"
-                : "Stage 3: Content & Branding"}
+              Stage 3: Content & Branding
             </h1>
-            <p className="text-sm text-white">
-              {stage === 2
-                ? "Professional Strategy Development"
-                : "Content & Branding Execution"}
-            </p>
+            <p className="text-sm text-white">Content & Branding Execution</p>
           </div>
-
           <button
             onClick={() => navigate(-1)}
             className="p-2 rounded-lg transition-colors cursor-pointer"
@@ -192,12 +154,10 @@ export default function BoostieChat() {
                       {msg.sender === "user" ? "U" : "AI"}
                     </span>
                   </div>
-
                   <div className="flex-1 min-w-0">
                     <div className="text-sm font-medium text-[#87F1FF] mb-1">
                       {msg.sender === "user" ? "You" : "Boostie"}
                     </div>
-
                     <div className="prose max-w-none text-white leading-relaxed">
                       {msg.sender === "user" ? (
                         <p className="whitespace-pre-wrap">{msg.message}</p>
@@ -210,7 +170,6 @@ export default function BoostieChat() {
                         </ReactMarkdown>
                       )}
                     </div>
-
                     {msg.createdAt && (
                       <div className="text-xs text-gray-400 mt-2">
                         {new Date(msg.createdAt).toLocaleTimeString()}
@@ -246,37 +205,9 @@ export default function BoostieChat() {
               </div>
             )}
           </div>
-
-          {stage2Complete && stage === 2 && (
-            <div className="text-center mt-4">
-              <button
-                onClick={() => {
-                  setStage(3);
-                  setMessages([
-                    {
-                      sender: "bot",
-                      message: `Here is your Stage 2 marketing strategy:\n\n${stage2Strategy}`,
-                      createdAt: new Date().toISOString(),
-                    },
-                    {
-                      sender: "bot",
-                      message:
-                        "Hi, I’m Boostie. You’ve already completed your marketing strategy. Now let’s bring it to life through content.",
-                      createdAt: new Date().toISOString(),
-                    },
-                  ]);
-
-                  navigate("/content");
-                }}
-                className="px-4 py-2 bg-[#98EBA5] text-[#2A4C57] rounded-lg font-semibold cursor-pointer"
-              >
-                Start Stage 3
-              </button>
-            </div>
-          )}
         </div>
 
-        <div className=" border-[#87F1FF]/30 bg-[#2A4C57]/60 backdrop-blur-md p-4">
+        <div className="border-[#87F1FF]/30 bg-[#2A4C57]/60 backdrop-blur-md p-4">
           <div className="max-w-6xl mx-auto">
             <div className="relative flex items-end gap-3">
               <div className="flex-1 relative">
@@ -287,7 +218,7 @@ export default function BoostieChat() {
                   placeholder="Type your message..."
                   className="w-full px-4 py-3 pr-12 border border-[#87F1FF]/40 rounded-xl bg-[#537F89]/30 focus:outline-none resize-none text-white placeholder-gray-300"
                   rows={1}
-                  disabled={loading}
+                  disabled={loading || !stage2Strategy}
                   onKeyDown={(e) => {
                     if (e.key === "Enter" && !e.shiftKey) {
                       e.preventDefault();
@@ -296,11 +227,10 @@ export default function BoostieChat() {
                   }}
                   style={{ minHeight: "48px", maxHeight: "120px" }}
                 />
-
                 <button
                   onClick={sendMessage}
-                  className="absolute right-2 bottom-3 p-2 bg-[#98EBA5] text-[#2A4C57] rounded-lg  disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                  disabled={loading || !input.trim()}
+                  className="absolute right-2 bottom-3 p-2 bg-[#98EBA5] text-[#2A4C57] rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  disabled={loading || !input.trim() || !stage2Strategy}
                 >
                   <Send className="w-4 h-4 text-center" />
                 </button>
