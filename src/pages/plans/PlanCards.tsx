@@ -78,7 +78,7 @@ export default function PlanCards() {
       setLoadingPlanId(plan.id);
       const { url } = await createCheckoutSession({
         stripePriceId: plan.stripePriceId,
-        id: user.userId,
+        userId: user.userId,
       }).unwrap();
 
       if (!url) throw new Error("Stripe checkout URL missing.");

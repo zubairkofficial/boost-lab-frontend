@@ -78,7 +78,7 @@ export const plansApi = createApi({
 
     createCheckoutSession: builder.mutation<
       { url: string },
-      { stripePriceId: string; id: number }
+      { stripePriceId: string; userId: number }
     >({
       query: (body) => ({
         url: "/checkout-session",
