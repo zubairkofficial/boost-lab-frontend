@@ -31,12 +31,10 @@ export default function Stage3Chat() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  // Focus input on mount
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
 
-  // Scroll to bottom when messages update
   useEffect(() => {
     scrollRef.current?.scrollTo({
       top: scrollRef.current.scrollHeight,
@@ -44,13 +42,11 @@ export default function Stage3Chat() {
     });
   }, [messages]);
 
-  // Fetch Stage 3 history and Stage 2 strategy
   useEffect(() => {
     if (!userId) return;
 
     const fetchData = async () => {
       try {
-        // Fetch Stage 2 strategy
         const strategyRes = await axios.get(
           `${import.meta.env.VITE_BASE_URL}/agent/strategy/${userId}`,
           { withCredentials: true }
@@ -63,7 +59,6 @@ export default function Stage3Chat() {
 
         setStage2Strategy(strategyRes.data.strategy);
 
-        // Fetch Stage 3 chat history
         const historyRes = await axios.get(
           `${import.meta.env.VITE_BASE_URL}/stage3/${userId}/history`,
           { withCredentials: true }
@@ -73,7 +68,6 @@ export default function Stage3Chat() {
           if (historyRes.data.history.length > 0) {
             setMessages(historyRes.data.history);
           } else {
-            // No previous messages, show initial Stage 2 welcome
             setMessages([
               {
                 sender: "bot",
@@ -107,7 +101,7 @@ export default function Stage3Chat() {
     try {
       const res = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/stage3/${userId}/chat`,
-        { message: input }, // strategy is fetched backend-side
+        { message: input },
         { withCredentials: true }
       );
 
@@ -139,7 +133,6 @@ export default function Stage3Chat() {
     >
       <Toaster position="top-right" />
       <div className="w-full max-w-4xl h-full flex flex-col relative z-10">
-        {/* Header */}
         <div className="flex items-center justify-between py-4 border-b border-[#87F1FF]/30 bg-[#2A4C57]/60 backdrop-blur-md">
           <div className="px-6">
             <h1 className="text-lg font-semibold text-white">
@@ -154,8 +147,6 @@ export default function Stage3Chat() {
             <X className="w-6 h-6 text-[#87F1FF]" />
           </button>
         </div>
-
-        {/* Chat Messages */}
         <div
           ref={scrollRef}
           className="flex-1 overflow-y-scroll hide-scrollbar bg-transparent"
@@ -194,8 +185,6 @@ export default function Stage3Chat() {
                 </div>
               </div>
             ))}
-
-            {/* Loading Indicator */}
             {loading && (
               <div className="group">
                 <div className="flex gap-4">
@@ -223,8 +212,6 @@ export default function Stage3Chat() {
             )}
           </div>
         </div>
-
-        {/* Input Area */}
         <div className="border-[#87F1FF]/30 bg-[#2A4C57]/60 backdrop-blur-md p-4">
           <div className="max-w-6xl mx-auto">
             <div className="relative flex items-end gap-3">

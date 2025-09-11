@@ -26,6 +26,7 @@ const Dashboard: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isResultOpen, setIsResultOpen] = useState(false);
   const [stage2Strategy, setStage2Strategy] = useState<string | null>(null);
+  const [billingEmail, setBillingEmail] = useState<string | null>(null);
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -60,6 +61,27 @@ const Dashboard: React.FC = () => {
       skip: !userId,
       refetchOnMountOrArgChange: true,
     });
+
+
+    // for getting billing_email from stripe 
+  useEffect(() => {
+    const fetchBillingEmail = async () => {
+      if (activeSubscription?.stripeSessionId) {
+        try {
+          const res = await axios.get(
+            `${import.meta.env.VITE_BASE_URL}/plans/session-email/${
+              activeSubscription.stripeSessionId
+            }`
+          );
+          setBillingEmail(res.data.customer_email);
+        } catch (err) {
+          console.error("Error fetching billing email:", err);
+        }
+      }
+    };
+
+    fetchBillingEmail();
+  }, [activeSubscription?.stripeSessionId]);
 
   const iconSrcList = [
     "https://static.tildacdn.net/tild6434-3931-4336-a566-393838356233/check_icon.svg",
@@ -164,7 +186,10 @@ const Dashboard: React.FC = () => {
               ? "Loading..."
               : activeSubscription?.plan?.name ?? "Free"}
           </p>
-          <p className="text-sm md:text-base mb-2">Billing Email: {email}</p>
+          <p className="text-sm md:text-base mb-2">
+            Billing Email: {billingEmail ?? "N/A"}
+          </p>
+
           <p className="text-sm md:text-base mb-2">
             Status: {activeSubscription?.status ?? "Inactive"}
           </p>
