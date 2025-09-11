@@ -62,8 +62,7 @@ const Dashboard: React.FC = () => {
       refetchOnMountOrArgChange: true,
     });
 
-
-    // for getting billing_email from stripe 
+  // for getting billing_email from stripe
   useEffect(() => {
     const fetchBillingEmail = async () => {
       if (activeSubscription?.stripeSessionId) {
@@ -333,12 +332,18 @@ const Dashboard: React.FC = () => {
 
       <div
         className="fixed bottom-4 right-4 z-50 flex items-end gap-2 cursor-pointer"
-        onClick={() => navigate("/strategy-generation")}
+        onClick={() => {
+          if (stage2Strategy) {
+            navigate("/content"); 
+          } else {
+            navigate("/strategy-generation"); 
+          }
+        }}
       >
         <div
           className="relative bg-white text-[#2A4C57] px-3 py-2 rounded-2xl shadow-md text-sm 
-                  before:content-[''] before:absolute before:-bottom-2 before:right-6 
-                  before:border-8 before:border-transparent before:border-t-white animate-bounce"
+            before:content-[''] before:absolute before:-bottom-2 before:right-6 
+            before:border-8 before:border-transparent before:border-t-white animate-bounce"
         >
           I'm here. Let’s talk.
         </div>
@@ -348,6 +353,7 @@ const Dashboard: React.FC = () => {
           className="w-20"
         />
       </div>
+
       <Footer />
     </div>
   );
