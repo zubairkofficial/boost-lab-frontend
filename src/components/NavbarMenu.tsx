@@ -15,7 +15,7 @@ const menuLinks = [
   { label: "PERSONAL ACCOUNT", path: "/personal-account" },
   { label: "STAGE 1: TEST", path: "/" },
   { label: "STAGE 2: STRATEGY", path: "/strategy-generation" },
-  { label: "STAGE 3: CONTENT", path: "/stage-3" },
+  { label: "STAGE 3: CONTENT", path: "/content" },
   { label: "STAGE 4: AUTOMATION", path: "/stage-4" },
   { label: "STAGE 5: AD Launch and Monetization", path: "/stage-5" },
   { label: "LIBRARY", path: "/library" },
