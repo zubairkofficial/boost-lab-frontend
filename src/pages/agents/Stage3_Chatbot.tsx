@@ -141,7 +141,7 @@ export default function Stage3Chat() {
             <p className="text-sm text-white">Content & Branding Execution</p>
           </div>
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => navigate("/strategy-generation")}
             className="p-2 rounded-lg transition-colors cursor-pointer"
           >
             <X className="w-6 h-6 text-[#87F1FF]" />
