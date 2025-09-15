@@ -223,7 +223,7 @@ export default function Stage3Chat() {
                   placeholder="Type your message..."
                   className="w-full px-4 py-3 pr-12 border border-[#87F1FF]/40 rounded-xl bg-[#537F89]/30 focus:outline-none resize-none text-white placeholder-gray-300"
                   rows={1}
-                  disabled={loading || !stage2Strategy}
+                  readOnly={loading || !stage2Strategy} // ✅ use readOnly instead of disabled
                   onKeyDown={(e) => {
                     if (e.key === "Enter" && !e.shiftKey) {
                       e.preventDefault();
@@ -232,6 +232,7 @@ export default function Stage3Chat() {
                   }}
                   style={{ minHeight: "48px", maxHeight: "120px" }}
                 />
+
                 <button
                   onClick={sendMessage}
                   className="absolute right-2 bottom-3 p-2 bg-[#98EBA5] text-[#2A4C57] rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors"

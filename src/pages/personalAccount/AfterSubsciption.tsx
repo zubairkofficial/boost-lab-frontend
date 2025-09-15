@@ -14,7 +14,15 @@ import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 import type { RootState } from "@/store/store";
 
+const iconSrcList = [
+  "https://static.tildacdn.net/tild6434-3931-4336-a566-393838356233/check_icon.svg",
+  "https://static.tildacdn.net/tild6231-3763-4066-a262-313738353561/result_icon.svg",
+  "https://static.tildacdn.net/tild3137-3364-4466-b538-656661373730/open_icon.svg",
+];
+
 const Dashboard: React.FC = () => {
+  const navigate = useNavigate();
+
   const user = useSelector((state: RootState) => state.user.user);
   const userLocal = localStorage.getItem("user");
   const userData = JSON.parse(userLocal ?? "{}");
@@ -26,27 +34,11 @@ const Dashboard: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isResultOpen, setIsResultOpen] = useState(false);
   const [stage2Strategy, setStage2Strategy] = useState<string | null>(null);
-  const [billingEmail, setBillingEmail] = useState<string | null>(null);
-
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (!userId) return;
-
-    const fetchStage2Strategy = async () => {
-      try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_BASE_URL}/agent/strategy/${userId}`,
-          { withCredentials: true }
-        );
-        setStage2Strategy(res.data.strategy || null);
-      } catch (error) {
-        console.error(error);
-        setStage2Strategy(null);
-      }
-    };
-
-    fetchStage2Strategy();
-  }, [userId]);
+  const [billingInfo, setBillingInfo] = useState<{
+    email: string | null;
+    plan: string | null;
+    status: string | null;
+  }>({ email: null, plan: null, status: null });
 
   const {
     data: testResult,
@@ -56,37 +48,44 @@ const Dashboard: React.FC = () => {
     skip: !isResultOpen || !email,
   });
 
-  const { data: activeSubscription, isLoading: isSubscriptionLoading } =
-    useGetActiveSubscriptionQuery(userId ?? "", {
+  const { data: activeSubscription } = useGetActiveSubscriptionQuery(
+    userId ?? "",
+    {
       skip: !userId,
       refetchOnMountOrArgChange: true,
-    });
+    }
+  );
 
-  // for getting billing_email from stripe
   useEffect(() => {
-    const fetchBillingEmail = async () => {
-      if (activeSubscription?.stripeSessionId) {
-        try {
-          const res = await axios.get(
-            `${import.meta.env.VITE_BASE_URL}/plans/session-email/${
-              activeSubscription.stripeSessionId
-            }`
-          );
-          setBillingEmail(res.data.customer_email);
-        } catch (err) {
-          console.error("Error fetching billing email:", err);
-        }
+    if (!userId) return;
+    axios
+      .get(`${import.meta.env.VITE_BASE_URL}/agent/strategy/${userId}`, {
+        withCredentials: true,
+      })
+      .then((res) => setStage2Strategy(res.data.strategy || null))
+      .catch(() => setStage2Strategy(null));
+  }, [userId]);
+
+  useEffect(() => {
+    const fetchBillingInfo = async () => {
+      if (!activeSubscription?.stripeSessionId) return;
+      try {
+        const res = await axios.get(
+          `${import.meta.env.VITE_BASE_URL}/plans/session-info/${
+            activeSubscription.stripeSessionId
+          }`
+        );
+        setBillingInfo({
+          email: res.data.customer_email,
+          plan: res.data.plan_name,
+          status: res.data.status,
+        });
+      } catch (err) {
+        console.error("Error fetching billing info:", err);
       }
     };
-
-    fetchBillingEmail();
+    fetchBillingInfo();
   }, [activeSubscription?.stripeSessionId]);
-
-  const iconSrcList = [
-    "https://static.tildacdn.net/tild6434-3931-4336-a566-393838356233/check_icon.svg",
-    "https://static.tildacdn.net/tild6231-3763-4066-a262-313738353561/result_icon.svg",
-    "https://static.tildacdn.net/tild3137-3364-4466-b538-656661373730/open_icon.svg",
-  ];
 
   useEffect(() => setIsClient(true), []);
 
@@ -94,14 +93,10 @@ const Dashboard: React.FC = () => {
     if (isResultOpen && !isLoading && (!testResult || isError)) {
       toast.error("Please give test and then see your results.");
       setIsResultOpen(false);
-    }
-  }, [isResultOpen, isLoading, testResult, isError]);
-
-  useEffect(() => {
-    if (isResultOpen && testResult && !isLoading) {
+    } else if (isResultOpen && testResult && !isLoading) {
       toast.success("Test results loaded successfully!");
     }
-  }, [isResultOpen, testResult, isLoading]);
+  }, [isResultOpen, isLoading, testResult, isError]);
 
   if (!isClient) return null;
 
@@ -111,14 +106,12 @@ const Dashboard: React.FC = () => {
       return;
     }
     try {
-      const response = await axios.post(
+      const { data } = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/plans/customer-portal`,
         { customerId: stripeCustomerId }
       );
-      const { url } = response.data;
-      window.open(url, "_blank");
-    } catch (error) {
-      console.error(error);
+      window.open(data.url, "_blank");
+    } catch {
       toast.error("Failed to open Stripe Customer Portal");
     }
   };
@@ -147,17 +140,19 @@ const Dashboard: React.FC = () => {
       <Toaster position="top-right" />
       <Header onMenuClick={() => setIsMenuOpen(true)} />
 
+      {/* Welcome */}
       <div className="absolute top-14 pt-14 left-1/2 -translate-x-1/2 sm:left-6 sm:translate-x-0 z-60 pl-0 sm:pl-8">
         <p className="text-[14px] sm:text-lg font-light tracking-wide font-ptSans text-center sm:text-left">
           WELCOME TO YOUR BOOSTLAB
         </p>
       </div>
 
+      {/* Personal Account */}
       <div className="relative flex flex-col items-center text-center px-4 py-30">
         <h1 className="text-[2.5rem] sm:text-[4rem] md:text-[6rem] lg:text-[7rem] mb-10 leading-none tracking-tight font-normal pt-10">
           PERSONAL ACCOUNT
         </h1>
-        <div className="relative rounded-xl overflow-hidden w-[90%] max-w-[450px] h-full">
+        <div className="relative rounded-xl overflow-hidden w-[90%] max-w-[450px]">
           <img
             src={boosties}
             alt="BOOSTIE"
@@ -172,32 +167,37 @@ const Dashboard: React.FC = () => {
         </div>
       </div>
 
+      {/* Subscription Section */}
       <div className="flex flex-col items-center px-4 py-10">
         {isMenuOpen && <MenuCard onClose={() => setIsMenuOpen(false)} />}
-
-        <div className="w-full max-w-[91rem] bg-[#537F89]/30 backdrop-blur-md rounded-md mb-6 text-white px-4 sm:border-0 border-1 border-[#537F89] sm:px-10 md:px-20 py-10 text-center">
-          <h2 className="text-2xl md:text-4xl text-[#87F1FF] uppercase tracking-wide font-normal mb-4">
+        <div className="w-full max-w-[91rem] bg-[#537F89]/30 backdrop-blur-md rounded-md mb-6 text-white px-4 sm:px-10 md:px-20 py-10 text-center">
+          <h2 className="text-2xl md:text-4xl text-[#87F1FF] uppercase mb-4">
             Subscription & Payments
           </h2>
           <p className="text-sm md:text-base mb-2">
-            Plan:{" "}
-            {isSubscriptionLoading
-              ? "Loading..."
-              : activeSubscription?.plan?.name ?? "Free"}
+            Plan: {billingInfo.plan ?? "Free"}
           </p>
           <p className="text-sm md:text-base mb-2">
-            Billing Email: {billingEmail ?? "N/A"}
+            Billing Email: {billingInfo.email ?? "N/A"}
+          </p>
+          <p className="text-sm md:text-base mb-2">
+            Status: {billingInfo.status ?? "Inactive"}
           </p>
 
           <p className="text-sm md:text-base mb-2">
-            Status: {activeSubscription?.status ?? "Inactive"}
-          </p>
-          <p className="text-sm md:text-base mb-2">
             Valid Until:{" "}
             {activeSubscription?.expiresAt
-              ? new Date(activeSubscription.expiresAt).toLocaleDateString()
+              ? new Date(activeSubscription.expiresAt).toLocaleDateString(
+                  "en-US",
+                  {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  }
+                )
               : "N/A"}
           </p>
+
           <button
             onClick={handleManageSubscription}
             className="mt-4 px-6 py-2 bg-[#98EBA5] text-[#2A4C57] font-medium rounded hover:bg-[#87f1ff] transition"
@@ -206,100 +206,116 @@ const Dashboard: React.FC = () => {
           </button>
         </div>
 
+        {/* Subscription Stages */}
         {AfterSubscriptionStages.map(
-          ({ stage, title, description, isResultStage }, index) => (
-            <div
-              key={stage + index}
-              className="w-full max-w-[91rem] bg-[#537F89]/30 backdrop-blur-md border-1 border-[#537F89] sm:border-0 rounded-md mb-6 text-white px-4 sm:px-10 md:px-20 py-10"
-            >
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-                <div className="w-full">
-                  <h2 className="text-xl md:text-4xl text-[#87F1FF] uppercase tracking-wide font-normal">
-                    {stage} {title ? `: ${title}` : ""}
-                  </h2>
-                  <p className="mt-2 text-sm md:text-base font-normal">
-                    {description}
-                  </p>
-                </div>
-                <div className="flex items-center gap-4 w-full md:w-auto md:justify-end">
-                  {isResultStage ? (
-                    <div
-                      onClick={() => {
-                        if (!email) {
-                          toast.error("Email not found. Please log in again.");
-                          return;
-                        }
-                        setIsResultOpen(true);
-                      }}
-                      className="flex items-center gap-4 cursor-pointer md:px-32 px-0"
-                    >
-                      <img
-                        src={iconSrcList[1]}
-                        alt="Result Icon"
-                        className=" w-10 h-10 md:w-16 md:h-14"
-                      />
-                      <span className="text-xl md:text-2xl font-medium text-[#87F1FF]">
-                        SEE RESULT
-                      </span>
-                    </div>
-                  ) : index === 0 ? (
-                    <div className="flex items-end justify-end gap-4 lg:px-8 md:px-0">
-                      <img
-                        src={iconSrcList[0]}
-                        alt="Start Icon"
-                        className=" w-10 h-10 md:w-16 md:h-16"
-                      />
-                      <Link
-                        to={import.meta.env.VITE_FRONTEND_URL}
-                        className="text-xl md:text-2xl font-medium text-[#98EBA5]"
-                      >
-                        START THE TEST
-                      </Link>
-                    </div>
-                  ) : index === 2 ? (
+          ({ stage, title, description, isResultStage }, index) => {
+            const renderAction = () => {
+              if (isResultStage) {
+                return (
+                  <div
+                    onClick={() =>
+                      email
+                        ? setIsResultOpen(true)
+                        : toast.error("Email not found. Please log in again.")
+                    }
+                    className="flex items-center gap-4 cursor-pointer md:px-32"
+                  >
+                    <img
+                      src={iconSrcList[1]}
+                      alt="Result Icon"
+                      className="w-10 h-10 md:w-16 md:h-14"
+                    />
+                    <span className="text-xl md:text-2xl font-medium text-[#87F1FF]">
+                      SEE RESULT
+                    </span>
+                  </div>
+                );
+              }
+              if (index === 0) {
+                return (
+                  <div className="flex items-end justify-end gap-4 lg:px-8">
+                    <img
+                      src={iconSrcList[0]}
+                      alt="Start Icon"
+                      className="w-10 h-10 md:w-16 md:h-16"
+                    />
                     <Link
-                      to="/strategy-generation"
-                      className="flex items-center gap-4 lg:px-18 md:px-0 cursor-pointer"
+                      to={import.meta.env.VITE_FRONTEND_URL}
+                      className="text-xl md:text-2xl font-medium text-[#98EBA5]"
                     >
-                      <img
-                        src={iconSrcList[2]}
-                        alt="Available Icon"
-                        className="w-10 md:w-16 md:h-16"
-                      />
-                      <span className="text-xl md:text-2xl font-medium text-[#98EBA5]">
-                        AVAILABLE
-                      </span>
+                      START THE TEST
                     </Link>
-                  ) : index === 3 ? (
-                    <div
-                      onClick={handleStage3Click}
-                      className="flex items-center gap-4 lg:px-18 md:px-0 cursor-pointer"
-                    >
-                      <img
-                        src={iconSrcList[2]}
-                        alt="Available Icon"
-                        className="w-10 md:w-16 md:h-16"
-                      />
-                      <span className="text-xl md:text-2xl font-medium text-[#98EBA5]">
-                        AVAILABLE
-                      </span>
-                    </div>
-                  ) : (
-                    <div className="flex items-center gap-4 lg:px-18 md:px-0">
-                      <img
-                        src={iconSrcList[2]}
-                        alt="Available Icon"
-                        className="w-10 h-10 md:w-16 md:h-16"
-                      />
-                      <span className="text-xl md:text-2xl font-medium text-[#98EBA5]">
-                        AVAILABLE
-                      </span>
-                    </div>
-                  )}
+                  </div>
+                );
+              }
+              if (index === 2) {
+                return (
+                  <Link
+                    to="/strategy-generation"
+                    className="flex items-center gap-4 lg:px-18 cursor-pointer"
+                  >
+                    <img
+                      src={iconSrcList[2]}
+                      alt="Available Icon"
+                      className="w-10 md:w-16 md:h-16"
+                    />
+                    <span className="text-xl md:text-2xl font-medium text-[#98EBA5]">
+                      AVAILABLE
+                    </span>
+                  </Link>
+                );
+              }
+              if (index === 3) {
+                return (
+                  <div
+                    onClick={handleStage3Click}
+                    className="flex items-center gap-4 lg:px-18 cursor-pointer"
+                  >
+                    <img
+                      src={iconSrcList[2]}
+                      alt="Available Icon"
+                      className="w-10 md:w-16 md:h-16"
+                    />
+                    <span className="text-xl md:text-2xl font-medium text-[#98EBA5]">
+                      AVAILABLE
+                    </span>
+                  </div>
+                );
+              }
+              return (
+                <div className="flex items-center gap-4 lg:px-18">
+                  <img
+                    src={iconSrcList[2]}
+                    alt="Available Icon"
+                    className="w-10 h-10 md:w-16 md:h-16"
+                  />
+                  <span className="text-xl md:text-2xl font-medium text-[#98EBA5]">
+                    AVAILABLE
+                  </span>
+                </div>
+              );
+            };
+
+            return (
+              <div
+                key={stage + index}
+                className="w-full max-w-[91rem] bg-[#537F89]/30 backdrop-blur-md border-1 border-[#537F89] sm:border-0 rounded-md mb-6 text-white px-4 sm:px-10 md:px-20 py-10"
+              >
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                  <div className="w-full">
+                    <h2 className="text-xl md:text-4xl text-[#87F1FF] uppercase">
+                      {stage}
+                      {title ? `: ${title}` : ""}
+                    </h2>
+                    <p className="mt-2 text-sm md:text-base">{description}</p>
+                  </div>
+                  <div className="flex items-center gap-4 w-full md:w-auto md:justify-end">
+                    {renderAction()}
+                  </div>
                 </div>
               </div>
-            </div>
-          )
+            );
+          }
         )}
 
         {isResultOpen && (
@@ -312,6 +328,7 @@ const Dashboard: React.FC = () => {
         )}
       </div>
 
+      {/* Services & Library */}
       <div className="w-full lg:w-[70%] px-6 py-10 max-w-screen-xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
         {["SERVICES", "LIBRARY"].map((label) => (
           <div
@@ -330,15 +347,12 @@ const Dashboard: React.FC = () => {
         ))}
       </div>
 
+      {/* Floating Boostie */}
       <div
         className="fixed bottom-4 right-4 z-50 flex items-end gap-2 cursor-pointer"
-        onClick={() => {
-          if (stage2Strategy) {
-            navigate("/content"); 
-          } else {
-            navigate("/strategy-generation"); 
-          }
-        }}
+        onClick={() =>
+          navigate(stage2Strategy ? "/content" : "/strategy-generation")
+        }
       >
         <div
           className="relative bg-white text-[#2A4C57] px-3 py-2 rounded-2xl shadow-md text-sm 
