@@ -143,7 +143,8 @@ export default {
         "portal-lg": "0 0 60px rgba(255, 69, 0, 0.6)",
       },
       screens: {
-        xs: "475px",
+        xs: "372px",
+        xsm: "420px",
         "3xl": "1600px",
         "4xl": "1920px",
       },

@@ -53,7 +53,7 @@ export default function Question2({ handleSelect }: Question2Props) {
       </div>
 
       <h2
-        className="text-2xl md:text-3xl font-normal mb-10 text-[#8EF0F4]"
+        className="text-lg md:text-3xl font-normal mb-5 md:mb-10 text-[#8EF0F4]"
         style={{ fontFamily: "'Unbounded', sans-serif" }}
       >
         {question}

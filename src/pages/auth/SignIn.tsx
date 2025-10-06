@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import frame from "../../assets/vector2.png";
@@ -7,7 +7,7 @@ import { IoMdCheckboxOutline, IoMdSquareOutline } from "react-icons/io";
 import { useAuth } from "../../contexts/AuthContext";
 import { supabase } from "../../supabaseClient";
 
-export const SignInPage = () => {
+const SignInPage = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
   const [isLoaded, setIsLoaded] = useState(false);
@@ -89,7 +89,6 @@ export const SignInPage = () => {
     }
   };
 
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-dark-blue via-dark-grey to-ui-dark relative overflow-hidden font-font flex items-center justify-center w-full">
       <div
@@ -101,22 +100,20 @@ export const SignInPage = () => {
       />
       <div className="absolute inset-0 bg-gradient-to-br from-dark-blue/80 via-dark-grey/70 to-ui-dark/90"></div>
 
-      <div className="relative z-30 flex justify-center items-center min-h-screen px-4 py-8">
+      <div className="relative z-30 flex justify-center items-center min-h-screen px-3 md:px-4 md:py-8">
         <div
-          className={`bg-ui-medium/20 backdrop-blur-sm border border-[#8ef0f4] rounded-2xl 
-  py-8 px-12 w-full max-w-4xl sm:max-w-5xl lg:max-w-6xl
-  flex flex-col justify-center transition-all duration-1000 delay-500 ${
-    isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-  }`}
+          className={`bg-ui-medium/20 backdrop-blur-sm border border-[#8ef0f4] rounded-2xl py-4 md:py-8 px-12 w-full max-w-4xl sm:max-w-5xl lg:max-w-6xl flex flex-col justify-center transition-all duration-1000 delay-500 ${
+            isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
         >
           <div className="text-center mb-8">
             <H2 className="text-white font-font mb-4">Welcome back</H2>
-            <BodyText className="text-gray-300 mb-6 text-base">
+            <BodyText className="text-gray-300 md:mb-6 text-base">
               Sign in to continue your photography
             </BodyText>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-8">
+          <form onSubmit={handleSubmit} className="space-y-4 md:space-y-8">
             <div>
               <label htmlFor="email" className="text-gray-200 mb-2 block">
                 Email Address
@@ -157,7 +154,7 @@ export const SignInPage = () => {
               )}
             </div>
 
-            <div className="flex items-center justify-between">
+            <div className="flex justify-start gap-2 md:items-center md:justify-between flex-wrap">
               <div
                 className="flex items-center space-x-3 cursor-pointer"
                 onClick={() =>
@@ -167,7 +164,7 @@ export const SignInPage = () => {
                   }))
                 }
               >
-                <div className="mt-1 text-white text-xl">
+                <div className="mt-1 text-white text-xl flex ">
                   {formData.rememberMe ? (
                     <IoMdCheckboxOutline className="w-5 h-5" />
                   ) : (
@@ -202,11 +199,10 @@ export const SignInPage = () => {
                 Continue with Google
               </button>
             </div> */}
-         
 
-            <div className="w-full mt-6 flex justify-center">
+            <div className="w-full md:mt-6 flex justify-center">
               <div
-                className="w-full max-w-xs h-[100px] bg-no-repeat bg-center bg-contain relative"
+                className="w-full max-w-xs h-14 md:h-[100px] bg-no-repeat bg-center bg-contain relative"
                 style={{
                   backgroundImage: `url(${frame})`,
                   backgroundSize: "100% 100%",
@@ -227,3 +223,4 @@ export const SignInPage = () => {
     </div>
   );
 };
+export default React.memo(SignInPage);

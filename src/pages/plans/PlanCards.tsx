@@ -129,10 +129,10 @@ export default function PlanCards() {
     <div>
       <div className="max-w-8xl mx-auto py-20 px-6 sm:px-14">
         <div className="text-center mb-16">
-          <h1 className="text-5xl font-bold text-white mb-4">
+          <h1 className="text-xl md:text-5xl font-bold text-white mb-4">
             Choose Your Plan
           </h1>
-          <p className="text-xl text-white max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-white max-w-2xl mx-auto">
             Select the perfect subscription plan for your needs. Upgrade or
             downgrade at any time.
           </p>
@@ -153,18 +153,18 @@ export default function PlanCards() {
             return (
               <div
                 key={plan.id}
-                className="bg-[#154E62]/60 backdrop-blur-md border border-cyan-500/30 shadow-2xl text-white min-h-[35rem] flex flex-col justify-between rounded-bl-[68px] 
+                className="bg-[#154E62]/60 backdrop-blur-md border border-cyan-500/30 shadow-2xl text-white md:min-h-[35rem] flex flex-col justify-between rounded-bl-[68px] 
              rounded-tr-none rounded-tl-none rounded-br-none relative mb-6"
               >
                 <div className="p-8 flex flex-col flex-grow gap-3">
                   <h3
-                    className="text-5xl font-normal text-[#8DEFF4] pt-2 pb-6"
+                    className="text-2xl md:text-5xl font-normal text-[#8DEFF4] pt-2 md:pb-6"
                     style={{ fontFamily: "'Unbounded', Arial, sans-serif" }}
                   >
                     {plan.name}
                   </h3>
 
-                  <div className="flex flex-col gap-4 flex-grow">
+                  <div className="flex flex-col gap-4 md:flex-grow">
                     {Array.isArray(plan.description)
                       ? plan.description.map((desc, i) => {
                           const words = desc.split(" ");
@@ -180,12 +180,12 @@ export default function PlanCards() {
                                     <p className="text-slate-200">
                                       {firstHalf}
                                     </p>
-                                    <p className="text-slate-200">
+                                    <p className="text-slate-200 pb-2">
                                       {secondHalf}
                                     </p>
                                   </>
                                 ) : (
-                                  <p className="text-[16px] text-slate-200">
+                                  <p className="text-[16px] text-slate-200 pb-2">
                                     {desc}
                                   </p>
                                 )}
@@ -254,7 +254,7 @@ export default function PlanCards() {
                   </div>
 
                   <div
-                    className="flex flex-col"
+                    className="flex flex-col mt-5 md:mt-0"
                     style={{ fontFamily: "'PT Sans', Arial, sans-serif" }}
                   >
                     <div className="flex flex-wrap items-baseline gap-x-4">
@@ -288,7 +288,7 @@ export default function PlanCards() {
                   }}
                 >
                   <div
-                    className="w-[103%] h-[120px] bg-no-repeat bg-center flex items-center justify-center relative left-1/2 -translate-x-1/2"
+                    className="w-[103%] h-[80px] md:h-[120px] bg-no-repeat bg-center flex items-center justify-center relative left-1/2 -translate-x-1/2"
                     style={{
                       backgroundImage: `url(${frame})`,
                       backgroundSize: "100% 100%",

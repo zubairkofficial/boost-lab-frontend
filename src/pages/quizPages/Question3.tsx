@@ -56,7 +56,7 @@ export default function Question3({ handleSelect }: Question3Props) {
         </div>
       </div>
       <h2
-        className="text-2xl sm:text-3xl font-semibold mb-10 text-[#8EF0F4] px-20"
+        className="text-xl md:text-3xl font-semibold mb-5 lg:mb-10 text-[#8EF0F4] px-6 lg:px-20"
         style={{ fontFamily: "'Unbounded', sans-serif" }}
       >
         {question}
@@ -99,7 +99,7 @@ export default function Question3({ handleSelect }: Question3Props) {
           />
         </div>
       </div>
-      <div className="flex justify-between items-center mt-auto py-0 mb-10 px-20">
+      <div className="flex justify-between items-center mt-auto py-0 mb-10 px-6 lg:px-20">
         <p className="text-gray-300 text-sm sm:text-base">Step: 3/6</p>
         <div className="flex space-x-3">
           <button className="bg-[#35686B] p-3 rounded hover:bg-[#46898D] transition w-12 h-12 flex items-center justify-center">

@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useForgotPasswordMutation } from "../../features/auth/authApi";
 import { useNavigate, Link } from "react-router-dom";
 import { H2, BodyText } from "../../components/ui/typography";
 import { useToast } from "../../contexts/ToastContext";
 
-export const ForgotPasswordPage = () => {
+const ForgotPasswordPage = () => {
   const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
   const navigate = useNavigate();
   const { showSuccess, showError } = useToast();
@@ -162,3 +162,5 @@ export const ForgotPasswordPage = () => {
     </div>
   );
 };
+
+export default React.memo(ForgotPasswordPage)

@@ -114,9 +114,9 @@ export default function SignupCard({
       animate="animate"
       exit="exit"
       transition={{ duration: 0.4 }}
-      className="min-h-screen bg-[#063241] text-white flex flex-col py-10 w-full px-14 container mx-auto"
+      className="min-h-screen bg-[#063241] text-white flex flex-col py-10 w-full px-6 lg:px-14 container mx-auto"
     >
-      <div className="flex items-center space-x-3 mb-6 px-10">
+      <div className="flex items-center space-x-3 mb-6 lg:px-10">
         <img src={iconImage} alt="Icon" className="w-8 h-8" />
         <h1 className="text-2xl font-semibold">Find Out Your Photo Identity</h1>
       </div>
@@ -125,11 +125,11 @@ export default function SignupCard({
         <div className="bg-[#62D4D8] h-1.5 w-[100%] rounded-full"></div>
       </div>
 
-      <div className="flex-1 flex flex-col justify-center px-10">
+      <div className="flex-1 flex flex-col justify-center lg:px-10">
         <h2 className="text-2xl font-semibold mb-3 text-[#8EF0F4]">
           You're one step away from your result
         </h2>
-        <p className="mb-10 text-sm text-[#8EF0F4]">
+        <p className="mb-4 md:mb-10 text-sm text-[#8EF0F4]">
           Enter your name and email to get your Photo Identity instantly
         </p>
 
@@ -177,7 +177,7 @@ export default function SignupCard({
         </div>
       </div>
 
-      <div className="flex justify-between items-center px-10">
+      <div className="flex justify-between items-center lg:px-10">
         <p className="text-sm">Step: 6/6</p>
         <div className="flex gap-2">
           <button className="bg-[#1E4A57] p-3 hover:bg-[#255a6b] transition">

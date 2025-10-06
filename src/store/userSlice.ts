@@ -91,10 +91,10 @@ export const {
 export default userSlice.reducer;
 
 // Selectors
-export const selectUser = (state: { user: UserState }) => state.user.user;
-export const selectUserInfo = (state: { user: UserState }) =>
-  state.user.userInfo;
-export const selectIsAuthenticated = (state: { user: UserState }) =>
+const selectUser = (state: { user: UserState }) => state.user.user;
+const selectUserInfo = (state: { user: UserState }) => state.user.userInfo;
+const selectIsAuthenticated = (state: { user: UserState }) =>
   state.user.isAuthenticated;
-export const selectIsLoading = (state: { user: UserState }) =>
-  state.user.isLoading;
+const selectIsLoading = (state: { user: UserState }) => state.user.isLoading;
+
+export { selectUser, selectUserInfo, selectIsAuthenticated, selectIsLoading };

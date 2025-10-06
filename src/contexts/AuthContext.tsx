@@ -47,7 +47,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [userId, setUserId] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
-
+  
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     const token = localStorage.getItem("access_token");

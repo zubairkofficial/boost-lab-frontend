@@ -4,29 +4,34 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
+
+import { lazy, Suspense } from "react";
+import Loader from "./components/Loader";
 import { Toaster } from "react-hot-toast";
 import { ToastProvider } from "./contexts/ToastContext";
 import { AuthProvider } from "./contexts/AuthContext";
-import { SignInPage } from "./pages/auth/SignIn";
-import { ForgotPasswordPage } from "./pages/auth/ForgotPassword";
-import ConfirmEmailPage from "./pages/auth/ConfirmEmail";
-import ResetPasswordPage from "./pages/auth/ResetPassword";
-import TakeTestPage from "./pages/TakeTestPage";
-import ResultsPage from "./pages/ResultPage";
-import BeforeSubsciption from "./pages/personalAccount/BeforeSubsciption";
-import AfterSubsciption from "./pages/personalAccount/AfterSubsciption";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AppInitializer from "./components/AppInitializer";
-import Success from "./pages/plans/Success";
-import Cancel from "./pages/plans/Cancel";
-import NotFound from "./generic-components/PageNotFound";
 import ScrollToTop from "./components/ScrollToTop";
-import PhotoIdentity from "./pages/quizPages/Start";
-import QuizWizard from "./pages/quizPages/QuizMain";
-import Stage2_ChatBotPage from "./pages/agents/Stage2_Chatbot";
-import Stage3_ChatBotPage from "./pages/agents/Stage3_Chatbot";
-import AuthCallback from "./pages/AuthCallback";
-import Loginscreen from "./pages/quizPages/loginScreens";
+
+// Lazy load all pages
+const SignInPage = lazy(() => import("./pages/auth/SignIn"));
+const ForgotPasswordPage = lazy(() => import("./pages/auth/ForgotPassword"));
+const ConfirmEmailPage = lazy(() => import("./pages/auth/ConfirmEmail"));
+const ResetPasswordPage = lazy(() => import("./pages/auth/ResetPassword"));
+const TakeTestPage = lazy(() => import("./pages/TakeTestPage"));
+const ResultsPage = lazy(() => import("./pages/ResultPage"));
+const BeforeSubsciption = lazy(() => import("./pages/personalAccount/BeforeSubsciption"));
+const AfterSubsciption = lazy(() => import("./pages/personalAccount/AfterSubsciption"));
+const Success = lazy(() => import("./pages/plans/Success"));
+const Cancel = lazy(() => import("./pages/plans/Cancel"));
+const NotFound = lazy(() => import("./generic-components/PageNotFound"));
+const PhotoIdentity = lazy(() => import("./pages/quizPages/Start"));
+const QuizWizard = lazy(() => import("./pages/quizPages/QuizMain"));
+const Stage2_ChatBotPage = lazy(() => import("./pages/agents/Stage2_Chatbot"));
+const Stage3_ChatBotPage = lazy(() => import("./pages/agents/Stage3_Chatbot"));
+const AuthCallback = lazy(() => import("./pages/AuthCallback"));
+const Loginscreen = lazy(() => import("./pages/quizPages/loginScreens"));
 
 const App = () => {
   return (
@@ -35,7 +40,8 @@ const App = () => {
         <ScrollToTop />
         <ToastProvider>
           <AuthProvider>
-            <div className="App">
+            <Suspense fallback={<Loader />}>
+              <div className="App">
               <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
               <Routes>
                 <Route path="/" element={<PhotoIdentity />} />
@@ -128,6 +134,7 @@ const App = () => {
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </div>
+            </Suspense>
           </AuthProvider>
         </ToastProvider>
       </Router>

@@ -5,7 +5,7 @@ import {
   setUserInfoFromStorage,
 } from "../store/userSlice";
 
-export const logout = () => {
+const logout = () => {
   localStorage.removeItem("access_token");
   localStorage.removeItem("user");
   localStorage.removeItem("user_id");
@@ -13,7 +13,7 @@ export const logout = () => {
   store.dispatch(clearUser());
 };
 
-export const getStoredUser = () => {
+const getStoredUser = () => {
   const storedUser = localStorage.getItem("user");
   if (storedUser) {
     try {
@@ -27,7 +27,7 @@ export const getStoredUser = () => {
   return null;
 };
 
-export const getStoredUserInfo = () => {
+const getStoredUserInfo = () => {
   const storedInfo = localStorage.getItem("userInfo");
   if (storedInfo) {
     try {
@@ -40,14 +40,23 @@ export const getStoredUserInfo = () => {
   return null;
 };
 
-export const getAccessToken = () => localStorage.getItem("access_token");
+const getAccessToken = () => localStorage.getItem("access_token");
 
-export const isAuthenticated = () => !!getAccessToken() && !!getStoredUser();
+const isAuthenticated = () => !!getAccessToken() && !!getStoredUser();
 
-export const loadUserFromStorage = () => {
+const loadUserFromStorage = () => {
   const user = getStoredUser();
   const userInfo = getStoredUserInfo();
 
   if (user) store.dispatch(setUserFromStorage(user));
   if (userInfo) store.dispatch(setUserInfoFromStorage(userInfo));
+};
+
+export {
+  loadUserFromStorage,
+  isAuthenticated,
+  getAccessToken,
+  getStoredUserInfo,
+  getStoredUser,
+  logout,
 };

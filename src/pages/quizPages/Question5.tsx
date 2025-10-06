@@ -34,7 +34,7 @@ export default function Question5({
       animate="animate"
       exit="exit"
       transition={{ duration: 0.4 }}
-      className="min-h-screen bg-[#04323A] text-white flex flex-col p-20 w-full"
+      className="min-h-screen bg-[#04323A] text-white flex flex-col p-6 lg:p-20 w-full"
     >
       <div className="flex items-center space-x-3 mb-6">
         <img src={iconImage} alt="Icon" className="w-8 h-8" />
@@ -50,7 +50,7 @@ export default function Question5({
           <label
             key={choice}
             onClick={() => handleChoiceClick(choice)}
-            className={`flex items-start sm:flex-1 gap-3 p-4 cursor-pointer transition ${
+            className={`flex items-center sm:flex-1 gap-3 p-2 md:p-4 cursor-pointer transition ${
               selected === choice
                 ? "bg-[#62D4D8] text-black"
                 : "bg-[#35686B] hover:bg-[#46898D]"

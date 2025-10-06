@@ -56,7 +56,7 @@ export default function Question4({ handleSelect }: Question4Props) {
       >
         {question}
       </h2>
-      <div className="flex flex-col sm:flex-row w-[40%]">
+      <div className="flex flex-col sm:flex-row lg:w-1/2">
         {choices.map(({ label, image }) => (
           <div
             key={label}

@@ -12,7 +12,7 @@ const PhotoIdentity = () => {
     <div className="flex flex-col md:flex-row w-full min-h-screen bg-[#02303d] text-white">
       <div className="flex flex-col justify-center px-8 md:px-16 py-12 w-full md:w-1/2">
         <h1
-          className="text-4xl md:text-5xl font-semibold text-[#8EF0F4] leading-tight"
+          className="text-2xl md:text-5xl font-semibold text-[#8EF0F4] leading-tight"
           style={{ fontFamily: "'Unbounded', sans-serif" }}
         >
           FIND OUT YOUR PHOTO IDENTITY WITH AI TEST

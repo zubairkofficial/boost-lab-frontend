@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import Loader from "./Loader";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -17,7 +18,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   requireSubscription = false,
   blockIfSubscribed = false,
 }) => {
-  const { user, isAuthenticated, isLoading } = useAuth();
+  const { user, isAuthenticated, isLoading=true } = useAuth();
   const location = useLocation();
   const [hasActiveSubscription, setHasActiveSubscription] = useState<
     boolean | null
@@ -88,13 +89,14 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
           fontFamily: `'PT Sans', sans-serif`,
         }}
       >
-        <div className="flex flex-col items-center justify-center bg-opacity-70 p-8 rounded-xl shadow-lg animate-fade-in">
+        {/* <div className="flex flex-col items-center justify-center bg-opacity-70 p-8 rounded-xl shadow-lg animate-fade-in">
           <div className="w-24 h-24 border-4 border-cyber-blue border-t-transparent rounded-full animate-spin mb-6"></div>
           <h1 className="text-white text-3xl font-bold mb-2">Loading...</h1>
           <p className="text-gray-300 text-center max-w-sm">
             Please wait while we verify your credentials.
           </p>
-        </div>
+        </div> */}
+        <Loader message="Please wait while we verify your credentials."/>
       </div>
     );
   }

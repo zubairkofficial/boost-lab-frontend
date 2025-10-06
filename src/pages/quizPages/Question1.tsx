@@ -44,7 +44,7 @@ export default function Question1({ handleSelect }: Question1Props) {
 
       <div className="flex-1 flex flex-col">
         <h2
-          className="text-2xl md:text-3xl font-normal mb-8 text-[#8EF0F4]"
+          className="text-xl md:text-3xl font-normal mb-8 text-[#8EF0F4]"
           style={{ fontFamily: "'Unbounded', sans-serif" }}
         >
           {question}

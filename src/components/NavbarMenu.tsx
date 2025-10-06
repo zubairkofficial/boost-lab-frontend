@@ -66,10 +66,10 @@ const MenuCard: React.FC<MenuCardProps> = ({ onClose }) => {
     >
       <div className="bg-[#2A515D]/60 w-[90%] max-w-md py-6 rounded-lg relative shadow-2xl text-white max-h-[80vh] overflow-y-auto hide-scrollbar">
         <button
-          className="absolute top-4 right-4 text-[#6dafb8]"
+          className="absolute top-1 right-1 text-[#6dafb8]"
           onClick={onClose}
         >
-          <X className="w-10 h-10" />
+          <X className="" />
         </button>
 
         <ul className="space-y-4 text-base flex flex-col mx-5">

@@ -85,17 +85,17 @@ const Dashboard: React.FC = () => {
       <Toaster position="top-right" />
       <Header onMenuClick={() => setIsMenuOpen(true)} />
 
-      <div className="absolute top-14 pt-8 sm:pt-14 left-6 z-60 ml-10">
-        <p className="text-lg font-light tracking-wide font-ptSans">
+      <div className="absolute top-14 pt-14 left-1/2 -translate-x-1/2 sm:left-6 sm:translate-x-0 z-60 pl-0 sm:pl-8">
+        <p className="text-[14px] sm:text-lg font-light tracking-wide font-ptSans text-center sm:text-left">
           WELCOME TO YOUR BOOSTLAB
         </p>
       </div>
 
-      <div className="relative z-10 flex flex-col items-center text-center py-24">
-        <h1 className="text-[2.5rem] sm:text-[4rem] md:text-[6rem] lg:text-[7rem] mb-10 leading-none tracking-tight font-normal pt-14">
+      <div className="relative flex flex-col items-center text-center px-4 pb-10 pt-26 sm:pt-22">
+        <h1 className="text-[2.5rem] sm:text-[4rem] md:text-[6rem] lg:text-[7rem] mb-10 leading-none tracking-tight font-normal pt-14 text-center md:text-left">
           PERSONAL ACCOUNT
         </h1>
-        <div className="w-[450px] sm:w-[400px] h-[700px] shadow-xl overflow-hidden border border-cyan-200">
+        <div className="w-[95%] sm:w-[400px] h-[540px] sm:h-[700px] shadow-xl overflow-hidden border border-cyan-200">
           <iframe
             src="https://kinescope.io/embed/3kNR85cmGAPZe13Py7UgF8"
             className="w-full h-full border-none"
@@ -227,4 +227,4 @@ const Dashboard: React.FC = () => {
   );
 };
 
-export default Dashboard;
+export default React.memo(Dashboard);

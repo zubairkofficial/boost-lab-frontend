@@ -1,1 +1,10 @@
-export { selectUser, selectIsAuthenticated, selectIsLoading, setUser, setUserFromStorage, clearUser, setLoading, updateUser } from './userSlice'; 
+export {
+  selectUser,
+  selectIsAuthenticated,
+  selectIsLoading,
+  setUser,
+  setUserFromStorage,
+  clearUser,
+  setLoading,
+  updateUser,
+} from "./userSlice";

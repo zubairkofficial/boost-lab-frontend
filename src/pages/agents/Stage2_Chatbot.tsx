@@ -42,6 +42,7 @@ export default function BoostieChat() {
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
+  
   useEffect(() => {
     if (!loading) inputRef.current?.focus();
   }, [loading]);
@@ -204,7 +205,7 @@ export default function BoostieChat() {
                       ) : (
                         <ReactMarkdown
                           remarkPlugins={[remarkGfm]}
-                          rehypePlugins={[rehypeRaw, rehypeSanitize]}
+                          rehypePlugins={[rehypeRaw,remarkGfm, rehypeSanitize]}
                         >
                           {msg.message}
                         </ReactMarkdown>

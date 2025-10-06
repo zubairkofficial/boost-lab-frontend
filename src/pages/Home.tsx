@@ -25,10 +25,6 @@ export default function HomePage() {
         }}
       />
 
-      {/* Background Overlay */}
-      {/* <div className="absolute inset-0 bg-gradient-to-br from-dark-blue/80 via-dark-grey/70 to-ui-dark/90"></div> */}
-
-      {/* Animated glowing circles */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-10 left-10 w-48 h-48 sm:w-72 sm:h-72 bg-[#8ef0f4]/30 rounded-full blur-3xl animate-pulse"></div>
         <div
@@ -42,14 +38,14 @@ export default function HomePage() {
         ></div>
       </div>
 
-      {/* Main Content */}
+        
       <div className="relative z-30 flex flex-col justify-center items-center min-h-screen px-4 py-12">
         <div
           className={`w-full max-w-lg mx-auto bg-ui-medium/50 backdrop-blur-sm border border-white/20 rounded-2xl p-8 transition-all duration-1000 delay-500 ${
             isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
-          {/* Header */}
+
           <div className="text-center mb-6">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white font-font mb-2 animate-fade-in">
               AI Personality Test
@@ -59,7 +55,7 @@ export default function HomePage() {
               about you!
             </p>
           </div>
-          a{/* Conditional: test block */}
+          {/* Conditional rendering based on testTaken */}
           {!testTaken ? (
             <div className="flex flex-col items-center space-y-4">
               <FuturisticButton onClick={() => navigate("/take-test")}>
