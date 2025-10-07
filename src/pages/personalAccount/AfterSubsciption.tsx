@@ -140,14 +140,12 @@ const Dashboard: React.FC = () => {
       <Toaster position="top-right" />
       <Header onMenuClick={() => setIsMenuOpen(true)} />
 
-      {/* Welcome */}
       <div className="absolute top-8 pt-14 left-1/2 -translate-x-1/2 sm:left-6 sm:translate-x-0 z-60 pl-0 sm:pl-8">
         <p className="text-[14px] sm:text-lg font-light tracking-wide font-ptSans text-center sm:text-left">
           WELCOME TO YOUR BOOSTLAB
         </p>
       </div>
 
-      {/* Personal Account */}
       <div className="relative flex flex-col items-center text-center px-4 pb-10 pt-26 sm:pt-22">
         <h1 className="text-[2.5rem] sm:text-[4rem] md:text-[6rem] lg:text-[7rem] mb-10 leading-none tracking-tight font-normal pt-10">
           PERSONAL ACCOUNT
@@ -167,7 +165,6 @@ const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Services & Library */}
       <div className="w-full lg:w-[70%] px-6 py-10 max-w-screen-xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
         {["SERVICES", "LIBRARY"].map((label) => (
           <div
@@ -186,7 +183,6 @@ const Dashboard: React.FC = () => {
         ))}
       </div>
 
-      {/* Floating Boostie */}
       <div
         className="fixed bottom-4 right-4 z-50 flex items-end gap-2 cursor-pointer"
         onClick={() =>
@@ -206,13 +202,10 @@ const Dashboard: React.FC = () => {
           className="w-20"
         />
       </div>
-      
-      {/* Subscription Section */}
+
       <div className="flex flex-col items-center px-4 py-10">
         {isMenuOpen && <MenuCard onClose={() => setIsMenuOpen(false)} />}
-  
 
-        {/* Subscription Stages */}
         {AfterSubscriptionStages.map(
           ({ stage, title, description, isResultStage }, index) => {
             const renderAction = () => {
@@ -288,6 +281,26 @@ const Dashboard: React.FC = () => {
                   </div>
                 );
               }
+              if (index === 4) {
+                return (
+                  <div
+                    onClick={() => {
+                      navigate("/automation");
+                    }}
+                    className="flex items-center gap-4 lg:px-18 cursor-pointer"
+                  >
+                    <img
+                      src={iconSrcList[2]}
+                      alt="Available Icon"
+                      className="w-10 md:w-16 md:h-16"
+                    />
+                    <span className="text-xl md:text-2xl font-medium text-[#98EBA5]">
+                      AVAILABLE
+                    </span>
+                  </div>
+                );
+              }
+
               return (
                 <div className="flex items-center gap-4 lg:px-18">
                   <img
@@ -334,40 +347,40 @@ const Dashboard: React.FC = () => {
         )}
       </div>
       <div className="w-full max-w-[91rem] bg-[#537F89]/30 backdrop-blur-md rounded-md mb-6 text-white px-4 sm:px-10 md:px-20 py-10 text-center mx-auto">
-          <h2 className="text-2xl md:text-4xl text-[#87F1FF] uppercase mb-4">
-            Subscription & Payments
-          </h2>
-          <p className="text-sm md:text-base mb-2">
-            Plan: {billingInfo.plan ?? "Free"}
-          </p>
-          <p className="text-sm md:text-base mb-2">
-            Billing Email: {billingInfo.email ?? "N/A"}
-          </p>
-          <p className="text-sm md:text-base mb-2">
-            Status: {billingInfo.status ?? "Inactive"}
-          </p>
+        <h2 className="text-2xl md:text-4xl text-[#87F1FF] uppercase mb-4">
+          Subscription & Payments
+        </h2>
+        <p className="text-sm md:text-base mb-2">
+          Plan: {billingInfo.plan ?? "Free"}
+        </p>
+        <p className="text-sm md:text-base mb-2">
+          Billing Email: {billingInfo.email ?? "N/A"}
+        </p>
+        <p className="text-sm md:text-base mb-2">
+          Status: {billingInfo.status ?? "Inactive"}
+        </p>
 
-          <p className="text-sm md:text-base mb-2">
-            Valid Until:{" "}
-            {activeSubscription?.expiresAt
-              ? new Date(activeSubscription.expiresAt).toLocaleDateString(
-                  "en-US",
-                  {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric",
-                  }
-                )
-              : "N/A"}
-          </p>
+        <p className="text-sm md:text-base mb-2">
+          Valid Until:{" "}
+          {activeSubscription?.expiresAt
+            ? new Date(activeSubscription.expiresAt).toLocaleDateString(
+                "en-US",
+                {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                }
+              )
+            : "N/A"}
+        </p>
 
-          <button
-            onClick={handleManageSubscription}
-            className="mt-4 px-6 py-2 bg-[#98EBA5] text-[#2A4C57] font-medium rounded hover:bg-[#87f1ff] transition"
-          >
-            Manage Subscription
-          </button>
-        </div>
+        <button
+          onClick={handleManageSubscription}
+          className="mt-4 px-6 py-2 bg-[#98EBA5] text-[#2A4C57] font-medium rounded hover:bg-[#87f1ff] transition"
+        >
+          Manage Subscription
+        </button>
+      </div>
       <Footer />
     </div>
   );

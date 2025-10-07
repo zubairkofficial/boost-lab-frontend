@@ -42,7 +42,7 @@ export default function BoostieChat() {
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
-  
+
   useEffect(() => {
     if (!loading) inputRef.current?.focus();
   }, [loading]);
@@ -65,7 +65,21 @@ export default function BoostieChat() {
             : `${import.meta.env.VITE_BASE_URL}/stage3/${userId}/history`;
 
         const res = await axios.get(url, { withCredentials: true });
-        setMessages(res.data.history || []);
+        const history = res.data.history || [];
+
+        if (history.length === 0 && stage === 2) {
+          history.push({
+            sender: "bot",
+            message: `Hi! I’m Boostie — your personal AI mentor and strategic architect.
+    I’m designed specifically for photographers and visual creatives.
+    I’ll help you understand your unique style, find the emotional and practical value your clients seek, and build a strategy that deeply resonates and sells effectively.
+    No pressure, no generic templates — just clear, personalized steps based on who you truly are and what your clients emotionally need.
+    Shall we begin?`,
+            createdAt: new Date().toISOString(),
+          });
+        }
+
+        setMessages(history);
       } catch (err: any) {
         toast.error("Failed to load chat history");
       }
@@ -205,7 +219,7 @@ export default function BoostieChat() {
                       ) : (
                         <ReactMarkdown
                           remarkPlugins={[remarkGfm]}
-                          rehypePlugins={[rehypeRaw,remarkGfm, rehypeSanitize]}
+                          rehypePlugins={[rehypeRaw, remarkGfm, rehypeSanitize]}
                         >
                           {msg.message}
                         </ReactMarkdown>
@@ -262,7 +276,7 @@ export default function BoostieChat() {
                     {
                       sender: "bot",
                       message:
-                        "Hi, I’m Boostie. You’ve already completed your marketing strategy. Now let’s bring it to life through content.",
+                        "Hi, I’m Boostie — your personal AI mentor inside the BoostLab platform. You’ve completed your marketing strategy.\n\nCould you please confirm the first marketing channel listed in your 'Channels and Traffic Paths' that you'd like to start working on?",
                       createdAt: new Date().toISOString(),
                     },
                   ]);

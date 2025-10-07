@@ -27,6 +27,7 @@ export default function Stage3Chat() {
   const [loading, setLoading] = useState(false);
   const [stage2Strategy, setStage2Strategy] = useState<string | null>(null);
 
+  const [stage4Ready, setStage4Ready] = useState(false);
   const navigate = useNavigate();
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -71,7 +72,7 @@ export default function Stage3Chat() {
             setMessages([
               {
                 sender: "bot",
-                message: `Hi, I’m Boostie. You’ve already completed your marketing strategy.\n\nNow let’s bring it to life through content.`,
+                message: `Hi, I’m Boostie. You’ve already completed your marketing strategy. Now let’s bring it to life through content. \n\n Should we proceed ? `,
                 createdAt: new Date().toISOString(),
               },
             ]);
@@ -104,7 +105,7 @@ export default function Stage3Chat() {
         { message: input },
         { withCredentials: true }
       );
-
+      const botReply = res.data.botReply;
       setMessages((prev) => [
         ...prev,
         {
@@ -113,6 +114,9 @@ export default function Stage3Chat() {
           createdAt: new Date().toISOString(),
         },
       ]);
+      if (botReply.includes("That’s what we’ll do in Stage 4")) {
+        setStage4Ready(true);
+      }
     } catch (err: any) {
       toast.error(err?.response?.data?.message || "Something went wrong");
     } finally {
@@ -185,6 +189,17 @@ export default function Stage3Chat() {
                 </div>
               </div>
             ))}
+            {stage4Ready && (
+              <div className="text-center mt-4">
+                <button
+                  onClick={() => navigate("/automation")}
+                  className="px-4 py-2 bg-[#98EBA5] text-[#2A4C57] rounded-lg font-semibold cursor-pointer"
+                >
+                  Start Stage 4
+                </button>
+              </div>
+            )}
+
             {loading && (
               <div className="group">
                 <div className="flex gap-4">
@@ -223,7 +238,7 @@ export default function Stage3Chat() {
                   placeholder="Type your message..."
                   className="w-full px-4 py-3 pr-12 border border-[#87F1FF]/40 rounded-xl bg-[#537F89]/30 focus:outline-none resize-none text-white placeholder-gray-300"
                   rows={1}
-                  readOnly={loading || !stage2Strategy} // ✅ use readOnly instead of disabled
+                  readOnly={loading || !stage2Strategy}
                   onKeyDown={(e) => {
                     if (e.key === "Enter" && !e.shiftKey) {
                       e.preventDefault();
