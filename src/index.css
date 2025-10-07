@@ -1,4 +1,6 @@
+@import "tailwindcss";
 @import "tailwindcss/preflight";
+@tailwind utilities;
 @tailwind utilities;
 
 /* hide scrollbar but keep scrolling */
@@ -9,48 +11,53 @@
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;     /* Firefox */
 }
-
 .prose p {
   margin-top: 0;
   margin-bottom: 0.5rem; /* adjust spacing */
 }
 
-.nav-top {
-  @apply z-[60] fixed top-7 right-0 sm:right-6;
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
+.nav-top{
+  @apply z-[60] fixed top-7 right-0 sm:right-6
 }
 .nav-icon-bg {
-  @apply relative w-27 h-7 -top-1 -left-5;
+   @apply relative w-27 h-7 -top-1 -left-5
 }
 
 @media (min-width: 372px) {
   .nav-icon-bg {
-    @apply w-33 h-8;
+    @apply w-33 h-8
   }
 }
 
+/* 425px*/
 @media (min-width: 425px) {
-  .nav-icon-bg {
-    @apply w-37 h-10;
+   .nav-icon-bg {
+    @apply w-37 h-10
   }
 }
-
+/* 768 */
 @media (min-width: 768px) {
-  .nav-icon-bg {
-    @apply w-21 h-7 -top-1.5 left-1;
+   .nav-icon-bg {
+    @apply w-21 h-7 -top-1.5 left-1
   }
 }
-
+/* 1024 */
 @media (min-width: 1024px) {
-  .nav-icon-bg {
-    @apply w-29 h-10 -top-1.5 left-1;
+   .nav-icon-bg {
+    @apply w-29 h-10 -top-1.5 left-1
   }
 }
-
+/* 1440 */
 @media (min-width: 1440px) {
-  .nav-top {
-    @apply w-42 h-12;
+  .nav-top{
+  @apply w-42 h-12
+}
+   .nav-icon-bg {
+    @apply w-full h-full top-0 left-0
   }
-  .nav-icon-bg {
-    @apply w-full h-full top-0 left-0;
-  }
+  
 }
