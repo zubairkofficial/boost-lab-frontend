@@ -69,7 +69,7 @@ const MenuCard: React.FC<MenuCardProps> = ({ onClose }) => {
           className="absolute top-1 right-1 text-[#6dafb8]"
           onClick={onClose}
         >
-          <X className="" />
+          <X className="cursor-pointer" />
         </button>
 
         <ul className="space-y-4 text-base flex flex-col mx-5">
@@ -109,7 +109,7 @@ const MenuCard: React.FC<MenuCardProps> = ({ onClose }) => {
               onClick={handleLogout}
               className="w-full mb-3 flex items-center text-left gap-2 text-white hover:text-[#f87171]"
             >
-              <span className="flex-1">LOGOUT</span>
+              <span className="flex-1 cursor-pointer">LOGOUT</span>
             </button>
             <img src={line} className="mb-2" alt="line-logout" />
           </div>

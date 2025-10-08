@@ -59,7 +59,7 @@ const SignInPage = () => {
 
     try {
       const user = await login(formData.email, formData.password);
-      const hasSubscription = user.subscription?.status === "active";
+      const hasSubscription = user?.subscription?.status === "active";
 
       toast.success("Login successful!");
 

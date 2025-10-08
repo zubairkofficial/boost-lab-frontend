@@ -19,7 +19,7 @@ type Plan = {
   price: number;
   oldPrice?: number;
   stripePriceId: string;
-  duration: number; // in months
+  duration: number; 
 };
 
 const durationMap: Record<number, string> = {

@@ -14,14 +14,11 @@ export default function Success() {
         setIsLoading(false);
         return;
       }
-
       try {
         const response = await fetch(
           `${import.meta.env.VITE_BASE_URL}/plans/verify-payment/${sessionId}`
         );
-        console.log("..........", response);
         const data = await response.json();
-
         setIsPaymentSuccessful(data.isPaid);
       } catch (error) {
         console.error("Error verifying payment:", error);
@@ -52,7 +49,6 @@ export default function Success() {
       </div>
     );
   }
-
   return (
     <div
       className="min-h-screen bg-fixed bg-cover bg-no-repeat flex items-center justify-center p-6"

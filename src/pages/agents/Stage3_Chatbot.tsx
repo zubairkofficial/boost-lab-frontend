@@ -57,14 +57,12 @@ export default function Stage3Chat() {
           toast.error("Stage 2 strategy not found. Complete Stage 2 first.");
           return;
         }
-
         setStage2Strategy(strategyRes.data.strategy);
 
         const historyRes = await axios.get(
           `${import.meta.env.VITE_BASE_URL}/stage3/${userId}/history`,
           { withCredentials: true }
         );
-
         if (historyRes.data.success && Array.isArray(historyRes.data.history)) {
           if (historyRes.data.history.length > 0) {
             setMessages(historyRes.data.history);

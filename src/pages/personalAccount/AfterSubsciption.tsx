@@ -141,7 +141,7 @@ const Dashboard: React.FC = () => {
       <Header onMenuClick={() => setIsMenuOpen(true)} />
 
       <div className="absolute top-8 pt-14 left-1/2 -translate-x-1/2 sm:left-6 sm:translate-x-0 z-60 pl-0 sm:pl-8">
-        <p className="text-[14px] sm:text-lg font-light tracking-wide font-ptSans text-center sm:text-left">
+        <p className=" text-[14px] sm:text-lg font-light tracking-wide font-ptSans text-center sm:text-left">
           WELCOME TO YOUR BOOSTLAB
         </p>
       </div>
@@ -164,7 +164,6 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
       </div>
-
       <div className="w-full lg:w-[70%] px-6 py-10 max-w-screen-xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
         {["SERVICES", "LIBRARY"].map((label) => (
           <div
@@ -182,7 +181,6 @@ const Dashboard: React.FC = () => {
           </div>
         ))}
       </div>
-
       <div
         className="fixed bottom-4 right-4 z-50 flex items-end gap-2 cursor-pointer"
         onClick={() =>
@@ -202,10 +200,8 @@ const Dashboard: React.FC = () => {
           className="w-20"
         />
       </div>
-
       <div className="flex flex-col items-center px-4 py-10">
         {isMenuOpen && <MenuCard onClose={() => setIsMenuOpen(false)} />}
-
         {AfterSubscriptionStages.map(
           ({ stage, title, description, isResultStage }, index) => {
             const renderAction = () => {
@@ -300,7 +296,6 @@ const Dashboard: React.FC = () => {
                   </div>
                 );
               }
-
               return (
                 <div className="flex items-center gap-4 lg:px-18">
                   <img
@@ -336,7 +331,6 @@ const Dashboard: React.FC = () => {
             );
           }
         )}
-
         {isResultOpen && (
           <MenuModal
             isModalOpen={isResultOpen}
@@ -373,10 +367,9 @@ const Dashboard: React.FC = () => {
               )
             : "N/A"}
         </p>
-
         <button
           onClick={handleManageSubscription}
-          className="mt-4 px-6 py-2 bg-[#98EBA5] text-[#2A4C57] font-medium rounded hover:bg-[#87f1ff] transition"
+          className="mt-4 px-6 py-2 bg-[#98EBA5] text-[#2A4C57] font-medium rounded hover:bg-[#87f1ff] transition cursor-pointer"
         >
           Manage Subscription
         </button>

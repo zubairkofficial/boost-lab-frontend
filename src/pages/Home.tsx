@@ -15,7 +15,6 @@ export default function HomePage() {
   }, []);
   return (
     <div className="min-h-screen bg-gradient-to-br from-dark-blue via-dark-grey to-ui-dark relative overflow-hidden">
-      {/* Background Image */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat bg-black/50 bg-blend-overlay"
         style={{
@@ -37,7 +36,6 @@ export default function HomePage() {
           style={{ animationDelay: "1.5s" }}
         ></div>
       </div>
-
         
       <div className="relative z-30 flex flex-col justify-center items-center min-h-screen px-4 py-12">
         <div
@@ -45,7 +43,6 @@ export default function HomePage() {
             isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
-
           <div className="text-center mb-6">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white font-font mb-2 animate-fade-in">
               AI Personality Test
@@ -55,7 +52,6 @@ export default function HomePage() {
               about you!
             </p>
           </div>
-          {/* Conditional rendering based on testTaken */}
           {!testTaken ? (
             <div className="flex flex-col items-center space-y-4">
               <FuturisticButton onClick={() => navigate("/take-test")}>
@@ -81,9 +77,7 @@ export default function HomePage() {
               </Link>
             </div>
           )}
-          {/* Divider */}
           <div className="w-full h-px bg-primary/20 my-6"></div>
-          {/* Back to login */}
           <div className="text-center mt-6">
             <p className="text-white text-caption font-font">
               Already have an account?{" "}

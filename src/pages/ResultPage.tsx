@@ -15,7 +15,6 @@ export default function ResultsPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-dark-blue via-dark-grey to-ui-dark relative overflow-hidden">
-      {/* Background */}
       <div 
         className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: 'url(https://static.tildacdn.net/tild6534-6232-4333-a431-313138303165/bg_1_1.jpg)' }}

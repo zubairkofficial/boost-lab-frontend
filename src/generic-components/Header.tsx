@@ -25,7 +25,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
         <div
          className="nav-icon-bg">
           <img src={menu} alt="Menu" className="w-full h-full" />
-          <div className="absolute inset-0 flex items-center justify-center">
+          <div className="absolute inset-0 flex items-center justify-center cursor-pointer">
             <span className="text-[#87F1FF] text-sm font-semibold">MENU</span>
           </div>
         </div>

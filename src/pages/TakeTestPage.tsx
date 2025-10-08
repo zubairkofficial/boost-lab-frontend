@@ -67,9 +67,7 @@ export default function TakeTestPage() {
     if (currentIndex < questions.length - 1) {
       setCurrentIndex(currentIndex + 1);
     } else {
-      // Test finished → mark as taken, save answers, and navigate to home
       localStorage.setItem("testTaken", "true");
-      // Save answers to localStorage for results page
       const finalAnswers = [...answers];
       finalAnswers[currentIndex] = selectedOption;
       localStorage.setItem("testAnswers", JSON.stringify(finalAnswers));
@@ -79,7 +77,6 @@ export default function TakeTestPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-dark-blue via-dark-grey to-ui-dark relative overflow-hidden">
-      {/* Background Image */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
@@ -87,11 +84,7 @@ export default function TakeTestPage() {
             "url(https://static.tildacdn.net/tild6534-6232-4333-a431-313138303165/bg_1_1.jpg)",
         }}
       />
-
-      {/* Background Overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-dark-blue/80 via-dark-grey/70 to-ui-dark/90"></div>
-
-      {/* Animated glowing circles */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-10 left-10 w-48 h-48 sm:w-72 sm:h-72 bg-[#8ef0f4]/30 rounded-full blur-3xl animate-pulse"></div>
         <div
@@ -104,8 +97,6 @@ export default function TakeTestPage() {
           style={{ animationDelay: "1.5s" }}
         ></div>
       </div>
-
-      {/* Main Content */}
       <div className="relative z-30 flex flex-col justify-center items-center min-h-screen px-4 py-12">
         <div
           className={`w-full max-w-xl mx-auto bg-ui-medium/50 backdrop-blur-sm border border-primary/20 rounded-2xl p-8 transition-all duration-1000 delay-500 ${

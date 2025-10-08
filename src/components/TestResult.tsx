@@ -2,7 +2,6 @@ function TestResult({ testResult }: any) {
   console.log("testResult", testResult);
   if (!testResult?.html_report) return null;
 
-  // Replace heading tags with <p> to render everything uniformly
   const normalizedContent = testResult?.html_report
     .replace(/<\/?h[1-6]>/g, "<p>")
     .replace(/<\/h[1-6]>/g, "</p>");
