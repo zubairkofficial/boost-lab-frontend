@@ -7,11 +7,11 @@ function TestResult({ testResult }: any) {
     .replace(/<\/h[1-6]>/g, "</p>");
 
   return (
-    <div className="w-full max-h-[75vh] overflow-y-visible px-10 rounded-xl bg-[#1D4552] text-white text-[18px] leading-relaxed scroll-smooth scrollbar-thin scrollbar-thumb-white/30 scrollbar-track-transparent">
+    <div className="w-full max-h-[70vh] overflow-y-visible px-2 md:px-10 rounded-2xl bg-[#1D4552] text-white md:text-[18px] text-[14px] leading-relaxed scroll-smooth scrollbar-thin scrollbar-thumb-white/30 scrollbar-track-transparent">
       <div
         className="
-          space-y-4
-          py-10
+          space-y-3
+          py-
           [&_*]:font-normal
           [&_hr]:hidden
           [&_ul]:list-none [&_ul]:ml-0 [&_ul>li]:before:content-['']

@@ -60,18 +60,19 @@ const MenuCard: React.FC<MenuCardProps> = ({ onClose }) => {
   };
 
   return (
+    
     <div
       className="fixed inset-0 bg-[#49909A]/1 backdrop-blur-md z-[90] flex items-center justify-center text-2xl"
       style={{ fontFamily: "'Unbounded', Arial, sans-serif" }}
     >
+      
       <div className="bg-[#2A515D]/60 w-[90%] max-w-md py-6 rounded-lg relative shadow-2xl text-white max-h-[80vh] overflow-y-auto hide-scrollbar">
-        <button
-          className="absolute top-1 right-1 text-[#6dafb8]"
-          onClick={onClose}
-        >
-          <X className="cursor-pointer" />
-        </button>
-
+      <button
+        className="fixed top-18 right-4 text-[#6dafb8] bg-[#49909A]/60 rounded-full p-2"
+        onClick={onClose}
+      >
+        <X className="cursor-pointer" />
+      </button>
         <ul className="space-y-4 text-base flex flex-col mx-5">
           {menuLinks.map(({ label, path }, index) => {
             const locked = isLocked(label);

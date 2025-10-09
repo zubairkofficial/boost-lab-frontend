@@ -19,7 +19,7 @@ type Plan = {
   price: number;
   oldPrice?: number;
   stripePriceId: string;
-  duration: number; 
+  duration: number;
 };
 
 const durationMap: Record<number, string> = {
@@ -43,6 +43,7 @@ export default function PlanCards() {
     skip: !user?.userId,
     refetchOnMountOrArgChange: true,
   });
+
   const [activeSubscription, setActiveSubscription] = useState(
     activeSubscriptionData || null
   );
@@ -126,19 +127,9 @@ export default function PlanCards() {
     );
 
   return (
-    <div>
-      <div className="max-w-8xl mx-auto py-20 px-6 sm:px-14">
-        <div className="text-center mb-16">
-          <h1 className="text-xl md:text-5xl font-bold text-white mb-4">
-            Choose Your Plan
-          </h1>
-          <p className="text-lg md:text-xl text-white max-w-2xl mx-auto">
-            Select the perfect subscription plan for your needs. Upgrade or
-            downgrade at any time.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 gap-y-10 justify-center">
+    <div className="w-full">
+      <div className="max-w-8xl mx-auto py-10 sm:py-20 px-4 sm:px-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {plans.map((plan: Plan) => {
             const isUserSubscribed = activeSubscription?.status === "active";
             const isCurrentPlan = activeSubscription?.plan?.id === plan.id;
@@ -149,22 +140,20 @@ export default function PlanCards() {
               isFetchingSubscription;
 
             const perMonth = (plan.price / plan.duration).toFixed(2);
-
             return (
               <div
                 key={plan.id}
-                className="bg-[#154E62]/60 backdrop-blur-md border border-cyan-500/30 shadow-2xl text-white md:min-h-[35rem] flex flex-col justify-between rounded-bl-[68px] 
-             rounded-tr-none rounded-tl-none rounded-br-none relative mb-6"
+                className="bg-[#154E62]/60 backdrop-blur-md border border-cyan-500/30 shadow-2xl text-white rounded-bl-[48px] sm:rounded-bl-[68px] md:min-h-[35rem] min-h-[28rem] flex flex-col justify-between relative"
               >
-                <div className="p-8 flex flex-col flex-grow gap-3">
+                <div className="p-5 sm:p-8 flex flex-col flex-grow gap-3">
                   <h3
-                    className="text-2xl md:text-5xl font-normal text-[#8DEFF4] pt-2 md:pb-6"
+                    className="text-2xl sm:text-4xl lg:text-5xl font-normal text-[#8DEFF4] pt-2 sm:pb-4"
                     style={{ fontFamily: "'Unbounded', Arial, sans-serif" }}
                   >
                     {plan.name}
                   </h3>
 
-                  <div className="flex flex-col gap-4 md:flex-grow">
+                  <div className="flex flex-col gap-3 sm:gap-5 flex-grow">
                     {Array.isArray(plan.description)
                       ? plan.description.map((desc, i) => {
                           const words = desc.split(" ");
@@ -173,98 +162,55 @@ export default function PlanCards() {
                           const secondHalf = words.slice(mid).join(" ");
 
                           return (
-                            <div key={i} className="flex flex-col pt-6">
-                              <div className="flex flex-col text-[16px] text-normal">
+                            <div key={i} className="flex flex-col pt-3">
+                              <div className="flex flex-col text-sm sm:text-base">
                                 {words.length > 3 ? (
                                   <>
                                     <p className="text-slate-200">
                                       {firstHalf}
                                     </p>
-                                    <p className="text-slate-200 pb-2">
+                                    <p className="text-slate-200 pb-1 sm:pb-2">
                                       {secondHalf}
                                     </p>
                                   </>
                                 ) : (
-                                  <p className="text-[16px] text-slate-200 pb-2">
-                                    {desc}
-                                  </p>
-                                )}
-                              </div>
-                              <div className="mt-[-24px]">
-                                <img
-                                  src={line}
-                                  alt="divider"
-                                  className="block w-full m-0 p-0 leading-none"
-                                />
-                              </div>
-                            </div>
-                          );
-                        })
-                      : plan.description &&
-                        (() => {
-                          const words = plan.description.split(" ");
-                          const mid = Math.ceil(words.length / 2);
-                          const firstHalf = words.slice(0, mid).join(" ");
-                          const secondHalf = words.slice(mid).join(" ");
-
-                          return (
-                            <div className="flex flex-col">
-                              <div className="flex flex-col">
-                                {words.length > 3 ? (
-                                  <>
-                                    <p
-                                      className="text-sm text-slate-200"
-                                      style={{
-                                        fontFamily:
-                                          "'PT Sans', Arial, sans-serif",
-                                      }}
-                                    >
-                                      {firstHalf}
-                                    </p>
-                                    <p
-                                      className="text-sm text-slate-200"
-                                      style={{
-                                        fontFamily:
-                                          "'PT Sans', Arial, sans-serif",
-                                      }}
-                                    >
-                                      {secondHalf}
-                                    </p>
-                                  </>
-                                ) : (
-                                  <p
-                                    className="text-sm text-slate-200"
-                                    style={{
-                                      fontFamily:
-                                        "'PT Sans', Arial, sans-serif",
-                                    }}
-                                  >
-                                    {plan.description}
-                                  </p>
+                                  <p className="text-slate-200 pb-0">{desc}</p>
                                 )}
                               </div>
                               <img
                                 src={line}
                                 alt="divider"
-                                className="w-full h-0 m-0 p-0"
+                                className="block w-full"
                               />
                             </div>
                           );
-                        })()}
+                        })
+                      : plan.description && (
+                          <div className="flex flex-col">
+                            <p className="text-sm sm:text-base text-slate-200">
+                              {plan.description}
+                            </p>
+                            <img
+                              src={line}
+                              alt="divider"
+                              className="w-full mt-2"
+                            />
+                          </div>
+                        )}
                   </div>
 
                   <div
-                    className="flex flex-col mt-5 md:mt-0"
+                    className="flex flex-col mt-4 sm:mt-1"
                     style={{ fontFamily: "'PT Sans', Arial, sans-serif" }}
                   >
-                    <div className="flex flex-wrap items-baseline gap-x-4">
+                    <div className="flex flex-wrap items-baseline gap-x-2">
                       {plan.oldPrice && (
-                        <span className="text-xl sm:text-2xl font-normal text-white line-through opacity-70 mr-2">
+                        <span className="text-base sm:text-xl font-normal text-white line-through opacity-70 mr-2">
                           €{plan.oldPrice}
                         </span>
                       )}
 
-                      <span className="text-3xl sm:text-4xl font-semibold text-[#8DEFF4]">
+                      <span className="text-2xl sm:text-4xl font-semibold text-[#8DEFF4]">
                         €{plan.price}
                       </span>
                       <span className="text-sm sm:text-base font-normal text-[#8DEFF4] opacity-80">
@@ -273,11 +219,12 @@ export default function PlanCards() {
                     </div>
                   </div>
                 </div>
+
                 <div
-                  className={`w-full mt-[20px] mb-[-2px] ${
+                  className={`w-full mt-6 ${
                     isLoadingThisPlan
                       ? "cursor-not-allowed opacity-50"
-                      : "cursor-pointer group"
+                      : "cursor-pointer"
                   }`}
                   onClick={() => {
                     if (isSubscribed) {
@@ -288,14 +235,14 @@ export default function PlanCards() {
                   }}
                 >
                   <div
-                    className="w-[103%] h-[80px] md:h-[120px] bg-no-repeat bg-center flex items-center justify-center relative left-1/2 -translate-x-1/2"
+                    className="w-[102%] h-[80px] sm:h-[100px] md:h-[120px] bg-no-repeat bg-center flex items-center justify-center relative left-1/2 -translate-x-1/2"
                     style={{
                       backgroundImage: `url(${frame})`,
                       backgroundSize: "100% 100%",
                     }}
                   >
                     <span
-                      className="text-white font-normal text-xl px-4 py-2 transition-all duration-500 ease-out rounded-md bg-transparent"
+                      className="text-base sm:text-lg md:text-xl text-white font-normal px-4 py-2 transition-all duration-500 ease-out rounded-md bg-transparent"
                       style={{ fontFamily: "'Unbounded', Arial, sans-serif" }}
                     >
                       {isSubscribed

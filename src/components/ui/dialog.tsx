@@ -87,14 +87,14 @@ function DialogContent({
         {showCloseButton && !loading && (
           <DialogPrimitive.Close
             data-slot="dialog-close"
-            className="fixed top-6 right-6 w-12 h-12 flex items-center justify-center rounded-full transition-colors z-50 border-none"
+            className="fixed top-5 right-5 z-[1000] text-[#6dafb8] bg-[#49909A]/60 rounded-full p-2"
             onClick={() => {
               if (setIsModalOpen && typeof isModelOpen === "boolean") {
                 setIsModalOpen(!isModelOpen);
               }
             }}
           >
-            <XIcon className="w-6 h-6 text-white" />
+            <XIcon className="cursor-pointer w-6 h-6" />
           </DialogPrimitive.Close>
         )}
       </DialogPrimitive.Content>

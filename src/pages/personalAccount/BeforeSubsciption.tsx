@@ -110,7 +110,7 @@ const Dashboard: React.FC = () => {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center w-full max-w-[91rem] px-6 md:px-20 py-10 bg-[#537F89]/30 backdrop-blur-md rounded-md mb-6 text-white">
           <div>
             <h2 className="text-xl md:text-4xl text-[#87F1FF] uppercase tracking-wide font-normal">
-              Stage 1: Test
+              Stage 1: Result
             </h2>
             <p className="mt-2 text-white text-sm md:text-base font-normal">
               Discover your creative DNA and unlock your unique path
@@ -123,7 +123,7 @@ const Dashboard: React.FC = () => {
             <img
               src="https://static.tildacdn.net/tild6231-3763-4066-a262-313738353561/result_icon.svg"
               alt="Result Icon"
-              className="w-18 h-18 mr-4"
+              className="w-14 h-14 mr-4"
             />
             <span className="text-xl font-light px-2 text-[#87F1FF] hover:underline">
               SEE RESULT
@@ -140,88 +140,100 @@ const Dashboard: React.FC = () => {
             isLoading={isTestLoading}
           />
         )}
-
-        {BeforeSubscriptionStages.map(({ stage, title, description }) => (
-          <div
-            key={stage}
-            className="flex justify-between items-center w-full max-w-[91rem] px-4 sm:px-10 md:px-20 py-10 bg-[#537F89]/30 backdrop-blur-md rounded-md mb-6 text-white"
-          >
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between justify-start w-full gap-4">
-              <div className="w-[82%] md:w-auto">
-                <h2
-                  className={`text-xl md:text-4xl text-[#87F1FF] uppercase tracking-wide font-normal ${
-                    stage === "LET BOOSTI BUILD YOUR PERSONALIZED STRATEGY"
-                      ? "py-5"
-                      : ""
-                  }`}
-                >
-                  {stage}
-                  {title ? `: ${title}` : ""}
-                </h2>
-                <p className="mt-2 text-white text-sm md:text-base font-normal">
-                  {description}
-                </p>
-              </div>
-
-              <div
-                className="flex items-center justify-start w-full md:w-auto cursor-pointer group relative"
-                onClick={() =>
-                  planCardsRef.current?.scrollIntoView({
-                    behavior: "smooth",
-                  })
-                }
-              >
-                {!hasActiveSubscription && (
-                  <img
-                    src="https://static.tildacdn.net/tild6466-3537-4561-a136-313962393561/lock_icon.svg"
-                    alt="Lock Icon"
-                    className="w-18 h-18 mr-4"
-                  />
-                )}
-                <span
-                  className={`underline underline-offset-[4px] text-xl font-light px-2 ${
-                    hasActiveSubscription ? "text-gray-300" : "text-gray-400"
-                  }`}
-                >
-                  {hasActiveSubscription ? "Available" : "Not Available"}
-                </span>
-                {!hasActiveSubscription && (
-                  <span className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 px-3 py-1.5 text-sm text-white rounded-lg bg-white/20 backdrop-blur-md shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none z-50">
-                    Unlock
-                  </span>
-                )}
+        {BeforeSubscriptionStages.map(
+          ({ stage, title, description, button }) => (
+            <div
+              key={stage}
+              className="flex justify-between items-center w-full max-w-[91rem] px-4 sm:px-10 md:px-20 py-10 bg-[#537F89]/30 backdrop-blur-md rounded-md mb-6 text-white"
+            >
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between justify-start w-full gap-2">
+                <div className="w-[100%] md:w-auto">
+                  <h2 className="text-xl md:text-4xl text-[#87F1FF] uppercase tracking-wide font-normal">
+                    {stage}
+                    {title ? `: ${title}` : ""}
+                  </h2>
+                  <p className="mt-2 text-white text-sm md:text-base font-normal">
+                    {description}
+                  </p>
+                </div>
+                {/* Right side */}
+                <div className="flex items-center justify-start w-full md:w-auto cursor-pointer group relative">
+                  {hasActiveSubscription ? (
+                    <span className="underline underline-offset-[4px] text-xl font-light text-gray-300">
+                      Available
+                    </span>
+                  ) : button ? (
+                    <div className="cursor-pointer flex items-center group relative">
+                      {button}
+                      <span
+                        className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 px-3 py-1.5 text-sm text-white rounded-lg bg-white/20 backdrop-blur-md shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-auto z-50 cursor-pointer"
+                        onClick={() =>
+                          planCardsRef.current?.scrollIntoView({
+                            behavior: "smooth",
+                          })
+                        }
+                      >
+                        Unlock
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center group relative">
+                      <img
+                        src="https://static.tildacdn.net/tild6466-3537-4561-a136-313962393561/lock_icon.svg"
+                        alt="Lock Icon"
+                        className="md:w-16 w-12 md:h-16 h-12 mr-4"
+                      />
+                      <span className="underline underline-offset-[4px] text-xl font-light text-gray-400">
+                        Not Available
+                      </span>
+                      <span
+                        className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 px-3 py-1.5 text-sm text-white rounded-lg bg-white/20 backdrop-blur-md shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-auto z-50 cursor-pointer"
+                        onClick={() =>
+                          planCardsRef.current?.scrollIntoView({
+                            behavior: "smooth",
+                          })
+                        }
+                      >
+                        Unlock
+                      </span>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          )
+        )}
       </div>
 
-      <div className="w-[70%] px-6 py-10 max-w-screen-xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-        {["SERVICES", "LIBRARY"].map((text, i) => (
+      <div className="w-full lg:w-[70%] px-6 py-10 max-w-screen-xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+        {["SERVICES", "LIBRARY"].map((label) => (
           <div
-            key={i}
+            key={label}
             className="w-full flex justify-center md:justify-between"
           >
-            <div className="relative w-full transition-all duration-300 rounded-xl group">
-              <img
-                src={vector2}
-                alt={text}
-                className="w-full h-auto rounded-xl"
-              />
+            <div className="relative w-full">
+              <img src={vector2} alt={label} className="w-full h-auto" />
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-white text-base md:text-lg font-semibold transition-all duration-500 ease-out group-hover:shadow-[0_0_2500px_100px_#8EF0F4]">
-                  {text}
+                <span className="text-white text-base md:text-lg font-semibold">
+                  {label}
                 </span>
               </div>
             </div>
           </div>
         ))}
       </div>
-
+      <div className="text-center mt-10 md:mt-20">
+        <h1 className="text-xl md:text-4xl font-bold text-white mb-4">
+          Choose Your Plan
+        </h1>
+        <p className="text-sm md:text-xl text-white max-w-2xl mx-auto">
+          Select the perfect subscription plan for your needs. Upgrade or
+          downgrade at any time.
+        </p>
+      </div>
       <div ref={planCardsRef}>
         <PlanCards />
       </div>
-
       <Footer />
     </div>
   );

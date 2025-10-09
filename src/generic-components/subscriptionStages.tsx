@@ -1,22 +1,24 @@
-import vector2 from "../assets/vector2.png";
+import frame from "../assets/vector2.png";
 
 export const BeforeSubscriptionStages = [
   {
     stage: "LET BOOSTI BUILD YOUR PERSONALIZED STRATEGY",
     description: "Define your niche, brand voice, and ideal clients",
     button: (
-      <button>
-        <div className="relative w-[300px] h-[130px] sm:w-[400px] sm:h-[100px] md:w-[400px] md:h-[130px]">
-          <img
-            src={vector2}
-            alt="SERVICES"
-            className="w-[82%] md:w-[100%] sm:w-[92%] h-[110px]"
-          />
-          <div className="absolute inset-0 flex items-center justify-center px-8">
-            <span className="text-white text-xs sm:text-lg md:text-start font-semibold w-[71%]">
-              START MY STRATEGY WITH BOOSTIE
-            </span>
-          </div>
+      <button className="pt-10">
+        <div
+          className="w-[100%] h-[80px] md:h-[110px] bg-no-repeat bg-center flex items-center justify-center relative left-1/2 -translate-x-1/2"
+          style={{
+            backgroundImage: `url(${frame})`,
+            backgroundSize: "100% 100%",
+          }}
+        >
+          <span
+            className="text-base md:text-lg text-white font-normal px-4 py-2 transition-all duration-500 ease-out rounded-md bg-transparent"
+            style={{ fontFamily: "'Unbounded', Arial, sans-serif" }}
+          >
+            START MY STRATEGY WITH BOOSTIE
+          </span>
         </div>
       </button>
     ),
@@ -46,14 +48,8 @@ export const BeforeSubscriptionStages = [
 export const AfterSubscriptionStages = [
   {
     stage: "Stage 1",
-    title: "TEST",
-    description: "Define your niche, brand voice, and ideal clients",
-    button: "",
-  },
-  {
-    stage: "Stage 1",
-    title: "Test",
-    description: "Discover your creative DNA and unlock your unique path",
+    title: "SEE RESULTS",
+    description: "See you test result here",
     isResultStage: true,
   },
   {

@@ -140,8 +140,8 @@ const Dashboard: React.FC = () => {
       <Toaster position="top-right" />
       <Header onMenuClick={() => setIsMenuOpen(true)} />
 
-      <div className="absolute top-8 pt-14 left-1/2 -translate-x-1/2 sm:left-6 sm:translate-x-0 z-60 pl-0 sm:pl-8">
-        <p className=" text-[14px] sm:text-lg font-light tracking-wide font-ptSans text-center sm:text-left">
+      <div className="absolute top-8 md:top-10 pt-14 left-1/2 -translate-x-1/2 sm:left-6 sm:translate-x-0 z-60 pl-0 sm:pl-8">
+        <p className=" text-[15px] sm:text-lg font-light tracking-wide font-ptSans text-center sm:text-left">
           WELCOME TO YOUR BOOSTLAB
         </p>
       </div>
@@ -164,23 +164,7 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className="w-full lg:w-[70%] px-6 py-10 max-w-screen-xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-        {["SERVICES", "LIBRARY"].map((label) => (
-          <div
-            key={label}
-            className="w-full flex justify-center md:justify-between"
-          >
-            <div className="relative w-full">
-              <img src={vector2} alt={label} className="w-full h-auto" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-white text-base md:text-lg font-semibold">
-                  {label}
-                </span>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+
       <div
         className="fixed bottom-4 right-4 z-50 flex items-end gap-2 cursor-pointer"
         onClick={() =>
@@ -213,37 +197,22 @@ const Dashboard: React.FC = () => {
                         ? setIsResultOpen(true)
                         : toast.error("Email not found. Please log in again.")
                     }
-                    className="flex items-center gap-4 cursor-pointer md:px-32"
+                    className="flex items-center gap-4 cursor-pointer md:px-16"
                   >
                     <img
                       src={iconSrcList[1]}
                       alt="Result Icon"
                       className="w-10 h-10 md:w-16 md:h-14"
                     />
-                    <span className="text-xl md:text-2xl font-medium text-[#87F1FF]">
+
+                    <span className="whitespace-nowrap text-[14px] font-normal md:text-xl text-[#98EBA5]">
                       SEE RESULT
                     </span>
                   </div>
                 );
               }
-              if (index === 0) {
-                return (
-                  <div className="flex items-end justify-end gap-4 lg:px-8">
-                    <img
-                      src={iconSrcList[0]}
-                      alt="Start Icon"
-                      className="w-10 h-10 md:w-16 md:h-16"
-                    />
-                    <Link
-                      to={import.meta.env.VITE_FRONTEND_URL}
-                      className="text-xl md:text-2xl font-medium text-[#98EBA5]"
-                    >
-                      START THE TEST
-                    </Link>
-                  </div>
-                );
-              }
-              if (index === 2) {
+
+              if (index === 1) {
                 return (
                   <Link
                     to="/strategy-generation"
@@ -254,13 +223,13 @@ const Dashboard: React.FC = () => {
                       alt="Available Icon"
                       className="w-10 md:w-16 md:h-16"
                     />
-                    <span className="text-xl md:text-2xl font-medium text-[#98EBA5]">
+                    <span className="text-[16px] font-normal md:text-xl text-[#98EBA5]">
                       AVAILABLE
                     </span>
                   </Link>
                 );
               }
-              if (index === 3) {
+              if (index === 2) {
                 return (
                   <div
                     onClick={handleStage3Click}
@@ -271,13 +240,13 @@ const Dashboard: React.FC = () => {
                       alt="Available Icon"
                       className="w-10 md:w-16 md:h-16"
                     />
-                    <span className="text-xl md:text-2xl font-medium text-[#98EBA5]">
+                    <span className="text-[16px] font-normal md:text-xl text-[#98EBA5]">
                       AVAILABLE
                     </span>
                   </div>
                 );
               }
-              if (index === 4) {
+              if (index === 3) {
                 return (
                   <div
                     onClick={() => {
@@ -290,7 +259,7 @@ const Dashboard: React.FC = () => {
                       alt="Available Icon"
                       className="w-10 md:w-16 md:h-16"
                     />
-                    <span className="text-xl md:text-2xl font-medium text-[#98EBA5]">
+                    <span className="text-[16px] font-normal md:text-xl text-[#98EBA5]">
                       AVAILABLE
                     </span>
                   </div>
@@ -303,7 +272,7 @@ const Dashboard: React.FC = () => {
                     alt="Available Icon"
                     className="w-10 h-10 md:w-16 md:h-16"
                   />
-                  <span className="text-xl md:text-2xl font-medium text-[#98EBA5]">
+                  <span className="text-[16px] font-normal md:text-xl text-[#98EBA5]">
                     AVAILABLE
                   </span>
                 </div>
@@ -317,11 +286,13 @@ const Dashboard: React.FC = () => {
               >
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                   <div className="w-full">
-                    <h2 className="text-xl md:text-4xl text-[#87F1FF] uppercase">
+                    <h2 className="text-xl font-normal md:text-4xl text-[#87F1FF] uppercase">
                       {stage}
                       {title ? `: ${title}` : ""}
                     </h2>
-                    <p className="mt-2 text-sm md:text-base">{description}</p>
+                    <p className="mt-2 font-light text-sm md:text-base">
+                      {description}
+                    </p>
                   </div>
                   <div className="flex items-center gap-4 w-full md:w-auto md:justify-end">
                     {renderAction()}
@@ -340,7 +311,24 @@ const Dashboard: React.FC = () => {
           />
         )}
       </div>
-      <div className="w-full max-w-[91rem] bg-[#537F89]/30 backdrop-blur-md rounded-md mb-6 text-white px-4 sm:px-10 md:px-20 py-10 text-center mx-auto">
+      <div className="w-full lg:w-[70%] px-6 py-10 max-w-screen-xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 cursor-pointer">
+        {["SERVICES", "LIBRARY"].map((label) => (
+          <div
+            key={label}
+            className="w-full flex justify-center md:justify-between"
+          >
+            <div className="relative w-full">
+              <img src={vector2} alt={label} className="w-full h-auto" />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-white text-base md:text-lg font-semibold">
+                  {label}
+                </span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="w-full max-w-[91rem] bg-[#537F89]/30 backdrop-blur-md rounded-md mb-6 text-white px-4 sm:px-10 md:px-20 py-10 text-center mx-auto mt-10">
         <h2 className="text-2xl md:text-4xl text-[#87F1FF] uppercase mb-4">
           Subscription & Payments
         </h2>

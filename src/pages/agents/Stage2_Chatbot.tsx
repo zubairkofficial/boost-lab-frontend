@@ -42,6 +42,15 @@ export default function BoostieChat() {
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
+  useEffect(() => {
+    const complete = localStorage.getItem("stage2Complete");
+    const strategy = localStorage.getItem("stage2Strategy");
+
+    if (complete === "true") {
+      setStage2Complete(true);
+      if (strategy) setStage2Strategy(strategy);
+    }
+  }, []);
 
   useEffect(() => {
     if (!loading) inputRef.current?.focus();
@@ -122,6 +131,8 @@ export default function BoostieChat() {
 
         if (fullText.includes("Stage 3: Content & Branding")) {
           setStage2Complete(true);
+          localStorage.setItem("stage2Complete", "true");
+          localStorage.setItem("stage2Strategy", fullText);
         }
 
         renderBotMessage(fullText);
@@ -190,7 +201,7 @@ export default function BoostieChat() {
             onClick={() => navigate(-1)}
             className="p-2 rounded-lg transition-colors cursor-pointer"
           >
-            <X className="w-6 h-6 text-[#87F1FF]" />
+            <X className="w-8 h-8 text-[#87F1FF]" />
           </button>
         </div>
 
@@ -263,7 +274,7 @@ export default function BoostieChat() {
           </div>
 
           {stage2Complete && stage === 2 && (
-            <div className="text-center mt-4">
+            <div className="text-center mt-4 p-4 bg-[#2A4C57]/60 backdrop-blur-md border-t border-[#87F1FF]/30">
               <button
                 onClick={() => {
                   setStage(3);
@@ -280,7 +291,6 @@ export default function BoostieChat() {
                       createdAt: new Date().toISOString(),
                     },
                   ]);
-
                   navigate("/content");
                 }}
                 className="px-4 py-2 bg-[#98EBA5] text-[#2A4C57] rounded-lg font-semibold cursor-pointer"
@@ -302,7 +312,7 @@ export default function BoostieChat() {
                   placeholder="Type your message..."
                   className="w-full px-4 py-3 pr-12 border border-[#87F1FF]/40 rounded-xl bg-[#537F89]/30 focus:outline-none resize-none text-white placeholder-gray-300"
                   rows={1}
-                  disabled={loading}
+                  disabled={loading || stage2Complete}
                   onKeyDown={(e) => {
                     if (e.key === "Enter" && !e.shiftKey) {
                       e.preventDefault();
@@ -315,7 +325,7 @@ export default function BoostieChat() {
                 <button
                   onClick={sendMessage}
                   className="absolute right-2 bottom-3 p-2 bg-[#98EBA5] text-[#2A4C57] rounded-lg  disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                  disabled={loading || !input.trim()}
+                  disabled={loading || !input.trim() || stage2Complete}
                 >
                   <Send className="w-4 h-4 text-center" />
                 </button>
