@@ -13,10 +13,9 @@ interface MenuCardProps {
 
 const menuLinks = [
   { label: "PERSONAL ACCOUNT", path: "/personal-account" },
-  { label: "STAGE 1: TEST", path: "/" },
   { label: "STAGE 2: STRATEGY", path: "/strategy-generation" },
   { label: "STAGE 3: CONTENT", path: "/content" },
-  { label: "STAGE 4: AUTOMATION", path: "/stage-4" },
+  { label: "STAGE 4: AUTOMATION", path: "/automation" },
   { label: "STAGE 5: AD Launch and Monetization", path: "/stage-5" },
   { label: "LIBRARY", path: "/library" },
   { label: "SERVICES", path: "/services" },
@@ -60,19 +59,17 @@ const MenuCard: React.FC<MenuCardProps> = ({ onClose }) => {
   };
 
   return (
-    
     <div
       className="fixed inset-0 bg-[#49909A]/1 backdrop-blur-md z-[90] flex items-center justify-center text-2xl"
       style={{ fontFamily: "'Unbounded', Arial, sans-serif" }}
     >
-      
       <div className="bg-[#2A515D]/60 w-[90%] max-w-md py-6 rounded-lg relative shadow-2xl text-white max-h-[80vh] overflow-y-auto hide-scrollbar">
-      <button
-        className="fixed top-18 right-4 text-[#6dafb8] bg-[#49909A]/60 rounded-full p-2"
-        onClick={onClose}
-      >
-        <X className="cursor-pointer" />
-      </button>
+        <button
+          className="fixed top-18 right-4 text-[#6dafb8] bg-[#49909A]/60 rounded-full p-2"
+          onClick={onClose}
+        >
+          <X className="cursor-pointer" />
+        </button>
         <ul className="space-y-4 text-base flex flex-col mx-5">
           {menuLinks.map(({ label, path }, index) => {
             const locked = isLocked(label);

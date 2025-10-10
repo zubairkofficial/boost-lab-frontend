@@ -27,7 +27,7 @@ const PhotoIdentity = () => {
 
         <button
           onClick={handleStart}
-          className="mt-8 w-fit bg-[#8EF0F4] text-black px-12 py-4 hover:bg-cyan-400 transition font-normal text-xl flex items-center gap-3"
+          className="mt-8 w-fit bg-[#8EF0F4] text-black px-12 py-4 hover:bg-cyan-400 transition font-normal text-xl flex items-center gap-3 cursor-pointer"
         >
           Get started →
         </button>

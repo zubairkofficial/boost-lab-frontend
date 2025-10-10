@@ -321,7 +321,6 @@ export default function BoostieChat() {
                   }}
                   style={{ minHeight: "48px", maxHeight: "120px" }}
                 />
-
                 <button
                   onClick={sendMessage}
                   className="absolute right-2 bottom-3 p-2 bg-[#98EBA5] text-[#2A4C57] rounded-lg  disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
